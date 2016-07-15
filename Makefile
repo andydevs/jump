@@ -1,10 +1,10 @@
 TARGET = program
 
 SHELL = /bin/bash -O globstar
-CC = g++
+CC    = g++
 
 COMPILE = $(CC) -c
-LINK = $(CC)
+LINK    = $(CC)
 
 CFLAGS = -Wall -std=c++14
 LFLAGS = -Wall
@@ -43,11 +43,13 @@ clean:
 	@echo Cleaning up...
 	@rm -r $(OBJDIR) $(BINDIR)
 
-install:
-	cp $(BINDIR)/$(TARGET) $(INSDIR)
+install: $(BINARY)
+	cp $(BINARY) $(INSDIR)
 
 uninstall:
 	rm $(INSDIR)/$(TARGET)
 
-run:
-	$(BINARY)
+run: $(BINARY)
+	@echo
+	@$(BINARY)
+	@echo
