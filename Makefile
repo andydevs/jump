@@ -23,22 +23,19 @@ OBJECTS = $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SOURCES))
 BINARY  = $(BINDIR)/$(TARGET)
 
 $(BINARY): $(OBJECTS)
-	@test -d $(BINDIR) || mkdir $(BINDIR)
-	@test -d $(@D) || mkdir $(@D)
+	@test -d $(@D) || mkdir -p $(@D)
 	@echo building $@
 	@$(LINK) $^ -o $@ $(LFLAGS) $(LIBRAR)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(INCLUDS)
-	@test -d $(OBJDIR) || mkdir $(OBJDIR)
-	@test -d $(@D) || mkdir $(@D)
+	@test -d $(@D) || mkdir -p $(@D)
 	@echo compiling $<
 	@$(COMPILE) $< -o $@ $(CPPFLAGS) $(INCLUD)
 
 clean:
 	@echo Cleaning up...
-	@test -d $(OBJDIR) && rm -r $(OBJDIR)
-	@test -d $(BINDIR) && rm -r $(BINDIR)
-	@test $(TARGET).exe.stackdump && rm $(TARGET).exe.stackdump
+	@rm -f -r $(OBJDIR) $(BINDIR)
+	@rm -f $(TARGET).exe.stackdump
 
 install: $(BINARY)
 	@echo Installing...
