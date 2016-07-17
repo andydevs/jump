@@ -7,8 +7,8 @@
 // Created: 7 - 15 - 2016
 //-----------------------------------------------------------------------------------
 
-#ifndef _CORE_PRINTSTATEMENT_H_
-#define _CORE_PRINTSTATEMENT_H_
+#ifndef _CORE_STATEMENT_PRINTSTATEMENT_H_
+#define _CORE_STATEMENT_PRINTSTATEMENT_H_
 
 // Headers being used
 #include "statement.h"

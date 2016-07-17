@@ -49,6 +49,7 @@ namespace Jump
 		 */
 		StateMachine::~StateMachine()
 		{
+			// Delete all states
 			for (map<string, State*>::iterator it = m_statetable.begin(); it != m_statetable.end(); ++it)
 				delete it->second;
 		}
@@ -60,7 +61,11 @@ namespace Jump
 		 */
 		void StateMachine::stateSet(State* state)
 		{
+			// Add state to statetable
 			m_statetable.insert(pair<string, State*>(state->getName(), state));
+
+			// Set this statemachine in state
+			state->statemachineSet(this);
 		}
 
 		/**
@@ -72,7 +77,10 @@ namespace Jump
 		 */
 		State* StateMachine::stateGet(std::string name)
 		{
+			// Find state with name
 			map<string, State*>::iterator it = m_statetable.find(name);
+
+			// Return state if found, else NULL
 			return it == m_statetable.end() ? NULL : m_statetable.find(name)->second;
 		}
 

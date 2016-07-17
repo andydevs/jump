@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------------------
 
 // Headers being used
-#include "Jump/Core/statement.h"
+#include "Jump/Core/Statement/statement.h"
 
 /**
  * Jump is a new programming language that uses the state machine paradigm

@@ -34,12 +34,6 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(INCLUDS)
 	@echo compiling $<
 	@$(COMPILE) $< -o $@ $(CPPFLAGS) $(INCLUD)
 
-index:
-	@echo includes: $(INCLUDS)
-	@echo sources: $(SOURCES)
-	@echo objects: $(OBJECTS)
-	@echo binary: $(BINARY)
-
 clean:
 	@echo Cleaning up...
 	@test -d $(OBJDIR) && rm -r $(OBJDIR)

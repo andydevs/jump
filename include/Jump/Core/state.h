@@ -10,7 +10,7 @@
 #ifndef _CORE_STATE_H_
 #define _CORE_STATE_H_
 
-#include "statement.h"
+#include "Statement/statement.h"
 
 #include <string>
 #include <vector>
@@ -32,6 +32,14 @@ namespace Jump
 	namespace Core
 	{
 		/**
+		 * Represents a Jump StateMachine
+		 *
+		 * @author  Anshul Kharbanda
+		 * @created 7 - 17 - 2016
+		 */
+		class StateMachine;
+
+		/**
 		 * Represents a state in the Jump program that can be jumped to
 		 *
 		 * @author  Anshul Kharbanda
@@ -44,6 +52,11 @@ namespace Jump
 			 * The name of the state
 			 */
 			std::string m_name;
+
+			/**
+			 * The statemachine of the state
+			 */
+			StateMachine* m_machine;
 
 			/**
 			 * Holds the statements to be executed
@@ -75,6 +88,13 @@ namespace Jump
 			 * @return the name of the state
 			 */
 			std::string getName();
+
+			/**
+			 * Sets the StateMachine of the state
+			 *
+			 * @param machine the StateMachine to set
+			 */
+			void statemachineSet(StateMachine* machine);
 
 			/**
 			 * Adds the given statement to the State

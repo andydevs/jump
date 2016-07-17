@@ -8,7 +8,7 @@
 //-----------------------------------------------------------------------------------
 
 // Headers being used
-#include "Jump/Core/tostatement.h"
+#include "Jump/Core/Statement/tostatement.h"
 
 // Namespaces being used
 using namespace std;

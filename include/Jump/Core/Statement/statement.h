@@ -7,8 +7,8 @@
 // Created: 7 - 15 - 2016
 //-----------------------------------------------------------------------------------
 
-#ifndef _CORE_STATEMENT_H_
-#define _CORE_STATEMENT_H_
+#ifndef _CORE_STATEMENT_STATEMENT_H_
+#define _CORE_STATEMENT_STATEMENT_H_
 
 // Libraries being used
 #include <string>

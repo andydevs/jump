@@ -8,9 +8,9 @@
 //-----------------------------------------------------------------------------------
 
 // Statement headers being used
-#include "Jump/Core/statement.h"
-#include "Jump/Core/printstatement.h"
-#include "Jump/Core/tostatement.h"
+#include "Jump/Core/Statement/statement.h"
+#include "Jump/Core/Statement/printstatement.h"
+#include "Jump/Core/Statement/tostatement.h"
 
 // State headers being used
 #include "Jump/Core/state.h"

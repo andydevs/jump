@@ -32,28 +32,21 @@ namespace Jump
 		 *
 		 * @param name the name of the state
 		 */
-		State::State(string name) 
-		{
-			m_name = name;
-			m_statements = vector<Statement*>();
-		}
+		State::State(string name) : m_name(name), m_statements(vector<Statement*>()) {}
 
 		/**
 		 * Copy constructor for State
 		 *
 		 * @param other the State to copy
 		 */
-		State::State(const State& other)
-		{
-			m_name = other.m_name;
-			m_statements = other.m_statements;
-		}
+		State::State(const State& other) : m_name(other.m_name), m_statements(other.m_statements) {}
 
 		/**
 		 * Destroys the State
 		 */
 		State::~State() 
 		{
+			// Delete all statements
 			for (int i = 0; i < m_statements.size(); ++i)
 				delete m_statements[i];
 		}
@@ -66,6 +59,16 @@ namespace Jump
 		string State::getName()
 		{
 			return m_name;
+		}
+
+		/**
+		 * Sets the StateMachine of the state
+		 *
+		 * @param machine the StateMachine to set
+		 */
+		void State::statemachineSet(StateMachine* machine)
+		{
+			m_machine = machine;
 		}
 
 		/**
@@ -85,12 +88,20 @@ namespace Jump
 		 */
 		string State::execute()
 		{
+			// Output of statements
 			string out;
+
+			// Each statement
 			for (int i = 0; i < m_statements.size(); ++i)
 			{
+				// Execute next statement
 				out = m_statements[i]->execute(this);
+
+				// If output is given, return output
 				if (!out.empty()) return out;
 			}
+
+			// Return end output by default
 			return "end";
 		}
 	}

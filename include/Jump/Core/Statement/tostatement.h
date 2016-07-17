@@ -7,8 +7,8 @@
 // Created: 7 - 15 - 2016
 //-----------------------------------------------------------------------------------
 
-#ifndef _CORE_TOSTATEMENT_H_
-#define _CORE_TOSTATEMENT_H_
+#ifndef _CORE_STATEMENT_TOSTATEMENT_H_
+#define _CORE_STATEMENT_TOSTATEMENT_H_
 
 // Headers being used
 #include "statement.h"
