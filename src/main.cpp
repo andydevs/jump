@@ -7,11 +7,14 @@
 // Created: 7 - 15 - 2016
 //-----------------------------------------------------------------------------------
 
-// Headers being used
+// Statement headers being used
 #include "Jump/Core/statement.h"
 #include "Jump/Core/printstatement.h"
 #include "Jump/Core/tostatement.h"
+
+// State headers being used
 #include "Jump/Core/state.h"
+#include "Jump/Core/statemachine.h"
 
 // Libraries being used
 #include <iostream>
@@ -30,17 +33,30 @@ using namespace Jump::Core;
  */
 int main(int argc, char const *argv[])
 {
-	State start("start");
+	// Sample start state
+	State* start = new State("start");
+		start->add(new PrintStatement("Good afternoon world"));
+		start->add(new PrintStatement("I am Chef Gordon Ramsay"));
+		start->add(new PrintStatement("And I like cat food"));
+		start->add(new ToStatement("next"));
 
-	start.add(new PrintStatement("Good afternoon world"));
-	start.add(new PrintStatement("I am Chef Gordon Ramsay"));
-	start.add(new PrintStatement("And I like cat food"));
-	start.add(new ToStatement("next"));
-	start.add(new PrintStatement("I am Dog"));
-	start.add(new PrintStatement("And I also like cat food"));
+	// Sample state
+	State* next = new State("next");
+		next->add(new PrintStatement("I am Dog"));
+		next->add(new PrintStatement("And I also like cat food"));
+		next->add(new ToStatement("final"));
 
-	cout << start.getName() << endl;
-	cout << start.execute() << endl;
+	// Sample state
+	State* final = new State("final");
+		final->add(new PrintStatement("I am Pig"));
+		final->add(new PrintStatement("I do pig stuff"));
 
-	return 0;
+	// Sample stateMachine
+	StateMachine statemachine;
+	statemachine.stateSet(start);
+	statemachine.stateSet(next);
+	statemachine.stateSet(final);
+
+	// Execute
+	return statemachine.execute();
 }
