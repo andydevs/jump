@@ -7,11 +7,16 @@
 // Created: 7 - 15 - 2016
 //-----------------------------------------------------------------------------------
 
+// Headers being used
+#include "Jump/Core/statement.h"
+#include "Jump/Core/printstatement.h"
+
 // Libraries being used
 #include <iostream>
 
 // Namespaces being used
 using namespace std;
+using namespace Jump::Core;
 
 /**
  * The main function of the program
@@ -23,6 +28,13 @@ using namespace std;
  */
 int main(int argc, char const *argv[])
 {
-	cout << "Hello World!" << endl;
+	PrintStatement statement1("Good afternoon world");
+	PrintStatement statement2("I am Chef Gordon Ramsay");
+	PrintStatement statement3("And I like cat food");
+
+	statement1.execute();
+	statement2.execute();
+	statement3.execute();
+
 	return 0;
 }

@@ -1,4 +1,4 @@
-TARGET = program
+TARGET = jump
 
 SHELL = /bin/bash -O globstar
 CC    = g++
@@ -22,34 +22,42 @@ SOURCES = $(shell ls $(SRCDIR)/**/*.cpp)
 OBJECTS = $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SOURCES))
 BINARY  = $(BINDIR)/$(TARGET)
 
+$(BINARY): $(OBJECTS)
+	@test -d $(BINDIR) || mkdir $(BINDIR)
+	@test -d $(@D) || mkdir $(@D)
+	@echo building $@
+	@$(LINK) $^ -o $@ $(LFLAGS) $(LIBRAR)
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(INCLUDS)
+	@test -d $(OBJDIR) || mkdir $(OBJDIR)
+	@test -d $(@D) || mkdir $(@D)
+	@echo compiling $<
+	@$(COMPILE) $< -o $@ $(CPPFLAGS) $(INCLUD)
+
 index:
 	@echo includes: $(INCLUDS)
 	@echo sources: $(SOURCES)
 	@echo objects: $(OBJECTS)
 	@echo binary: $(BINARY)
 
-$(BINARY): $(OBJECTS)
-	@echo $(SOURCES)
-	@test -d $(@D) || mkdir $(@D)
-	@echo building $@
-	@$(LINK) $^ -o $@ $(LFLAGS) $(LIBRAR)
-
-$(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(INCLUDS)
-	@test -d $(@D) || mkdir $(@D)
-	@echo compiling $<
-	@$(COMPILE) $< -o $@ $(CPPFLAGS) $(INCLUD)
-
 clean:
 	@echo Cleaning up...
-	@rm -r $(OBJDIR) $(BINDIR)
+	@test -d $(OBJDIR) && rm -r $(OBJDIR)
+	@test -d $(BINDIR) && rm -r $(BINDIR)
+	@test $(TARGET).exe.stackdump && rm $(TARGET).exe.stackdump
 
 install: $(BINARY)
-	cp $(BINARY) $(INSDIR)
+	@echo Installing...
+	@cp $(BINARY) $(INSDIR)
+	@echo Installed!
 
 uninstall:
-	rm $(INSDIR)/$(TARGET)
+	@echo Uninstalling...
+	@rm $(INSDIR)/$(TARGET)
+	@echo Uninstalled!
 
 run: $(BINARY)
-	@echo
+	@echo Running...
+	@echo -----------------------------------------
 	@$(BINARY)
-	@echo
+	@echo -----------------------------------------
