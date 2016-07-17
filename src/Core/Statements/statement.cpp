@@ -7,11 +7,8 @@
 // Created: 7 - 15 - 2016
 //-----------------------------------------------------------------------------------
 
-#ifndef _CORE_STATEMENT_STATEMENT_H_
-#define _CORE_STATEMENT_STATEMENT_H_
-
-// Libraries being used
-#include <string>
+// Headers being used
+#include "Jump/Core/Statements/statement.h"
 
 /**
  * Jump is a new programming language that uses the state machine paradigm
@@ -30,70 +27,48 @@ namespace Jump
 	namespace Core
 	{
 		/**
-		 * Represents a state in the Jump program that can be jumped to
+		 * Contains all of the Jump statements
 		 *
 		 * @author  Anshul Kharbanda
-	 	 * @created 7 - 17 - 2016
+		 * @created 7 - 17 - 2016
 		 */
-		class State;
-
-		/**
-		 * A single statement in the Jump program
-		 *
-		 * @author  Anshul Kharbanda
-		 * @created 7 - 16 - 2016
-		 */
-		class Statement
+		namespace Statements
 		{
-		protected:
-			/**
-			 * The condition being checked
-			 */
-			bool m_condition;
-		public:
 			/**
 			 * Creates an empty Statement
 			 */
-			Statement();
+			Statement::Statement() : m_condition(true) {}
 
 			/**
 			 * Creates a Statement with the given condition
 			 *
 			 * @param condition the condition being checked
 			 */
-			Statement(bool condition);
+			Statement::Statement(bool condition) : m_condition(condition) {}
 
 			/**
 			 * Copy constructor
 			 *
 			 * @param other the Statement to copy
 			 */
-			Statement(const Statement& other);
+			Statement::Statement(const Statement& other) : m_condition(other.m_condition) {}
 
 			/**
 			 * Destroys the Statement
 			 */
-			~Statement();
+			Statement::~Statement() {}
 
 			/**
-			 * Executes the statement
-			 *
-			 * @param stateRef reference to the containing state (pointer)
-			 * 
-			 * @return a reference to the next state (the state's name)
-			 */
-			std::string execute(State* stateRef);
-
-			/**
-			 * Executes the Statement if the condition is true
+			 * Executes the Statement
 			 *
 			 * @param stateRef reference to the containing state (pointer)
 			 *
 			 * @return a reference to the next state (the state's name)
 			 */
-			virtual std::string conditionedExecute(State* stateRef) = 0;
-		};
+			std::string Statement::execute(State* stateRef)
+			{
+				return m_condition ? conditionedExecute(stateRef) : "";
+			}
+		}
 	}
 }
-
-#endif

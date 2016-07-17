@@ -10,7 +10,7 @@
 #ifndef _CORE_STATE_H_
 #define _CORE_STATE_H_
 
-#include "Statement/statement.h"
+#include "Statements/statement.h"
 
 #include <string>
 #include <vector>
@@ -61,7 +61,7 @@ namespace Jump
 			/**
 			 * Holds the statements to be executed
 			 */
-			std::vector<Statement*> m_statements;
+			std::vector<Statements::Statement*> m_statements;
 		public:
 			/**
 			 * Creates a new State with the given name
@@ -101,7 +101,7 @@ namespace Jump
 			 *
 			 * @param statement the statement to add
 			 */
-			void add(Statement* statement);
+			void add(Statements::Statement* statement);
 
 			/**
 			 * Executes the State

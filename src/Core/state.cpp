@@ -32,7 +32,7 @@ namespace Jump
 		 *
 		 * @param name the name of the state
 		 */
-		State::State(string name) : m_name(name), m_statements(vector<Statement*>()) {}
+		State::State(string name) : m_name(name), m_statements(vector<Statements::Statement*>()) {}
 
 		/**
 		 * Copy constructor for State
@@ -76,7 +76,7 @@ namespace Jump
 		 *
 		 * @param statement the statement to add
 		 */
-		void State::add(Statement* statement)
+		void State::add(Statements::Statement* statement)
 		{
 			m_statements.push_back(statement);
 		}

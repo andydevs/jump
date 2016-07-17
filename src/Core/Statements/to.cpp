@@ -7,14 +7,11 @@
 // Created: 7 - 15 - 2016
 //-----------------------------------------------------------------------------------
 
-#ifndef _CORE_STATEMENT_TOSTATEMENT_H_
-#define _CORE_STATEMENT_TOSTATEMENT_H_
-
 // Headers being used
-#include "statement.h"
+#include "Jump/Core/Statements/to.h"
 
-// Libraries being used
-#include <string>
+// Namespaces being used
+using namespace std;
 
 /**
  * Jump is a new programming language that uses the state machine paradigm
@@ -33,41 +30,36 @@ namespace Jump
 	namespace Core
 	{
 		/**
-		 * Transitions to another state
+		 * Contains all of the Jump statements
 		 *
 		 * @author  Anshul Kharbanda
 		 * @created 7 - 17 - 2016
 		 */
-		class ToStatement : public Statement
+		namespace Statements
 		{
-		private:
 			/**
-			 * Reference to another state (the state's name)
-			 */
-			std::string m_stateRef;
-		public:
-			/**
-			 * Creates a new ToStatement with the given stateRef
+			 * Creates a new To with the given stateRef
 			 *
 			 * @param stateRef reference to another state (the state's name)
 			 */
-			ToStatement(std::string stateRef);
+			To::To(string stateRef) : Statement(), m_stateRef(stateRef) {}
 
 			/**
-			 * Destroys the ToStatement
+			 * Destroys the To
 			 */
-			~ToStatement();
+			To::~To() {}
 
 			/**
-			 * Executes the ToStatement if the condition is true
+			 * Executes the To if the condition is true
 			 *
 			 * @param stateRef reference to containing state (pointer)
 			 *
 			 * @return reference to another state (the state's name)
 			 */
-			std::string conditionedExecute(State* stateRef);
-		};
+			std::string To::conditionedExecute(State* stateRef)
+			{
+				return m_stateRef;
+			}
+		}
 	}
 }
-
-#endif

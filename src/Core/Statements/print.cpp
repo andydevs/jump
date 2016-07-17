@@ -7,15 +7,11 @@
 // Created: 7 - 15 - 2016
 //-----------------------------------------------------------------------------------
 
-#ifndef _CORE_STATEMENT_PRINTSTATEMENT_H_
-#define _CORE_STATEMENT_PRINTSTATEMENT_H_
-
 // Headers being used
-#include "statement.h"
+#include "Jump/Core/Statements/print.h"
 
-// Libaries being used
-#include <iostream>
-#include <string>
+// Namespace being used
+using namespace std;
 
 /**
  * Jump is a new programming language that uses the state machine paradigm
@@ -34,30 +30,22 @@ namespace Jump
 	namespace Core
 	{
 		/**
-		 * Prints the given value to the given output stream
+		 * Contains all of the Jump statements
 		 *
 		 * @author  Anshul Kharbanda
-		 * @created 7 - 16 - 2016
+		 * @created 7 - 17 - 2016
 		 */
-		class PrintStatement : public Statement
+		namespace Statements
 		{
-		public:
-			/**
-			 * The value to print
-			 */
-			std::string m_toPrint;
-
-			/**
-			 * The stream to print to (pointer)
-			 */
-			std::ostream& m_streamRef;
-	
 			/**
 			 * Creates a print statement with the given value to print
 			 *
 			 * @param toPrint the value to print
 			 */
-			PrintStatement(std::string toPrint);
+			Print::Print(string toPrint) : Statement(), m_streamRef(cout)
+			{
+				m_toPrint = toPrint;
+			}
 
 			/**
 			 * Creates a print statement with the given value to print and the stream to print to
@@ -65,7 +53,10 @@ namespace Jump
 			 * @param toPrint   the value to print
 			 * @param streamRef the stream to print to
 			 */
-			PrintStatement(std::string toPrint, std::ostream& streamRef);
+			Print::Print(string toPrint, ostream& streamRef) : Statement(), m_streamRef(m_streamRef)
+			{
+				m_toPrint = toPrint;
+			}
 
 			/**
 			 * Creates a print statement with the given condition to check and value to print
@@ -73,7 +64,10 @@ namespace Jump
 			 * @param condition the condition to ckeck
 			 * @param toPrint   the value to print
 			 */
-			PrintStatement(bool condition, std::string toPrint);
+			Print::Print(bool condition, string toPrint) : Statement(condition), m_streamRef(cout)
+			{
+				m_toPrint = toPrint;
+			}
 
 			/**
 			 * Creates a print statement with the given condition to check and value to print
@@ -82,19 +76,25 @@ namespace Jump
 			 * @param toPrint   the value to print
 			 * @param streamRef the stream to print to (referenced)
 			 */
-			PrintStatement(bool condition, std::string toPrint, std::ostream& streamRef);
+			Print::Print(bool condition, string toPrint, ostream& streamRef) : Statement(condition), m_streamRef(m_streamRef)
+			{
+				m_toPrint = toPrint;
+			}
 
 			/**
 			 * Copy constructor for print statement
 			 *
-			 * @param other the PrintStatement to copy
+			 * @param other the Print to copy
 			 */
-			PrintStatement(const PrintStatement& other);
+			Print::Print(const Print& other) : Statement(other), m_streamRef(other.m_streamRef)
+			{
+				m_toPrint = other.m_toPrint;
+			}
 
 			/**
 			 * Destructor for print statement
 			 */
-			~PrintStatement();
+			Print::~Print() {}
 
 			/**
 			 * Executes the print statement if the condition is true
@@ -103,9 +103,11 @@ namespace Jump
 			 *
 			 * @return a reference to the next state (the state's name)
 			 */
-			std::string conditionedExecute(State* stateRef);
-		};
+			string Print::conditionedExecute(State* stateRef)
+			{
+				m_streamRef << m_toPrint << endl;
+				return "";
+			}
+		}
 	}
 }
-
-#endif

@@ -7,17 +7,10 @@
 // Created: 7 - 15 - 2016
 //-----------------------------------------------------------------------------------
 
-// Statement headers being used
-#include "Jump/Core/Statement/statement.h"
-#include "Jump/Core/Statement/printstatement.h"
-#include "Jump/Core/Statement/tostatement.h"
-
-// State headers being used
-#include "Jump/Core/state.h"
+// Geaders being used
+#include "Jump/Core/Statements/statement.h"
 #include "Jump/Core/statemachine.h"
-
-// Libraries being used
-#include <iostream>
+#include "Jump/Core/state.h"
 
 // Namespaces being used
 using namespace std;
@@ -35,21 +28,21 @@ int main(int argc, char const *argv[])
 {
 	// Sample start state
 	State* start = new State("start");
-		start->add(new PrintStatement("Good afternoon world"));
-		start->add(new PrintStatement("I am Chef Gordon Ramsay"));
-		start->add(new PrintStatement("And I like cat food"));
-		start->add(new ToStatement("next"));
+		start->add(new Statements::Print("Good afternoon world"));
+		start->add(new Statements::Print("I am Chef Gordon Ramsay"));
+		start->add(new Statements::Print("And I like cat food"));
+		start->add(new Statements::To("next"));
 
 	// Sample state
 	State* next = new State("next");
-		next->add(new PrintStatement("I am Dog"));
-		next->add(new PrintStatement("And I also like cat food"));
-		next->add(new ToStatement("final"));
+		next->add(new Statements::Print("I am Dog"));
+		next->add(new Statements::Print("And I also like cat food"));
+		next->add(new Statements::To("final"));
 
 	// Sample state
 	State* final = new State("final");
-		final->add(new PrintStatement("I am Pig"));
-		final->add(new PrintStatement("I do pig stuff"));
+		final->add(new Statements::Print("I am Pig"));
+		final->add(new Statements::Print("I do pig stuff"));
 
 	// Sample stateMachine
 	StateMachine statemachine;
