@@ -99,9 +99,11 @@ namespace Jump
 			/**
 			 * Executes the print statement if the condition is true
 			 *
+			 * @param stateRef reference to the containing state (pointer)
+			 *
 			 * @return a reference to the next state (the state's name)
 			 */
-			std::string conditionedExecute();
+			std::string conditionedExecute(State* stateRef);
 		};
 	}
 }

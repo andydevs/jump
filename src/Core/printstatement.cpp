@@ -91,9 +91,11 @@ namespace Jump
 		/**
 		 * Executes the print statement if the condition is true
 		 *
+		 * @param stateRef reference to the containing state (pointer)
+		 *
 		 * @return a reference to the next state (the state's name)
 		 */
-		string PrintStatement::conditionedExecute()
+		string PrintStatement::conditionedExecute(State* stateRef)
 		{
 			m_streamRef << m_toPrint << endl;
 			return "";

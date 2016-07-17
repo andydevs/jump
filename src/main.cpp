@@ -10,6 +10,8 @@
 // Headers being used
 #include "Jump/Core/statement.h"
 #include "Jump/Core/printstatement.h"
+#include "Jump/Core/tostatement.h"
+#include "Jump/Core/state.h"
 
 // Libraries being used
 #include <iostream>
@@ -28,13 +30,17 @@ using namespace Jump::Core;
  */
 int main(int argc, char const *argv[])
 {
-	PrintStatement statement1("Good afternoon world");
-	PrintStatement statement2("I am Chef Gordon Ramsay");
-	PrintStatement statement3("And I like cat food");
+	State start("start");
 
-	statement1.execute();
-	statement2.execute();
-	statement3.execute();
+	start.add(new PrintStatement("Good afternoon world"));
+	start.add(new PrintStatement("I am Chef Gordon Ramsay"));
+	start.add(new PrintStatement("And I like cat food"));
+	start.add(new ToStatement("next"));
+	start.add(new PrintStatement("I am Dog"));
+	start.add(new PrintStatement("And I also like cat food"));
+
+	cout << start.getName() << endl;
+	cout << start.execute() << endl;
 
 	return 0;
 }

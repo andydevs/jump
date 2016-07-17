@@ -30,6 +30,14 @@ namespace Jump
 	namespace Core
 	{
 		/**
+		 * Represents a state in the Jump program that can be jumped to
+		 *
+		 * @author  Anshul Kharbanda
+	 	 * @created 7 - 17 - 2016
+		 */
+		class State;
+
+		/**
 		 * A single statement in the Jump program
 		 *
 		 * @author  Anshul Kharbanda
@@ -70,16 +78,20 @@ namespace Jump
 			/**
 			 * Executes the statement
 			 *
+			 * @param stateRef reference to the containing state (pointer)
+			 * 
 			 * @return a reference to the next state (the state's name)
 			 */
-			std::string execute();
+			std::string execute(State* stateRef);
 
 			/**
 			 * Executes the Statement if the condition is true
 			 *
+			 * @param stateRef reference to the containing state (pointer)
+			 *
 			 * @return a reference to the next state (the state's name)
 			 */
-			virtual std::string conditionedExecute() = 0;
+			virtual std::string conditionedExecute(State* stateRef) = 0;
 		};
 	}
 }

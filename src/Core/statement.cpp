@@ -62,11 +62,13 @@ namespace Jump
 		/**
 		 * Executes the Statement
 		 *
+		 * @param stateRef reference to the containing state (pointer)
+		 *
 		 * @return a reference to the next state (the state's name)
 		 */
-		 std::string Statement::execute()
+		 std::string Statement::execute(State* stateRef)
 		 {
-		 	return m_condition ? conditionedExecute() : "";
+		 	return m_condition ? conditionedExecute(stateRef) : "";
 		 }
 	}
 }
