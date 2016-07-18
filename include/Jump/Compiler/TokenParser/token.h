@@ -57,6 +57,11 @@ namespace Jump
 				std::string m_attribute;
 
 				/**
+				 * Creates an empty token
+				 */
+				Token();
+
+				/**
 				 * Creates a token with the given klass and attribute values
 				 *
 				 * @param klass     the class of the Token

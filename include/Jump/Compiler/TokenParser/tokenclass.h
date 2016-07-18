@@ -67,6 +67,11 @@ namespace Jump
 				std::regex m_regex;
 
 				/**
+				 * True if tokens of this class should be ignored
+				 */
+				bool m_ignore;
+
+				/**
 				 * Holds the match made by the token method
 				 */
 				std::smatch m_match;
@@ -81,6 +86,16 @@ namespace Jump
 				TokenClass(std::string name, std::string regx);
 
 				/**
+				 * Creates a TokenClass with the given name and regex and ignore boolean
+				 *
+				 * @param name   the name of the TokenClass
+				 * @param regx   the regex that matches tokens of this class
+				 *			     (as a string to be compiled)
+				 * @param ignore true if tokens of this class should be ignored
+				 */
+				TokenClass(std::string name, std::string regx, bool ignore);
+
+				/**
 				 * Copy constructor for TokenClass
 				 *
 				 * @param other the TokenClass to copy
@@ -93,6 +108,20 @@ namespace Jump
 				~TokenClass();
 
 				/**
+				 * Returns true if tokens of this class should be ignored
+				 *
+				 * @return true if tokens of this class should be ignored
+				 */
+				bool ignore();
+
+				/**
+				 * Returns the name of the TokenClass
+				 *
+				 * @return the name of the TokenClass
+				 */
+				std::string name();
+
+				/**
 				 * Returns true if the TokenClass matches a token in the given 
 				 * input at the given location
 				 * 
@@ -102,7 +131,7 @@ namespace Jump
 				 * @return true if the TokenClass matches a token in the given 
 				 *		   input at the given location
 				 */
-				bool hasToken(std::string& input, int location);
+				bool hasToken(std::string& input);
 
 				/**
 				 * Returns the TokenClass matched at in the given input at the
@@ -114,7 +143,7 @@ namespace Jump
 				 * @return true if the TokenClass matches a token in the given 
 				 *		   input at the given location
 				 */
-				Token token(std::string& input, int& location);
+				Token token(std::string& input);
 			};
 		}
 	}

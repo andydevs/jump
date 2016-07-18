@@ -3,7 +3,8 @@ TARGET = jump
 SHELL = /bin/bash -O globstar
 CC    = g++
 
-FLAGS = -Wall -std=c++14
+IGNORE = -Wno-sign-compare
+FLAGS = -std=c++14 -Wall $(IGNORE)
 
 INCDIR = include
 LIBDIR = lib

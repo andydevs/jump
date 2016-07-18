@@ -91,7 +91,7 @@ namespace Jump
 		 */
 		int StateMachine::execute()
 		{
-			execute(0);
+			return execute(0);
 		}
 
 		/**

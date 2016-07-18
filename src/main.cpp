@@ -8,11 +8,11 @@
 //-----------------------------------------------------------------------------------
 
 // Headers being used
-#include "Jump/Compiler/TokenParser/tokenclass.h"
+#include "Jump/Compiler/TokenParser/parser.h"
 
 // Libraries being used
 #include <string>
-#include <vector>
+#include <queue>
 
 // Namespaces being used
 using namespace std;
@@ -28,43 +28,19 @@ using namespace Jump::Compiler::TokenParser;
  */
 int main(int argc, char const *argv[])
 {
-	// TokenClasses array
-	TokenClass klasses[] = {
-		TokenClass("keyword", "print"),
-		TokenClass("identifier", "[a-zA-Z][a-zA-Z0-9_]*"),
-		TokenClass("string", "(\"|').*?\\1"),
-		TokenClass("wspace", "\\s+")
-	};
-
-	// Length of TokenClass array
-	int length = sizeof(klasses)/sizeof(TokenClass);
-
 	// Test Input
-	string input = "Hello_World8 \"I will help\" print 'I will help too' \"I will help three\"";
-	
+	string input = "state start\n\tprint \"Hello World\"";
 
-	// ----------------------------- Test TokenParser -----------------------------
+	// Parse input
+	queue<Token> tks;
+	bool error = parse(tks, input);
 
-	int location = 0;
-	int error = 0;
-	while (location < input.length() && !error)
+	// Print tokens
+	while (!tks.empty())
 	{
-		error = 1;
-		for (int i = 0; i < length; i++)
-		{
-			if (klasses[i].hasToken(input, location))
-			{
-				error = 0;
-				cout << klasses[i].token(input, location) << endl;
-				break;
-			}
-		}
+		cout << tks.front() << endl;
+		tks.pop();
 	}
-
-	// Error handling
-	if (error) cout << "There was an error: " << input.substr(location) << endl;
-
-	// ----------------------------------------------------------------------------
 
 	// Return
 	return error;

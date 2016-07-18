@@ -38,6 +38,11 @@ namespace Jump
 		namespace TokenParser
 		{
 			/**
+			 * Creates an empty token
+			 */
+			Token::Token() : m_klass(""), m_attribute("") {}
+
+			/**
 			 * Creates a token with the given klass and attribute values
 			 *
 			 * @param klass     the class of the Token
