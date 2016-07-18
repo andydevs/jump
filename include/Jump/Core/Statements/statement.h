@@ -81,7 +81,7 @@ namespace Jump
 				/**
 				 * Destroys the Statement
 				 */
-				~Statement();
+				virtual ~Statement();
 
 				/**
 				 * Executes the statement
