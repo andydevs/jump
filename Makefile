@@ -3,15 +3,10 @@ TARGET = jump
 SHELL = /bin/bash -O globstar
 CC    = g++
 
-COMPILE = $(CC) -c
-LINK    = $(CC)
-
-CFLAGS = -Wall -std=c++14
-LFLAGS = -Wall
-INCLUD = -Iinclude
-LIBRAR = -Llib
+FLAGS = -Wall -std=c++14
 
 INCDIR = include
+LIBDIR = lib
 SRCDIR = src
 OBJDIR = obj
 BINDIR = bin
@@ -23,14 +18,14 @@ OBJECTS = $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SOURCES))
 BINARY  = $(BINDIR)/$(TARGET)
 
 $(BINARY): $(OBJECTS)
-	@test -d $(@D) || mkdir -p $(@D)
 	@echo building $@
-	@$(LINK) $^ -o $@ $(LFLAGS) $(LIBRAR)
+	@test -d $(@D) || mkdir -p $(@D)
+	@$(CC) $^ -o $@ $(FLAGS) -L $(LIBDIR)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(INCLUDS)
-	@test -d $(@D) || mkdir -p $(@D)
 	@echo compiling $<
-	@$(COMPILE) $< -o $@ $(CPPFLAGS) $(INCLUD)
+	@test -d $(@D) || mkdir -p $(@D)
+	@$(CC) -c $< -o $@ $(FLAGS) -I $(INCDIR)
 
 clean:
 	@echo Cleaning up...
