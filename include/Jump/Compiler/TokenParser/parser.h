@@ -10,9 +10,11 @@
 #ifndef _COMPILER_TOKENPARSER_PARSER_H_
 #define _COMPILER_TOKENPARSER_PARSER_H_
 
+// Headers being used
 #include "token.h"
 #include "tokenclass.h"
 
+// Libraries being used
 #include <queue>
 #include <string>
 
@@ -57,11 +59,6 @@ namespace Jump
 				// Ignore whitespaces
 				TokenClass("wspace", "[ \t]+", true)
 			};
-
-			/**
-			 * The End of File Token
-			 */
-			const Token EOF_TOKEN("EOF", "EOF");
 
 			/**
 			 * Parses the given input into tokens which are pushed onto 

@@ -62,6 +62,29 @@ namespace Jump
 		}
 
 		/**
+		 * Returns the string representation of the Print
+		 *
+		 * @return the string representation of the Print
+		 */ 
+		string State::toString()
+		{
+			return "[STATE " + m_name + "]";
+		}
+
+		/**
+		 * Returns an index of the statements in the State
+		 *
+		 * @return an index of the statements in the State
+		 */
+		string State::index()
+		{
+			string s = toString() + "\n";
+			for (int i = 0; i < m_statements.size(); ++i)
+				s += "\t\t" + m_statements[i]->toString() + "\n";
+			return s;
+		}
+
+		/**
 		 * Sets the StateMachine of the state
 		 *
 		 * @param machine the StateMachine to set

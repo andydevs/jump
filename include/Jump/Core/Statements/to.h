@@ -67,6 +67,13 @@ namespace Jump
 				~To();
 
 				/**
+				 * Returns the string representation of the Print
+				 *
+				 * @return the string representation of the Print
+				 */ 
+				std::string toString();
+
+				/**
 				 * Executes the To if the condition is true
 				 *
 				 * @param stateRef reference to containing state (pointer)

@@ -97,6 +97,16 @@ namespace Jump
 			Print::~Print() {}
 
 			/**
+			 * Returns the string representation of the Print
+			 *
+			 * @return the string representation of the Print
+			 */ 
+			std::string Print::toString()
+			{
+				return "[PRINT " + m_toPrint + "]";
+			}
+
+			/**
 			 * Executes the print statement if the condition is true
 			 *
 			 * @param stateRef reference to the containing state (pointer)

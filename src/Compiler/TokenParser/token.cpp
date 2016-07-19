@@ -93,6 +93,26 @@ namespace Jump
 			}
 
 			/**
+			 * Returns true if the given Token equals the other Token
+			 *
+			 * @return true if the given Token equals the other Token
+			 */
+			bool Token::operator==(const Token& other) const
+			{
+				return m_klass == other.m_klass && m_attribute == other.m_attribute;
+			}
+
+			/**
+			 * Returns true if the given Token does not equal the other Token
+			 *
+			 * @return true if the given Token does not equal the other Token
+			 */
+			bool Token::operator!=(const Token& other) const
+			{
+				return m_klass != other.m_klass || m_attribute != other.m_attribute;
+			}
+
+			/**
 			 * Operator for passing token to output stream
 			 *
 			 * @param out the output stream to write to

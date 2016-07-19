@@ -8,15 +8,11 @@
 //-----------------------------------------------------------------------------------
 
 // Headers being used
-#include "Jump/Compiler/TokenParser/parser.h"
+#include "Jump/Compiler/grammarparser.h"
 
 // Libraries being used
 #include <string>
 #include <queue>
-
-// Namespaces being used
-using namespace std;
-using namespace Jump::Compiler::TokenParser;
 
 /**
  * The main function of the program
@@ -28,20 +24,17 @@ using namespace Jump::Compiler::TokenParser;
  */
 int main(int argc, char const *argv[])
 {
-	// Test Input
-	string input = "state start\n\tprint \"Hello World\"";
+	// Test input to parse
+	std::string input = "state start\n\tprint \"Hello World\"";
 
-	// Parse input
-	queue<Token> tks;
-	bool error = parse(tks, input);
+	// Declare Token queue and StateMachine
+	std::queue<Jump::Compiler::TokenParser::Token> tokens;
+	Jump::Core::StateMachine machine;
 
-	// Print tokens
-	while (!tks.empty())
-	{
-		cout << tks.front() << endl;
-		tks.pop();
-	}
+	// Parse Tokens and StateMachine
+	Jump::Compiler::TokenParser::parse(tokens, input);
+	Jump::Compiler::GrammarParser::parse(machine, tokens);
 
-	// Return
-	return error;
+	// Execute the machine and return status code
+	return machine.execute();
 }

@@ -65,6 +65,20 @@ namespace Jump
 			~StateMachine();
 
 			/**
+			 * Returns the string representation of the Print
+			 *
+			 * @return the string representation of the Print
+			 */ 
+			std::string toString();
+
+			/**
+			 * Returns an index of states in the StateMachine
+			 *
+			 * @return an index of states in the StateMachine
+			 */
+			std::string index();
+
+			/**
 			 * Enters a State into the StateMachine
 			 *
 			 * @param state the State to enter

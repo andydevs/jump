@@ -84,6 +84,13 @@ namespace Jump
 				virtual ~Statement();
 
 				/**
+				 * Returns the string representation of the Statement
+				 *
+				 * @return the string representation of the Statement
+				 */ 
+				virtual std::string toString() = 0;
+
+				/**
 				 * Executes the statement
 				 *
 				 * @param stateRef reference to the containing state (pointer)

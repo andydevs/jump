@@ -10,8 +10,10 @@
 #ifndef _CORE_STATE_H_
 #define _CORE_STATE_H_
 
+// Headers being used
 #include "Statements/statement.h"
 
+// Libaries being used
 #include <string>
 #include <vector>
 
@@ -88,6 +90,20 @@ namespace Jump
 			 * @return the name of the state
 			 */
 			std::string getName();
+
+			/**
+			 * Returns the string representation of the Print
+			 *
+			 * @return the string representation of the Print
+			 */ 
+			std::string toString();
+
+			/**
+			 * Returns an index of the statements in the State
+			 *
+			 * @return an index of the statements in the State
+			 */
+			std::string index();
 
 			/**
 			 * Sets the StateMachine of the state

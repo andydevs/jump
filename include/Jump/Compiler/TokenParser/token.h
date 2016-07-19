@@ -82,9 +82,25 @@ namespace Jump
 				~Token();
 
 				/**
-				 * Returns the string representation of the token
+				 * Returns the string representation of the Token
+				 *
+				 * @return the string representation of the Token
 				 */
 				std::string toString() const;
+
+				/**
+				 * Returns true if the given Token equals the other Token
+				 *
+				 * @return true if the given Token equals the other Token
+				 */
+				bool operator==(const Token& other) const;
+
+				/**
+				 * Returns true if the given Token does not equal the other Token
+				 *
+				 * @return true if the given Token does not equal the other Token
+				 */
+				bool operator!=(const Token& other) const;
 
 				/**
 				 * Operator for passing token to output stream

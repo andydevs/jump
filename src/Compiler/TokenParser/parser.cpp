@@ -79,9 +79,6 @@ namespace Jump
 					}
 				}
 
-				// Push EOF Token
-				tkq.push(EOF_TOKEN);
-
 				// Return error status
 				return error;
 			}
