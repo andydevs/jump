@@ -27,13 +27,9 @@ int main(int argc, char const *argv[])
 	// Test input to parse
 	std::string input = "state start\n\tprint \"Hello World\"";
 
-	// Declare Token queue and StateMachine
-	std::queue<Jump::Compiler::TokenParser::Token> tokens;
-	Jump::Core::StateMachine machine;
-
 	// Parse Tokens and StateMachine
-	Jump::Compiler::TokenParser::parse(tokens, input);
-	Jump::Compiler::GrammarParser::parse(machine, tokens);
+	std::queue<Jump::Compiler::TokenParser::Token> tokens = Jump::Compiler::TokenParser::parse(input);
+	Jump::Core::StateMachine machine = Jump::Compiler::GrammarParser::parse(tokens);
 
 	// Execute the machine and return status code
 	return machine.execute();

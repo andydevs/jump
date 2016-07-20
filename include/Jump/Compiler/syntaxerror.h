@@ -7,13 +7,12 @@
 // Created: 7 - 15 - 2016
 //-----------------------------------------------------------------------------------
 
-#ifndef _COMPILER_GRAMMARPARSER_H_
-#define _COMPILER_GRAMMARPARSER_H_
+#ifndef _COMPILER_SYNTAXERROR_H_
+#define _COMPILER_SYNTAXERROR_H_
 
-// Headers being used
-#include "syntaxerror.h"
-#include "TokenParser/parser.h"
-#include "Jump/Core/statemachine.h"
+// Libraries being used
+#include <exception>
+#include <string>
 
 /**
  * Jump is a new programming language that uses the state machine paradigm
@@ -32,24 +31,38 @@ namespace Jump
 	namespace Compiler
 	{
 		/**
-		 * Performs grammar analysis on a token queue
+		 * Thrown when the TokenParser or GrammarParser fails
 		 *
 		 * @author  Anshul Kharbanda
-		 * @created 7 - 18 - 2016
+		 * @created 7 - 19 - 2016
 		 */
-		namespace GrammarParser
+		class SyntaxError
 		{
+		private:
 			/**
-			 * Parses the given token queue into a StateMachine
-			 *
-			 * @param tks the tokens to parse into the StateMachine
-			 *
-			 * @return the StateMachine that was parsed
-			 *
-			 * @throw SyntaxError if an invalid token was detected
+			 * The message of the SyntaxError
 			 */
-			Jump::Core::StateMachine parse(std::queue<Jump::Compiler::TokenParser::Token>& tks) throw(Jump::Compiler::SyntaxError);
-		}
+			std::string m_message;
+		public:
+			/**
+			 * Creates a SyntaxError with the given message
+			 *
+			 * @param message the message of the SyntaxError
+			 */
+			SyntaxError(std::string message);
+
+			/**
+			 * Destroys the SyntaxError
+			 */
+			~SyntaxError();
+
+			/**
+			 * Returns the message of the SyntaxError
+			 * 
+			 * @return the message of the SyntaxError
+			 */
+			const char* what() const throw();
+		};
 	}
 }
 

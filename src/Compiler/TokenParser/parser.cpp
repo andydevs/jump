@@ -9,11 +9,14 @@
 
 // Headers being used
 #include "Jump/Compiler/TokenParser/parser.h"
+#include "Jump/Compiler/syntaxerror.h"
 
-#include <iostream>
+// Libraries being used
+#include <exception>
 
 // Namespaces being used
 using namespace std;
+using namespace Jump::Compiler;
 
 /**
  * Jump is a new programming language that uses the state machine paradigm
@@ -40,28 +43,31 @@ namespace Jump
 		namespace TokenParser
 		{
 			/**
-			 * Parses the given input into tokens which are pushed onto 
-			 * the given queue. Returns true if parser errored
+			 * Parses the given input into a queue of tokens tokens.
 			 *
-			 * @param tkq   the queue to push tokens to
 			 * @param input the input to parse from
 			 *
-			 * @return true if parser errored
+			 * @return the Tokens parsed from the input
+			 *
+			 * @throw SyntaxError if parser could not parse a particular character
 			 */
-			bool parse(queue<Token>& tkq, string input)
+			queue<Token> parse(string input) throw(SyntaxError)
 			{
-				// Declare error and Token buffer
-				bool error = false;
+				// Declare token queue and buffer
+				queue<Token> tkq;
 				Token tk;
+
+				// Initialize error
+				bool error = false;
 
 				// Parse entire string (stop if error)
 				while (!(input.empty() || error))
 				{
-					// Assume no token class was found (error is true)
+					// Assume token is not found (error is true)
 					error = true;
 
 					// Search token classes
-					for (int i = 0; i < sizeof(TOKEN_CLASSES)/sizeof(TokenClass); ++i)
+					for (int i = 0; i < sizeof(TOKEN_CLASSES) / sizeof(TokenClass); ++i)
 					{
 						// If one matches input
 						if (TOKEN_CLASSES[i].hasToken(input))
@@ -77,10 +83,13 @@ namespace Jump
 							break;
 						}
 					}
+
+					// Throw SyntaxError if error
+					if (error) throw SyntaxError("Unexpected character " + input[0]);
 				}
 
-				// Return error status
-				return error;
+				// Return queue
+				return tkq;
 			}
 		}
 	}

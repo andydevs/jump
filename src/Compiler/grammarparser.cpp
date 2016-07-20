@@ -58,6 +58,20 @@ namespace Jump
 
 			/**
 			 * Returns true if the next token in the given queue
+			 * is a statemachine declaration
+			 *
+			 * @param tks  the queue of tokens to check
+			 *
+			 * @return true if the next token in the given queue
+			 *		   is a declaration
+			 */
+			static bool isDeclaration(queue<Token> tks)
+			{
+				return isKeyword(tks, "state");
+			}
+
+			/**
+			 * Returns true if the next token in the given queue
 			 * is an identifier
 			 *
 			 * @param tks the queue of tokens to check
@@ -118,16 +132,11 @@ namespace Jump
 			 * Parses an endline
 			 *
 			 * @param tks the token queue to parse
-			 *
-			 * @return status code of parses
 			 */
-			static int endline(queue<Token>& tks)
+			static void endline(queue<Token>& tks)
 			{
 				// Pop next token
 				if (isEndline(tks)) tks.pop();
-
-				// Return ok
-				return 0;
 			}
 
 			// -------------- STATEMENTS --------------
@@ -138,9 +147,9 @@ namespace Jump
 			 * @param state the state to add the statement to
 			 * @param tks   the token queue to parse
 			 *
-			 * @return status code of parses
+			 * @throw SyntaxError if invalid token sequence
 			 */
-			static int to(State* state, queue<Token>& tks)
+			static void to(State* state, queue<Token>& tks) throw(SyntaxError)
 			{
 				// Next token
 				tks.pop();
@@ -151,12 +160,8 @@ namespace Jump
 					// Add to statement with the identifier token
 					state->add(new Statements::To(tks.front().m_attribute));
 					tks.pop();
-
-					// Return ok
-					return 0;
 				}
-				// Return error
-				else return 1;
+				else throw SyntaxError("Expected identifier after \"to\" keyword");
 			}
 
 			/**
@@ -164,10 +169,8 @@ namespace Jump
 			 *
 			 * @param state the state to add the statement to
 			 * @param tks   the token queue to parse
-			 *
-			 * @return status code of parses
 			 */
-			static int print(State* state, queue<Token>& tks)
+			static void print(State* state, queue<Token>& tks)
 			{
 				// Next token
 				tks.pop();
@@ -181,9 +184,6 @@ namespace Jump
 				}
 				// Else add blank print statement
 				else state->add(new Statements::Print(""));
-
-				// Return exit
-				return 0;
 			}
 
 			/**
@@ -192,25 +192,18 @@ namespace Jump
 			 * @param state the state to add the statement to
 			 * @param tks   the token queue to parse
 			 *
-			 * @return status code of parses
+			 * @throw SyntaxError if invalid token sequence
 			 */
-			static int statement(State* state, queue<Token>& tks)
+			static void statement(State* state, queue<Token>& tks) throw(SyntaxError)
 			{
 				// Parse Statements
 				if (isKeyword(tks, "print"))
-				{
-					if (!print(state, tks)) return 1;
-				}
+					print(state, tks);
 				else if (isKeyword(tks, "to"))
-				{
-					if (!to(state, tks)) return 1;
-				}
+					to(state, tks);
 
 				// Endline
 				endline(tks);
-
-				// Return ok
-				return 0;
 			}
 
 			// -------------- STATEMACHINE --------------
@@ -221,9 +214,9 @@ namespace Jump
 			 * @param machine the StateMachine to add the state to
 			 * @param tks     the token queue to parse
 			 *
-			 * @return status code of parses
+			 * @throw SyntaxError if invalid token sequence
 			 */
-			static int state(StateMachine& machine, queue<Token>& tks)
+			static void state(StateMachine& machine, queue<Token>& tks) throw(SyntaxError)
 			{
 				// Next token
 				tks.pop();
@@ -236,18 +229,15 @@ namespace Jump
 					tks.pop();
 					endline(tks);
 
-					// Parse statements until next state declaration
-					while (!isKeyword(tks, "state") && continuing(tks))
-						if (!statement(state, tks)) return 1;
+					// Parse statements until next state declaration (or end of program)
+					while (continuing(tks) && !isDeclaration(tks))
+						statement(state, tks);
 
 					// Set state in machine
 					machine.stateSet(state);
-
-					// Return ok
-					return 0;
 				}
-				// Return error
-				else return 1;
+				// Throw error
+				else throw SyntaxError("Expected identifier after \"state\" keyword");
 			}
 
 			/**
@@ -256,16 +246,13 @@ namespace Jump
 			 * @param machine the StateMachine to parse
 			 * @param tks     the token queue to parse
 			 *
-			 * @return status code of parses
+			 * @throw SyntaxError if invalid token sequence
 			 */
-			static int declaration(StateMachine& machine, queue<Token>& tks)
+			static void declaration(StateMachine& machine, queue<Token>& tks) throw(SyntaxError)
 			{
 				// Parse declaration
 				if (isKeyword(tks, "state"))
-					if (!state(machine, tks)) return 1;
-
-				// Return ok
-				return 0;
+					state(machine, tks);
 			}
 
 			/**
@@ -274,32 +261,34 @@ namespace Jump
 			 * @param machine the StateMachine to parse
 			 * @param tks     the token queue to parse
 			 *
-			 * @return status code of parses
+			 * @throw SyntaxError if invalid token sequence
 			 */
-			static int statemachine(StateMachine& machine, queue<Token>& tks)
+			static void statemachine(StateMachine& machine, queue<Token>& tks) throw(SyntaxError)
 			{
 				// Parse state machine declarations
 				while (continuing(tks))
-					if (!declaration(machine, tks)) return 1;
-
-				// Return ok
-				return 0;
+					declaration(machine, tks);
 			}
 
 			// ------------------------ PARSE --------------------------
 
 			/**
-			 * Parses the given token queue into the given StateMachine
+			 * Parses the given token queue into a StateMachine
 			 *
-			 * @param machine the StateMachine to be parsed
-			 * @param tks     the tokens to parse into the StateMachine
+			 * @param tks the tokens to parse into the StateMachine
 			 *
-			 * @return status code to parse
+			 * @return the StateMachine that was parsed
+			 *
+			 * @throw SyntaxError if an invalid token was detected
 			 */
-			int parse(StateMachine& machine, queue<Token>& tks)
+			StateMachine parse(queue<Token>& tks) throw(SyntaxError)
 			{
-				// Parse statemachine and return error code
-				return statemachine(machine, tks);
+				// Parse machine
+				StateMachine machine;
+				statemachine(machine, tks);
+
+				// Return machine
+				return machine;
 			}
 		}
 	}

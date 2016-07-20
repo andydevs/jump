@@ -13,6 +13,7 @@
 // Headers being used
 #include "token.h"
 #include "tokenclass.h"
+#include "Jump/Compiler/syntaxerror.h"
 
 // Libraries being used
 #include <queue>
@@ -61,15 +62,15 @@ namespace Jump
 			};
 
 			/**
-			 * Parses the given input into tokens which are pushed onto 
-			 * the given queue. Returns true if parser errored
+			 * Parses the given input into a queue of tokens tokens.
 			 *
-			 * @param tkq   the queue to push tokens to
 			 * @param input the input to parse from
 			 *
-			 * @return true if parser errored
+			 * @return the Tokens parsed from the input
+			 * 
+			 * @throw SyntaxError if parser could not parse a particular character
 			 */
-			bool parse(std::queue<Token>& tkq, std::string input);
+			std::queue<Token> parse(std::string input) throw(Jump::Compiler::SyntaxError);
 		}
 	}
 }
