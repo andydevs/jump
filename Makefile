@@ -1,9 +1,9 @@
-TARGET = jump
+# --------------------- PROJECT ----------------------
 
-SHELL = /bin/bash -O globstar
-CC    = g++
+PROJECT = jump
+VERSION = 0.1.0
 
-FLAGS = -std=c++14 -Wall
+# -------------------- DIRECTORIES -------------------
 
 INCDIR = include
 LIBDIR = lib
@@ -11,6 +11,26 @@ SRCDIR = src
 OBJDIR = obj
 BINDIR = bin
 INSDIR = /usr/bin
+
+# ----------------------- TEST -----------------------
+
+# Program arguments
+TESTARGS = example.jump
+
+# ---------------------- CONFIG ----------------------
+
+# Shell command
+SHELL = /bin/bash -O globstar
+
+# Compiler
+CC = g++
+
+# Flags
+FLAGS = -std=c++14 -Wall
+
+# ---------------------- MAKEFILE --------------------
+
+TARGET = $(PROJECT)-$(VERSION)
 
 INCLUDS = $(shell ls $(INCDIR)/**/*.h)
 SOURCES = $(shell ls $(SRCDIR)/**/*.cpp)
@@ -42,8 +62,8 @@ uninstall:
 	@rm $(INSDIR)/$(TARGET)
 	@echo Uninstalled!
 
-run: $(BINARY)
+test: $(BINARY)
 	@echo Running...
 	@echo -----------------------------------------
-	@$(BINARY)
+	@$(BINARY) $(TESTARGS)
 	@echo -----------------------------------------

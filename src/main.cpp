@@ -21,6 +21,15 @@ using namespace std;
 using namespace Jump;
 
 /**
+ * Returns the text read from the file of the given filename
+ *
+ * @param filename the name of the file to read
+ *
+ * @return text read from the file of the given filename
+ */
+string readfile(string filename);
+
+/**
  * The main function of the program
  *
  * @param argc the number of command line arguments
@@ -30,15 +39,41 @@ using namespace Jump;
  */
 int main(int argc, char const *argv[])
 {
-	// Read program from file
-	ifstream file("example.jump");
+	// Get filename
+	// Return error if filename not given
+	string filename;
+	if (argc > 1)
+	{
+		filename = argv[1];
+	}
+	else
+	{
+		cout << "ERROR! Program name not specified!" << endl;
+		return 1;
+	}
+
+	// Compile inout into StateMachine
+	Core::StateMachine machine = Compiler::compile(readfile(filename));
+
+	// Execute the machine and return status code
+	return machine.execute();
+}
+
+/**
+ * Returns the text read from the file of the given filename
+ *
+ * @param filename the name of the file to read
+ *
+ * @return text read from the file of the given filename
+ */
+string readfile(string filename)
+{
+	// Read file into input
+	ifstream file(filename);
 	string input = ""; char c;
 	while (file.get(c)) input += c;
 	file.close();
 
-	// Compile inout into StateMachine
-	Core::StateMachine machine = Compiler::compile(input);
-
-	// Execute the machine and return status code
-	return machine.execute();
+	// Return input
+	return input;
 }
