@@ -1,3 +1,5 @@
+# Sample Jump program
+
 state start
 	print "Good afternoon world"
 	print "I am Chef Gordon Ramsay"

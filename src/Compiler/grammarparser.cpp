@@ -43,6 +43,20 @@ namespace Jump
 
 			/**
 			 * Returns true if the next token in the given queue
+			 * is a keyword
+			 *
+			 * @param tks the queue of tokens to check
+			 *
+			 * @return true if the next token in the given queue
+			 *		   is a keyword
+			 */
+			static bool isKeyword(queue<Token> tks)
+			{
+				return tks.front().m_klass == "keyword";
+			}
+
+			/**
+			 * Returns true if the next token in the given queue
 			 * is a keyword and equals the given word
 			 *
 			 * @param tks  the queue of tokens to check
@@ -63,7 +77,7 @@ namespace Jump
 			 * @param tks  the queue of tokens to check
 			 *
 			 * @return true if the next token in the given queue
-			 *		   is a declaration
+			 *		   is a statemachine declaration
 			 */
 			static bool isDeclaration(queue<Token> tks)
 			{
@@ -161,6 +175,7 @@ namespace Jump
 					state->add(new Statements::To(tks.front().m_attribute));
 					tks.pop();
 				}
+				// Else throw SyntaxError
 				else throw SyntaxError("Expected identifier after \"to\" keyword");
 			}
 
@@ -201,9 +216,8 @@ namespace Jump
 					print(state, tks);
 				else if (isKeyword(tks, "to"))
 					to(state, tks);
-
-				// Endline
-				endline(tks);
+				else
+					throw SyntaxError("Unexpected State keyword: " + tks.front().m_attribute);
 			}
 
 			// -------------- STATEMACHINE --------------
@@ -229,12 +243,26 @@ namespace Jump
 					tks.pop();
 					endline(tks);
 
-					// Parse statements until next state declaration (or end of program)
-					while (continuing(tks) && !isDeclaration(tks))
-						statement(state, tks);
+					try
+					{
+						// Parse statements until next state declaration (or end of program)
+						while (continuing(tks) && !isDeclaration(tks))
+							if (isKeyword(tks))
+								statement(state, tks);
+							else if (isEndline(tks))
+								endline(tks);
+							else
+								throw SyntaxError("Unexpected token " + tks.front().toString() + ". Expected KEYWORD or ENDLINE");
 
-					// Set state in machine
-					machine.stateSet(state);
+						// Set state in machine
+						machine.stateSet(state);
+					}
+					catch (exception& e)
+					{
+						// Delete state if error
+						delete state;
+						throw e;
+					}
 				}
 				// Throw error
 				else throw SyntaxError("Expected identifier after \"state\" keyword");
@@ -253,6 +281,8 @@ namespace Jump
 				// Parse declaration
 				if (isKeyword(tks, "state"))
 					state(machine, tks);
+				else
+					throw SyntaxError("Unexpected StateMachine keyword: " + tks.front().m_attribute);
 			}
 
 			/**
@@ -267,7 +297,12 @@ namespace Jump
 			{
 				// Parse state machine declarations
 				while (continuing(tks))
-					declaration(machine, tks);
+					if (isKeyword(tks))
+						declaration(machine, tks);
+					else if (isEndline(tks))
+						endline(tks);
+					else
+						throw SyntaxError("Unexpected token " + tks.front().toString() + ". Expected KEYWORD or ENDLINE");
 			}
 
 			// ------------------------ PARSE --------------------------
