@@ -67,7 +67,7 @@ namespace Jump
 					error = true;
 
 					// Search token classes
-					for (int i = 0; i < sizeof(TOKEN_CLASSES) / sizeof(TokenClass); ++i)
+					for (unsigned i = 0; i < sizeof(TOKEN_CLASSES) / sizeof(TokenClass); ++i)
 					{
 						// If one matches input
 						if (TOKEN_CLASSES[i].hasToken(input))

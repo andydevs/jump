@@ -47,7 +47,7 @@ namespace Jump
 		State::~State() 
 		{
 			// Delete all statements
-			for (int i = 0; i < m_statements.size(); ++i)
+			for (unsigned i = 0; i < m_statements.size(); ++i)
 				delete m_statements[i];
 		}
 
@@ -79,7 +79,7 @@ namespace Jump
 		string State::index()
 		{
 			string s = toString() + "\n";
-			for (int i = 0; i < m_statements.size(); ++i)
+			for (unsigned i = 0; i < m_statements.size(); ++i)
 				s += "\t\t" + m_statements[i]->toString() + "\n";
 			return s;
 		}
@@ -115,7 +115,7 @@ namespace Jump
 			string out;
 
 			// Each statement
-			for (int i = 0; i < m_statements.size(); ++i)
+			for (unsigned i = 0; i < m_statements.size(); ++i)
 			{
 				// Execute next statement
 				out = m_statements[i]->execute(this);

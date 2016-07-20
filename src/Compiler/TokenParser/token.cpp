@@ -68,7 +68,7 @@ namespace Jump
 			string Token::toString() const
 			{
 				string s = "<" + m_klass + "-\"";
-				for (int i = 0; i < m_attribute.length(); ++i)
+				for (unsigned i = 0; i < m_attribute.length(); ++i)
 				{
 					switch (m_attribute[i])
 					{
