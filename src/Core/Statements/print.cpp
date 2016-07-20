@@ -38,14 +38,20 @@ namespace Jump
 		namespace Statements
 		{
 			/**
+			 * Creates an empty print statement
+			 */
+			Print::Print() : Statement(), 
+							 m_toPrint(""),
+							 m_streamRef(cout) {}
+
+			/**
 			 * Creates a print statement with the given value to print
 			 *
 			 * @param toPrint the value to print
 			 */
-			Print::Print(string toPrint) : Statement(), m_streamRef(cout)
-			{
-				m_toPrint = toPrint;
-			}
+			Print::Print(string toPrint) : Statement(),  
+										   m_toPrint(toPrint),
+										   m_streamRef(cout) {}
 
 			/**
 			 * Creates a print statement with the given value to print and the stream to print to
@@ -53,10 +59,9 @@ namespace Jump
 			 * @param toPrint   the value to print
 			 * @param streamRef the stream to print to
 			 */
-			Print::Print(string toPrint, ostream& streamRef) : Statement(), m_streamRef(m_streamRef)
-			{
-				m_toPrint = toPrint;
-			}
+			Print::Print(string toPrint, ostream& streamRef) : Statement(),
+															   m_toPrint(toPrint),
+															   m_streamRef(streamRef) {}
 
 			/**
 			 * Creates a print statement with the given condition to check and value to print
@@ -64,10 +69,9 @@ namespace Jump
 			 * @param condition the condition to ckeck
 			 * @param toPrint   the value to print
 			 */
-			Print::Print(bool condition, string toPrint) : Statement(condition), m_streamRef(cout)
-			{
-				m_toPrint = toPrint;
-			}
+			Print::Print(bool condition, string toPrint) : Statement(condition),
+														   m_toPrint(toPrint),
+														   m_streamRef(cout) {}
 
 			/**
 			 * Creates a print statement with the given condition to check and value to print
@@ -76,20 +80,18 @@ namespace Jump
 			 * @param toPrint   the value to print
 			 * @param streamRef the stream to print to (referenced)
 			 */
-			Print::Print(bool condition, string toPrint, ostream& streamRef) : Statement(condition), m_streamRef(m_streamRef)
-			{
-				m_toPrint = toPrint;
-			}
+			Print::Print(bool condition, string toPrint, ostream& streamRef) : Statement(condition),
+																			   m_toPrint(toPrint),
+																			   m_streamRef(streamRef) {}
 
 			/**
 			 * Copy constructor for print statement
 			 *
 			 * @param other the Print to copy
 			 */
-			Print::Print(const Print& other) : Statement(other), m_streamRef(other.m_streamRef)
-			{
-				m_toPrint = other.m_toPrint;
-			}
+			Print::Print(const Print& other) : Statement(other),
+											   m_toPrint(other.m_toPrint),
+											   m_streamRef(other.m_streamRef) {}
 
 			/**
 			 * Destructor for print statement
@@ -115,7 +117,7 @@ namespace Jump
 			 */
 			string Print::conditionedExecute(State* stateRef)
 			{
-				m_streamRef << m_toPrint << endl;
+				m_streamRef << m_toPrint.substr(1, m_toPrint.length() - 2) << endl;
 				return "";
 			}
 		}

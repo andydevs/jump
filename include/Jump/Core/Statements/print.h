@@ -59,6 +59,11 @@ namespace Jump
 				 * The stream to print to (pointer)
 				 */
 				std::ostream& m_streamRef;
+
+				/**
+				 * Creates an empty print statement
+				 */
+				Print();
 		
 				/**
 				 * Creates a print statement with the given value to print

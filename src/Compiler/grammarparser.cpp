@@ -183,7 +183,7 @@ namespace Jump
 					tks.pop();
 				}
 				// Else add blank print statement
-				else state->add(new Statements::Print(""));
+				else state->add(new Statements::Print());
 			}
 
 			/**
