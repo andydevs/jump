@@ -1,0 +1,55 @@
+%YAML 1.2
+---
+name: Jump
+file_extensions: 
+  - jump
+scope: source.jump
+
+contexts:
+  comments:
+    - comment: Comment
+      match: \#.*\r?\n
+      scope: comment.line.number-sign.jump
+
+  main:
+    - include: comments
+
+    - comment: Keywords
+      match: \b(var|const|print|read|to|loop|end|check|if|otherwise)\b
+      scope: keyword.control.jump
+    
+    - comment: Numbers
+      match: \b\d+(\.\d+)?((e|E)(\+|-)?\d+)?\b
+      scope: constant.numeric.jump
+    
+    - comment: Boolean
+      match: \b(True|False)\b
+      scope: constant.language.jump
+    
+    - comment: The start of a double-quoted string
+      match: '"'
+      push: double_quoted_string
+
+    - comment: The start of a single-quoted string
+      match: "'"
+      push: single_quoted_string
+    
+    - comment: State definition
+      match: \b(state)\s+(\w+)\b
+      captures:
+        1: support.function.jump
+        2: entity.name.function.jump
+
+  double_quoted_string:
+    - meta_scope: string.quoted.double.jump
+    - match: \\.
+      scope: constant.character.escape.jump
+    - match: '"'
+      pop: true
+
+  single_quoted_string:
+    - meta_scope: string.quoted.single.jump
+    - match: \\.
+      scope: constant.character.escape.jump
+    - match: "'"
+      pop: true
