@@ -8,11 +8,17 @@
 //-----------------------------------------------------------------------------------
 
 // Headers being used
-#include "Jump/Compiler/grammarparser.h"
+#include "Jump/Compiler/compiler.h"
 
 // Libraries being used
+#include <iostream>
+#include <fstream>
 #include <string>
 #include <queue>
+
+// Namespaces being used
+using namespace std;
+using namespace Jump;
 
 /**
  * The main function of the program
@@ -24,12 +30,14 @@
  */
 int main(int argc, char const *argv[])
 {
-	// Test input to parse
-	std::string input = "state start\n\tprint \"Hello World\"";
+	// Read program from file
+	ifstream file("example.jump");
+	string input = ""; char c;
+	while (file.get(c)) input += c;
+	file.close();
 
-	// Parse Tokens and StateMachine
-	std::queue<Jump::Compiler::TokenParser::Token> tokens = Jump::Compiler::TokenParser::parse(input);
-	Jump::Core::StateMachine machine = Jump::Compiler::GrammarParser::parse(tokens);
+	// Compile inout into StateMachine
+	Core::StateMachine machine = Compiler::compile(input);
 
 	// Execute the machine and return status code
 	return machine.execute();

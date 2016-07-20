@@ -1,0 +1,14 @@
+state start
+	print "Good afternoon world"
+	print "I am Chef Gordon Ramsay"
+	print "And I like cat food"
+	to next
+
+state next
+	print "I am dog"
+	print "I also like cat food"
+	to final
+
+state final
+	print "I am pig"
+	print "I do pig stuff"
