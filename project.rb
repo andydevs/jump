@@ -5,16 +5,16 @@ created: "7 - 15 - 2016",
 short_description: "Jump is a new programming language that uses the state machine paradigm",
 long_description: "Jump is a new programming language that uses the state machine paradigm"
 
-#---------------------------MAKERS---------------------------
+#--------------------------------------------MAKERS--------------------------------------------
 
 # Header file
-file :header, 
+file :header,
 path: "include/@(project_name)/@(path)",
 template: "header.general",
 extension: "h"
 
 # Source file
-file :source, 
+file :source,
 path: "src/@(path)",
 template: "source.general",
 extension: "cpp"
