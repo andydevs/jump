@@ -62,7 +62,7 @@ uninstall:
 	@rm $(INSDIR)/$(TARGET)
 	@echo Uninstalled!
 
-test: $(BINARY)
+run: $(BINARY)
 	@echo Running...
 	@echo -----------------------------------------
 	@$(BINARY) $(TESTARGS)

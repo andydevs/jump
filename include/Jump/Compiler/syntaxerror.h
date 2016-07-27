@@ -38,7 +38,7 @@ namespace Jump
 		 * @author  Anshul Kharbanda
 		 * @created 7 - 19 - 2016
 		 */
-		class SyntaxError
+		class SyntaxError: public std::exception
 		{
 		private:
 			/**
