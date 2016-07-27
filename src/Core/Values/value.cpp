@@ -12,10 +12,6 @@ Created: 7 - 15 - 2016
 // Headers being used
 #include "Jump/Core/Values/value.h"
 
-// Libraries being used
-#include <typeinfo>
-#include <cstdio>
-
 // Namespaces being used
 using namespace std;
 using namespace Jump::Core::Errors;
@@ -45,9 +41,18 @@ namespace Jump
 		namespace Values
 		{
 			/**
-			 * Creates a value
+			 * Creates a value with the given type
+			 *
+			 * @param type the type of the value
 			 */
-			Value::Value() {}
+			Value::Value(string type): m_type(type) {}
+
+			/**
+			 * Copy constructor for value
+			 *
+			 * @param other the other Value to copy
+			 */ 
+			Value::Value(const Value& other) : m_type(other.m_type) {}
 
 			/**
 			 * Destroys the value
@@ -61,7 +66,7 @@ namespace Jump
 			 */
 			string Value::type() const
 			{
-				return typeid(this).name();
+				return m_type;
 			}
 
 			/**
@@ -72,8 +77,21 @@ namespace Jump
 			string Value::toString() const
 			{
 				char buff[50];
-				sprintf(buff, "<%s@%lx>", type().c_str(), (unsigned long)this);
+				sprintf(buff, "<%s@%lx>", m_type.c_str(), (unsigned long)this);
 				return string(buff);
+			}
+
+			/**
+			 * Operator for passing value to output stream
+			 *
+			 * @param out the output stream to write to
+			 * @param val the value to write
+			 *
+			 * @return the output stream that was written to
+			 */
+			std::ostream& operator<<(std::ostream& out, const Value& val)
+			{
+				return out << val.toString();
 			}
 
 			/**

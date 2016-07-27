@@ -11,9 +11,11 @@ Created: 7 - 15 - 2016
 
 // Headers being used
 #include "Jump/Core/Statements/print.h"
+#include "Jump/Core/Values/null.h"
 
 // Namespace being used
 using namespace std;
+using namespace Jump::Core::Values;
 
 /**
  * Jump is a new programming language that uses the state machine paradigm
@@ -43,7 +45,7 @@ namespace Jump
 			 * Creates an empty print statement
 			 */
 			Print::Print() : Statement(), 
-							 m_toPrint(""),
+							 m_toPrint(new Null()),
 							 m_streamRef(cout) {}
 
 			/**
@@ -51,7 +53,7 @@ namespace Jump
 			 *
 			 * @param toPrint the value to print
 			 */
-			Print::Print(string toPrint) : Statement(),  
+			Print::Print(Value* toPrint) : Statement(),  
 										   m_toPrint(toPrint),
 										   m_streamRef(cout) {}
 
@@ -61,7 +63,7 @@ namespace Jump
 			 * @param toPrint   the value to print
 			 * @param streamRef the stream to print to
 			 */
-			Print::Print(string toPrint, ostream& streamRef) : Statement(),
+			Print::Print(Value* toPrint, ostream& streamRef) : Statement(),
 															   m_toPrint(toPrint),
 															   m_streamRef(streamRef) {}
 
@@ -71,7 +73,7 @@ namespace Jump
 			 * @param condition the condition to ckeck
 			 * @param toPrint   the value to print
 			 */
-			Print::Print(bool condition, string toPrint) : Statement(condition),
+			Print::Print(bool condition, Value* toPrint) : Statement(condition),
 														   m_toPrint(toPrint),
 														   m_streamRef(cout) {}
 
@@ -82,7 +84,7 @@ namespace Jump
 			 * @param toPrint   the value to print
 			 * @param streamRef the stream to print to (referenced)
 			 */
-			Print::Print(bool condition, string toPrint, ostream& streamRef) : Statement(condition),
+			Print::Print(bool condition, Value* toPrint, ostream& streamRef) : Statement(condition),
 																			   m_toPrint(toPrint),
 																			   m_streamRef(streamRef) {}
 
@@ -98,16 +100,19 @@ namespace Jump
 			/**
 			 * Destructor for print statement
 			 */
-			Print::~Print() {}
+			Print::~Print() 
+			{
+				delete m_toPrint;
+			}
 
 			/**
 			 * Returns the string representation of the Print
 			 *
 			 * @return the string representation of the Print
 			 */ 
-			std::string Print::toString()
+			string Print::toString()
 			{
-				return "[PRINT " + m_toPrint + "]";
+				return "[PRINT " + m_toPrint->toString() + "]";
 			}
 
 			/**
@@ -119,7 +124,7 @@ namespace Jump
 			 */
 			string Print::conditionedExecute(State* stateRef)
 			{
-				m_streamRef << m_toPrint.substr(1, m_toPrint.length() - 2) << endl;
+				m_streamRef << m_toPrint->toString() << endl;
 				return "";
 			}
 		}

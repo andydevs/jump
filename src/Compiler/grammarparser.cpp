@@ -11,6 +11,7 @@ Created: 7 - 15 - 2016
 
 // Headers being used
 #include "Jump/Compiler/grammarparser.h"
+#include "Jump/Core/Values/string.h"
 
 // Namespaces being used
 using namespace std;
@@ -102,16 +103,30 @@ namespace Jump
 
 			/**
 			 * Returns true if the next token in the given queue
-			 * is an string
+			 * is a string
 			 *
 			 * @param tks the queue of tokens to check
 			 *
 			 * @return true if the next token in the given queue
-			 *		   is an string
+			 *		   is a string
 			 */
 			static bool isString(queue<Token> tks)
 			{
 				return tks.front().m_klass == "string";
+			}
+
+			/**
+			 * Returns true if the next token in the given queue
+			 * is a value
+			 *
+			 * @param tks the queue of tokens to check
+			 *
+			 * @return true if the next token in the given queue
+			 *		   is a value
+			 */
+			static bool isValue(queue<Token> tks)
+			{
+				return isString(tks) || isIdentifier(tks);
 			}
 
 			/**
@@ -158,6 +173,23 @@ namespace Jump
 			// -------------- STATEMENTS --------------
 
 			/**
+			 * Parses a value
+			 *
+			 * @param tks the token queue to parse
+			 *
+			 * @return the value parsed
+			 *
+			 * @throw SyntaxError if invalid token sequence
+			 */
+			static Values::Value* value(queue<Token>& tks) throw(SyntaxError)
+			{
+				if (isString(tks))
+					return new Values::String(tks.front().m_attribute);
+				else
+					throw SyntaxError("Unexpected token " + tks.front().toString() +  ". Expected Value Type");
+			}
+
+			/**
 			 * Parses a to statement
 			 *
 			 * @param state the state to add the statement to
@@ -192,15 +224,21 @@ namespace Jump
 				// Next token
 				tks.pop();
 
-				// If next is string
-				if (isString(tks))
+				// If next is value
+				if (isValue(tks))
 				{
-					// Add print statement with the string token
-					state->add(new Statements::Print(tks.front().m_attribute));
+					// Add print statement with the value token
+					state->add(new Statements::Print(value(tks)));
+
+					// Pop token
 					tks.pop();
 				}
-				// Else add blank print statement
-				else state->add(new Statements::Print());
+				// Else if endline add blank print statement
+				else if (isEndline(tks))
+					state->add(new Statements::Print());
+				// Else throw SyntaxError
+				else
+					throw SyntaxError("Unexpected token " + tks.front().toString() + ". expected ValueType or Endline");
 			}
 
 			/**

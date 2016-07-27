@@ -14,6 +14,8 @@ Created: 7 - 15 - 2016
 
 // Headers being used
 #include "statement.h"
+#include "Jump/Core/Values/value.h"
+#include "print.h"
 
 // Libaries being used
 #include <iostream>
@@ -55,7 +57,7 @@ namespace Jump
 				/**
 				 * The value to print
 				 */
-				std::string m_toPrint;
+				Jump::Core::Values::Value* m_toPrint;
 
 				/**
 				 * The stream to print to (pointer)
@@ -72,7 +74,7 @@ namespace Jump
 				 *
 				 * @param toPrint the value to print
 				 */
-				Print(std::string toPrint);
+				Print(Jump::Core::Values::Value* toPrint);
 
 				/**
 				 * Creates a print statement with the given value to print and the stream to print to
@@ -80,7 +82,7 @@ namespace Jump
 				 * @param toPrint   the value to print
 				 * @param streamRef the stream to print to
 				 */
-				Print(std::string toPrint, std::ostream& streamRef);
+				Print(Jump::Core::Values::Value* toPrint, std::ostream& streamRef);
 
 				/**
 				 * Creates a print statement with the given condition to check and value to print
@@ -88,7 +90,7 @@ namespace Jump
 				 * @param condition the condition to ckeck
 				 * @param toPrint   the value to print
 				 */
-				Print(bool condition, std::string toPrint);
+				Print(bool condition, Jump::Core::Values::Value* toPrint);
 
 				/**
 				 * Creates a print statement with the given condition to check and value to print
@@ -97,7 +99,7 @@ namespace Jump
 				 * @param toPrint   the value to print
 				 * @param streamRef the stream to print to (referenced)
 				 */
-				Print(bool condition, std::string toPrint, std::ostream& streamRef);
+				Print(bool condition, Jump::Core::Values::Value* toPrint, std::ostream& streamRef);
 
 				/**
 				 * Copy constructor for print statement

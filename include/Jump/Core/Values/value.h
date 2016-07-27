@@ -50,16 +50,30 @@ namespace Jump
 			 */
 			class Value
 			{
+			private:
+				/**
+				 * The type of the value
+				 */
+				std::string m_type;
 			public:
 				/**
-				 * Creates a value
+				 * Creates a value with the given type
+				 * 
+				 * @param type the type of the value
 				 */
-				Value();
+				Value(std::string type);
+
+				/**
+				 * Copy constructor for value
+				 *
+				 * @param other the other Value to copy
+				 */ 
+				Value(const Value& other);
 
 				/**
 				 * Destroys the value
 				 */
-				~Value();
+				virtual ~Value();
 
 				/**
 				 * Returns the type of the value
@@ -74,6 +88,16 @@ namespace Jump
 				 * @return the string representation of the Value
 				 */
 				virtual std::string toString() const;
+
+				/**
+				 * Operator for passing value to output stream
+				 *
+				 * @param out the output stream to write to
+				 * @param val the value to write
+				 *
+				 * @return the output stream that was written to
+				 */
+				friend std::ostream& operator<<(std::ostream& out, const Value& val);
 
 				/**
 				 * The boolean and operation for Jump values
