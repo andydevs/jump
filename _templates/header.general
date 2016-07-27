@@ -1,0 +1,17 @@
+/*
+
+Program: @(project_name)
+
+@(long_description)
+
+Author:  @(author)
+Created: @(created)
+
+*/
+
+#ifndef @(header_id)
+#define @(header_id)
+
+// Code
+
+#endif

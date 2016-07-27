@@ -1,11 +1,13 @@
-//-----------------------------------------------------------------------------------
-// Program: Jump
-// 
-// Jump is a new programming language that uses the state machine paradigm
-//
-// Author:  Anshul Kharbanda
-// Created: 7 - 15 - 2016
-//-----------------------------------------------------------------------------------
+/*
+
+Program: Jump
+
+Jump is a new programming language that uses the state machine paradigm
+
+Author:  Anshul Kharbanda
+Created: 7 - 15 - 2016
+
+*/
 
 #ifndef _COMPILER_TOKENPARSER_TOKENCLASS_H_
 #define _COMPILER_TOKENPARSER_TOKENCLASS_H_
