@@ -87,7 +87,7 @@ namespace Jump
 					}
 
 					// Throw SyntaxError if error
-					if (error) throw SyntaxError("Unexpected character " + input[0]);
+					if (error) throw SyntaxError("Unexpected character: \"" + input.substr(0, 1) + "\"");
 				}
 
 				// Return queue

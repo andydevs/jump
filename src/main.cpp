@@ -64,7 +64,7 @@ int main(int argc, char const *argv[])
 	}
 	catch (Compiler::SyntaxError& e)
 	{
-		cout << e.what() << endl;
+		cout << "SyntaxError: " << e.what() << endl;
 		return 1;
 	}
 }
