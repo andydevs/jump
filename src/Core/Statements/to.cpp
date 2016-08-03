@@ -52,11 +52,11 @@ namespace Jump
 			To::~To() {}
 
 			/**
-			 * Returns the string representation of the Print
+			 * Returns an inspection of the To
 			 *
-			 * @return the string representation of the Print
+			 * @return an inspection of the To
 			 */ 
-			std::string To::toString()
+			string To::inspect()
 			{
 				return "[TO " + m_stateRef + "]";
 			}

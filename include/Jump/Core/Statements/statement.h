@@ -86,11 +86,11 @@ namespace Jump
 				virtual ~Statement();
 
 				/**
-				 * Returns the string representation of the Statement
+				 * Returns an inspection of the Statement
 				 *
-				 * @return the string representation of the Statement
+				 * @return an inspection of the Statement
 				 */ 
-				virtual std::string toString() = 0;
+				virtual std::string inspect() = 0;
 
 				/**
 				 * Executes the statement

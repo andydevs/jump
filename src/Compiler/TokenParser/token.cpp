@@ -65,6 +65,26 @@ namespace Jump
 			Token::~Token() {}
 
 			/**
+			 * Returns the class of the Token
+			 *
+			 * @return the class of the Token
+			 */
+			std::string Token::klass() const
+			{
+				return m_klass;
+			}
+
+			/**
+			 * Returns the attribute of the Token
+			 *
+			 * @return the attribute of the Token
+			 */
+			std::string Token::attribute() const
+			{
+				return m_attribute;
+			}
+
+			/**
 			 * Returns the string representation of the token
 			 */
 			string Token::toString() const

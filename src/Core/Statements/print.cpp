@@ -106,13 +106,13 @@ namespace Jump
 			}
 
 			/**
-			 * Returns the string representation of the Print
+			 * Returns an inspection of the Print
 			 *
-			 * @return the string representation of the Print
+			 * @return an inspection of the Print
 			 */ 
-			string Print::toString()
+			string Print::inspect()
 			{
-				return "[PRINT " + m_toPrint->toString() + "]";
+				return "[PRINT" + (m_toPrint->isNull() ? "" : " " + m_toPrint->toString()) + "]";
 			}
 
 			/**

@@ -114,11 +114,11 @@ namespace Jump
 				~Print();
 
 				/**
-				 * Returns the string representation of the Print
+				 * Returns an inspection of the Print
 				 *
-				 * @return the string representation of the Print
+				 * @return an inspection of the Print
 				 */ 
-				std::string toString();
+				std::string inspect();
 
 				/**
 				 * Executes the print statement if the condition is true

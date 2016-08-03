@@ -70,6 +70,16 @@ namespace Jump
 			}
 
 			/**
+			 * Returns true if the value is Null
+			 *
+			 * @return true if the value is Null
+			 */
+			bool Value::isNull() const
+			{
+				return false;
+			}
+
+			/**
 			 * Returns the string representation of the Value
 			 *
 			 * @return the string representation of the Value

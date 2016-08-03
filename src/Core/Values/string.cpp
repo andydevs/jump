@@ -90,7 +90,7 @@ namespace Jump
 			 *
 			 * @return the result of the concatenation operator
 			 */
-			String String::operator+(Value other) const
+			Value String::operator+(const Value& other) const throw(Jump::Core::Errors::TypeError)
 			{
 				return String(m_store + other.toString());
 			}

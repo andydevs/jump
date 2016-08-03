@@ -55,6 +55,7 @@ namespace Jump
 
 				// Values
 				TokenClass("string", "(\"|').*?\\1"),
+				TokenClass("number", "[0-9]+"),
 
 				// Endline
 				TokenClass("endline", "(#.*?)?\r?\n"),

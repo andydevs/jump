@@ -59,6 +59,13 @@ namespace Jump
 				~Null();
 
 				/**
+				 * Returns true if the value is Null
+				 *
+				 * @return true if the value is Null
+				 */
+				bool isNull() const;
+
+				/**
 				 * Returns the string representaiton of the Null value
 				 *
 				 * @return the string representation of the Null value

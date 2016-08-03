@@ -54,11 +54,19 @@ int main(int argc, char const *argv[])
 		return 1;
 	}
 
-	// Compile inout into StateMachine
-	Core::StateMachine machine = Compiler::compile(readfile(filename));
+	try
+	{
+		// Compile inout into StateMachine
+		Core::StateMachine machine = Compiler::compile(readfile(filename));
 
-	// Execute the machine and return status code
-	return machine.execute();
+		// Execute the machine and return status code
+		return machine.execute();
+	}
+	catch (Compiler::SyntaxError& e)
+	{
+		cout << e.what() << endl;
+		return 1;
+	}
 }
 
 /**

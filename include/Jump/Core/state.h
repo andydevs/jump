@@ -94,18 +94,11 @@ namespace Jump
 			std::string getName();
 
 			/**
-			 * Returns the string representation of the Print
+			 * Returns an inspection of the State
 			 *
-			 * @return the string representation of the Print
-			 */ 
-			std::string toString();
-
-			/**
-			 * Returns an index of the statements in the State
-			 *
-			 * @return an index of the statements in the State
+			 * @return an inspection of the State
 			 */
-			std::string index();
+			std::string inspect();
 
 			/**
 			 * Sets the StateMachine of the state

@@ -83,6 +83,13 @@ namespace Jump
 				std::string type() const;
 
 				/**
+				 * Returns true if the value is Null
+				 *
+				 * @return true if the value is Null
+				 */
+				virtual bool isNull() const;
+
+				/**
 				 * Returns the string representation of the Value
 				 *
 				 * @return the string representation of the Value

@@ -12,6 +12,10 @@ Created: 7 - 15 - 2016
 // Headers being used
 #include "Jump/Compiler/grammarparser.h"
 #include "Jump/Core/Values/string.h"
+#include "Jump/Core/Values/Numbers/int32.h"
+
+// Libraries being used
+#include <cstdlib>
 
 // Namespaces being used
 using namespace std;
@@ -117,6 +121,20 @@ namespace Jump
 
 			/**
 			 * Returns true if the next token in the given queue
+			 * is a number
+			 *
+			 * @param tks the queue of tokens to check
+			 *
+			 * @return true if the next token in the given queue
+			 *		   is a number
+			 */
+			static bool isNumber(queue<Token> tks)
+			{
+				return tks.front().m_klass == "number";
+			}
+
+			/**
+			 * Returns true if the next token in the given queue
 			 * is a value
 			 *
 			 * @param tks the queue of tokens to check
@@ -126,7 +144,7 @@ namespace Jump
 			 */
 			static bool isValue(queue<Token> tks)
 			{
-				return isString(tks) || isIdentifier(tks);
+				return isString(tks) || isNumber(tks) || isIdentifier(tks);
 			}
 
 			/**
@@ -184,7 +202,9 @@ namespace Jump
 			static Values::Value* value(queue<Token>& tks) throw(SyntaxError)
 			{
 				if (isString(tks))
-					return new Values::String(tks.front().m_attribute);
+					return new Values::String(tks.front().attribute());
+				else if (isNumber(tks))
+					return new Values::Numbers::Int32(atoi(tks.front().attribute().c_str()));
 				else
 					throw SyntaxError("Unexpected token " + tks.front().toString() +  ". Expected Value Type");
 			}
@@ -206,7 +226,7 @@ namespace Jump
 				if (isIdentifier(tks))
 				{
 					// Add to statement with the identifier token
-					state->add(new Statements::To(tks.front().m_attribute));
+					state->add(new Statements::To(tks.front().attribute()));
 					tks.pop();
 				}
 				// Else throw SyntaxError
@@ -257,7 +277,7 @@ namespace Jump
 				else if (isKeyword(tks, "to"))
 					to(state, tks);
 				else
-					throw SyntaxError("Unexpected State keyword: " + tks.front().m_attribute);
+					throw SyntaxError("Unexpected State keyword: " + tks.front().attribute());
 			}
 
 			// -------------- STATEMACHINE --------------
@@ -279,7 +299,7 @@ namespace Jump
 				if (isIdentifier(tks))
 				{
 					// Generate state from identifier token
-					State* state = new State(tks.front().m_attribute);
+					State* state = new State(tks.front().attribute());
 					tks.pop();
 					endline(tks);
 
@@ -322,7 +342,7 @@ namespace Jump
 				if (isKeyword(tks, "state"))
 					state(machine, tks);
 				else
-					throw SyntaxError("Unexpected StateMachine keyword: " + tks.front().m_attribute);
+					throw SyntaxError("Unexpected StateMachine keyword: " + tks.front().attribute());
 			}
 
 			/**

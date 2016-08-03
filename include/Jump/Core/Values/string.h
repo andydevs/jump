@@ -13,6 +13,7 @@ Created: 7 - 15 - 2016
 #define _CORE_VALUES_STRING_H_
 
 // Headers being used
+#include "Jump/Core/Errors/typeerror.h"
 #include "value.h"
 
 /**
@@ -98,7 +99,7 @@ namespace Jump
 				 *
 				 * @return the result of the concatenation operator
 				 */
-				String operator+(Value other) const;
+				Value operator+(const Value& other) const throw(Jump::Core::Errors::TypeError);
 			};
 		}
 	}

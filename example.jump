@@ -9,6 +9,7 @@ state start
 state next
 	print "I am dog"
 	print "I also like cat food"
+	print 32
 	to final
 
 state final
