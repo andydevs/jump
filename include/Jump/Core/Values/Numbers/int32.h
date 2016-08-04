@@ -13,7 +13,7 @@ Created: 7 - 15 - 2016
 #define _CORE_VALUES_NUMBERS_INT32_H_
  
 // Headers being used
-#include "Jump/Core/Values/value.h"
+#include "number.h"
 
 // Libraries being used
 #include <string>
@@ -56,7 +56,7 @@ namespace Jump
 				 * @author  Anshul Kharbanda
 				 * @created 7 - 30 - 2016
 				 */
-				class Int32 : public Value
+				class Int32 : public Number
 				{
 				private:
 					/**
@@ -84,11 +84,18 @@ namespace Jump
 					~Int32();
 
 					/**
-					 * Returns the store of the String
+					 * Returns the value as an integer
 					 *
-					 * @return the store of the String
+					 * @return the value as an integer
 					 */
-					int store() const;
+					int toInt() const;
+
+					/**
+					 * Returns the value as a float
+					 *
+					 * @return the value as a float
+					 */
+					double toFloat() const;
 
 					/**
 					 * Returns the string representation of the Value

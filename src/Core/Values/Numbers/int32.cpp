@@ -14,9 +14,6 @@ Created: 7 - 15 - 2016
 #include "Jump/Core/Values/Numbers/float64.h"
 #include "Jump/Core/Values/string.h"
 
-// Libraries being used
-#include <sstream>
-
 // Namespaces being used
 using namespace std;
 using namespace Jump::Core::Errors;
@@ -58,14 +55,14 @@ namespace Jump
 				 *
 				 * @param store the integer value to store
 				 */
-				Int32::Int32(int store) : Value("Int32"), m_store(store) {}
+				Int32::Int32(int store) : Number("Int32"), m_store(store) {}
 
 				/**
 				 * Copy constructor for Int32
 				 *
 				 * @param other the other Int32 to copy
 				 */ 
-				Int32::Int32(const Int32& other) : Value(other), m_store(other.m_store) {}
+				Int32::Int32(const Int32& other) : Number(other), m_store(other.m_store) {}
 
 				/**
 				 * Destroys the Int32
@@ -73,13 +70,23 @@ namespace Jump
 				Int32::~Int32() {}
 
 				/**
-				 * Returns the store of the String
+				 * Returns the value as an integer
 				 *
-				 * @return the store of the String
+				 * @return the value as an integer
 				 */
-				int Int32::store() const
+				int Int32::toInt() const
 				{
-					return m_store;
+					return (int)m_store;
+				}
+
+				/**
+				 * Returns the value as a float
+				 *
+				 * @return the value as a float
+				 */
+				double Int32::toFloat() const
+				{
+					return (double)m_store;
 				}
 
 				/**
@@ -89,9 +96,7 @@ namespace Jump
 				 */
 				std::string Int32::toString() const
 				{
-					stringstream s;
-					s << m_store;
-					return s.str();
+					return to_string(m_store);
 				}
 
 				/**
@@ -105,12 +110,18 @@ namespace Jump
 				 */
 				Value* Int32::plus(const Value* other) const throw(TypeError)
 				{
-					if (other->type() == "Int32")
-						return new Int32(m_store + ((const Int32*)other)->store());
-					else if (other->type() == "Float64")
-						return new Float64(m_store + ((const Float64*)other)->store());
+					if (other->type() == "Number")
+					{
+						const Number* number = (const Number*)other;
+						if (number->numericType() == "Int32")
+							return new Int32(m_store + number->toInt());
+						else if (number->numericType() == "Float64")
+							return new Float64(m_store + number->toFloat());
+						else
+							throw TypeError("Incompatible numeric types for +: Int32 and " + number->numericType());
+					}
 					else if (other->type() == "String")
-						return new String("" + m_store + other->toString());
+						return new String(to_string(m_store) + other->toString());
 					else throw TypeError("Incompatible types for +: Int32 and " + other->type());
 				}
 
@@ -125,10 +136,16 @@ namespace Jump
 				 */
 				Value* Int32::minus(const Value* other) const throw(TypeError)
 				{
-					if (other->type() == "Int32")
-						return new Int32(m_store - ((const Int32*)other)->store());
-					else if (other->type() == "Float64")
-						return new Float64(m_store - ((const Float64*)other)->store());
+					if (other->type() == "Number")
+					{
+						const Number* number = (const Number*)other;
+						if (number->numericType() == "Int32")
+							return new Int32(m_store - number->toInt());
+						else if (number->numericType() == "Float64")
+							return new Float64(m_store - number->toFloat());
+						else
+							throw TypeError("Incompatible numeric types for -: Int32 and " + number->numericType());
+					}
 					else throw TypeError("Incompatible types for -: Int32 and " + other->type());
 				}
 
@@ -143,10 +160,16 @@ namespace Jump
 				 */
 				Value* Int32::times(const Value* other) const throw(TypeError)
 				{
-					if (other->type() == "Int32")
-						return new Int32(m_store * ((const Int32*)other)->store());
-					else if (other->type() == "Float64")
-						return new Float64(m_store * ((const Float64*)other)->store());
+					if (other->type() == "Number")
+					{
+						const Number* number = (const Number*)other;
+						if (number->numericType() == "Int32")
+							return new Int32(m_store * number->toInt());
+						else if (number->numericType() == "Float64")
+							return new Float64(m_store * number->toFloat());
+						else
+							throw TypeError("Incompatible numeric types for *: Int32 and " + number->numericType());
+					}
 					else throw TypeError("Incompatible types for *: Int32 and " + other->type());
 				}
 
@@ -161,10 +184,16 @@ namespace Jump
 				 */
 				Value* Int32::divides(const Value* other) const throw(TypeError)
 				{
-					if (other->type() == "Int32")
-						return new Int32(m_store / ((const Int32*)other)->store());
-					else if (other->type() == "Float64")
-						return new Float64(m_store / ((const Float64*)other)->store());
+					if (other->type() == "Number")
+					{
+						const Number* number = (const Number*)other;
+						if (number->numericType() == "Int32")
+							return new Int32(m_store / number->toInt());
+						else if (number->numericType() == "Float64")
+							return new Float64(m_store / number->toFloat());
+						else
+							throw TypeError("Incompatible numeric types for /: Int32 and " + number->numericType());
+					}
 					else throw TypeError("Incompatible types for /: Int32 and " + other->type());
 				}
 
@@ -179,9 +208,15 @@ namespace Jump
 				 */
 				Value* Int32::modulus(const Value* other) const throw(TypeError)
 				{
-					if (other->type() == "Int32")
-						return new Int32(m_store % ((const Int32*)other)->store());
-					else throw TypeError("Incompatible types for %: Int32 and " + other->type());
+					if (other->type() == "Number")
+					{
+						const Number* number = (const Number*)other;
+						if (number->numericType() == "Int32")
+							return new Int32(m_store / number->toInt());
+						else
+							throw TypeError("Incompatible numeric types for %: Int32 and " + number->numericType());
+					}
+					else throw TypeError("Incompatible types for /: Int32 and " + other->type());
 				}	
 			}
 		}

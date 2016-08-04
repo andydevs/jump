@@ -12,9 +12,7 @@ Created: 7 - 15 - 2016
 // Headers being used
 #include "Jump/Core/Values/Numbers/float64.h"
 #include "Jump/Core/Values/Numbers/int32.h"
-
-// Libraries being used
-#include <sstream>
+#include "Jump/Core/Values/string.h"
 
 // Namespaces being used
 using namespace std;
@@ -57,14 +55,14 @@ namespace Jump
 				 *
 				 * @param store the float value to store
 				 */
-				Float64::Float64(double store) : Value("Float64"), m_store(store) {}
+				Float64::Float64(double store) : Number("Float64"), m_store(store) {}
 
 				/**
 				 * Copy constructor for Float64
 				 *
 				 * @param other the other Float64 to copy
 				 */ 
-				Float64::Float64(const Float64& other) : Value(other), m_store(other.m_store) {}
+				Float64::Float64(const Float64& other) : Number(other), m_store(other.m_store) {}
 
 				/**
 				 * Destroys the Float64
@@ -72,13 +70,23 @@ namespace Jump
 				Float64::~Float64() {}
 
 				/**
-				 * Returns the store of the String
+				 * Returns the value as an integer
 				 *
-				 * @return the store of the String
+				 * @return the value as an integer
 				 */
-				double Float64::store() const
+				int Float64::toInt() const
 				{
-					return m_store;
+					return (int)m_store;
+				}
+
+				/**
+				 * Returns the value as a float
+				 *
+				 * @return the value as a float
+				 */
+				double Float64::toFloat() const
+				{
+					return (double)m_store;
 				}
 
 				/**
@@ -88,9 +96,7 @@ namespace Jump
 				 */
 				std::string Float64::toString() const
 				{
-					stringstream s;
-					s << m_store;
-					return s.str();
+					return to_string(m_store);
 				}
 
 				/**
@@ -104,10 +110,10 @@ namespace Jump
 				 */
 				Value* Float64::plus(const Value* other) const throw(TypeError)
 				{
-					if (other->type() == "Float64")
-						return new Float64(m_store + ((const Float64*)other)->store());
-					else if (other->type() == "Int32")
-						return new Float64(m_store + ((const Int32*)other)->store());
+					if (other->type() == "Number")
+						return new Float64(m_store + ((const Number*)other)->toFloat());
+					else if (other->type() == "String")
+						return new String(to_string(m_store) + other->toString());
 					else throw TypeError("Incompatible types for +: Float64 and " + other->type());
 				}
 
@@ -122,10 +128,8 @@ namespace Jump
 				 */
 				Value* Float64::minus(const Value* other) const throw(TypeError)
 				{
-					if (other->type() == "Float64")
-						return new Float64(m_store - ((const Float64*)other)->store());
-					else if (other->type() == "Int32")
-						return new Float64(m_store - ((const Int32*)other)->store());
+					if (other->type() == "Number")
+						return new Float64(m_store - ((const Number*)other)->toFloat());
 					else throw TypeError("Incompatible types for -: Float64 and " + other->type());
 				}
 
@@ -140,11 +144,9 @@ namespace Jump
 				 */
 				Value* Float64::times(const Value* other) const throw(TypeError)
 				{
-					if (other->type() == "Float64")
-						return new Float64(m_store * ((const Float64*)other)->store());
-					else if (other->type() == "Int32")
-						return new Float64(m_store * ((const Int32*)other)->store());
-					else throw TypeError("Incompatible types for *: Float64 and " + other->type());
+					if (other->type() == "Number")
+						return new Float64(m_store * ((const Number*)other)->toFloat());
+					else throw TypeError("Incompatible types for -: Float64 and " + other->type());
 				}
 
 				/**
@@ -158,11 +160,9 @@ namespace Jump
 				 */
 				Value* Float64::divides(const Value* other) const throw(TypeError)
 				{
-					if (other->type() == "Float64")
-						return new Float64(m_store / ((const Float64*)other)->store());
-					else if (other->type() == "Int32")
-						return new Float64(m_store / ((const Int32*)other)->store());
-					else throw TypeError("Incompatible types for /: Float64 and " + other->type());
+					if (other->type() == "Number")
+						return new Float64(m_store / ((const Number*)other)->toFloat());
+					else throw TypeError("Incompatible types for -: Float64 and " + other->type());
 				}
 			}
 		}

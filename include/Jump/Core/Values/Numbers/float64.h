@@ -13,7 +13,7 @@ Created: 7 - 15 - 2016
 #define _CORE_VALUES_NUMBERS_FLOAT64_H_
 
 // Headres being used
-#include "Jump/Core/Values/value.h"
+#include "number.h"
 
 /**
  * Jump is a new programming language that uses the state machine paradigm
@@ -53,7 +53,7 @@ namespace Jump
 				 * @author  Anshul Kharbanda
 				 * @created 7 - 30 - 2016
 				 */
-				class Float64 : public Value
+				class Float64 : public Number
 				{
 				private:
 					/**
@@ -81,11 +81,18 @@ namespace Jump
 					~Float64();
 
 					/**
-					 * Returns the store of the String
+					 * Returns the value as an integer
 					 *
-					 * @return the store of the String
+					 * @return the value as an integer
 					 */
-					double store() const;
+					int toInt() const;
+
+					/**
+					 * Returns the value as a float
+					 *
+					 * @return the value as a float
+					 */
+					double toFloat() const;
 
 					/**
 					 * Returns the string representation of the Value
