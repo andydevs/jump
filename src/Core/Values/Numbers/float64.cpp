@@ -10,9 +10,8 @@ Created: 7 - 15 - 2016
 */
 
 // Headers being used
-#include "Jump/Core/Values/Numbers/int32.h"
 #include "Jump/Core/Values/Numbers/float64.h"
-#include "Jump/Core/Values/string.h"
+#include "Jump/Core/Values/Numbers/int32.h"
 
 // Libraries being used
 #include <sstream>
@@ -54,30 +53,30 @@ namespace Jump
 			namespace Numbers
 			{
 				/**
-				 * Creates an Int32 with the given store
+				 * Creates an Float64 with the given store
 				 *
-				 * @param store the integer value to store
+				 * @param store the float value to store
 				 */
-				Int32::Int32(int store) : Value("Int32"), m_store(store) {}
+				Float64::Float64(double store) : Value("Float64"), m_store(store) {}
 
 				/**
-				 * Copy constructor for Int32
+				 * Copy constructor for Float64
 				 *
-				 * @param other the other Int32 to copy
+				 * @param other the other Float64 to copy
 				 */ 
-				Int32::Int32(const Int32& other) : Value(other), m_store(other.m_store) {}
+				Float64::Float64(const Float64& other) : Value(other), m_store(other.m_store) {}
 
 				/**
-				 * Destroys the Int32
+				 * Destroys the Float64
 				 */
-				Int32::~Int32() {}
+				Float64::~Float64() {}
 
 				/**
 				 * Returns the store of the String
 				 *
 				 * @return the store of the String
 				 */
-				int Int32::store() const
+				double Float64::store() const
 				{
 					return m_store;
 				}
@@ -87,7 +86,7 @@ namespace Jump
 				 *
 				 * @return the string representation of the Value
 				 */
-				std::string Int32::toString() const
+				std::string Float64::toString() const
 				{
 					stringstream s;
 					s << m_store;
@@ -103,15 +102,13 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				Value Int32::operator+(const Value& other) const throw(TypeError)
+				Value Float64::operator+(const Value& other) const throw(TypeError)
 				{
-					if (other.type() == "Int32")
-						return Int32(m_store + ((const Int32&)other).store());
-					else if (other.type() == "Float64")
+					if (other.type() == "Float64")
 						return Float64(m_store + ((const Float64&)other).store());
-					else if (other.type() == "String")
-						return String("" + m_store + other.toString());
-					else throw TypeError("Incompatible types for +: Int32 and " + other.type());
+					else if (other.type() == "Int32")
+						return Float64(m_store + ((const Int32&)other).store());
+					else throw TypeError("Incompatible types for +: Float64 and " + other.type());
 				}
 
 				/**
@@ -123,13 +120,13 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				Value Int32::operator-(const Value& other) const throw(TypeError)
+				Value Float64::operator-(const Value& other) const throw(TypeError)
 				{
-					if (other.type() == "Int32")
-						return Int32(m_store - ((const Int32&)other).store());
-					else if (other.type() == "Float64")
+					if (other.type() == "Float64")
 						return Float64(m_store - ((const Float64&)other).store());
-					else throw TypeError("Incompatible types for -: Int32 and " + other.type());
+					else if (other.type() == "Int32")
+						return Float64(m_store - ((const Int32&)other).store());
+					else throw TypeError("Incompatible types for -: Float64 and " + other.type());
 				}
 
 				/**
@@ -141,13 +138,13 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				Value Int32::operator*(const Value& other) const throw(TypeError)
+				Value Float64::operator*(const Value& other) const throw(TypeError)
 				{
-					if (other.type() == "Int32")
-						return Int32(m_store * ((const Int32&)other).store());
-					else if (other.type() == "Float64")
+					if (other.type() == "Float64")
 						return Float64(m_store * ((const Float64&)other).store());
-					else throw TypeError("Incompatible types for *: Int32 and " + other.type());
+					else if (other.type() == "Int32")
+						return Float64(m_store * ((const Int32&)other).store());
+					else throw TypeError("Incompatible types for *: Float64 and " + other.type());
 				}
 
 				/**
@@ -159,30 +156,14 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				Value Int32::operator/(const Value& other) const throw(TypeError)
+				Value Float64::operator/(const Value& other) const throw(TypeError)
 				{
-					if (other.type() == "Int32")
-						return Int32(m_store / ((const Int32&)other).store());
-					else if (other.type() == "Float64")
+					if (other.type() == "Float64")
 						return Float64(m_store / ((const Float64&)other).store());
-					else throw TypeError("Incompatible types for /: Int32 and " + other.type());
+					else if (other.type() == "Int32")
+						return Float64(m_store / ((const Int32&)other).store());
+					else throw TypeError("Incompatible types for /: Float64 and " + other.type());
 				}
-
-				/**
-				 * The modulus operation for Jump values
-				 *
-				 * @param other the other Value in the operation
-				 *
-				 * @return the result of the modulus operation
-				 *
-				 * @throw TypeError upon an error during the operation
-				 */
-				Value Int32::operator%(const Value& other) const throw(TypeError)
-				{
-					if (other.type() == "Int32")
-						return Int32(m_store % ((const Int32&)other).store());
-					else throw TypeError("Incompatible types for %: Int32 and " + other.type());
-				}	
 			}
 		}
 	}

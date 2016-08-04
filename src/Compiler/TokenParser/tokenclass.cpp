@@ -48,10 +48,15 @@ namespace Jump
 			 * @param regx the regex that matches tokens of this class
 			 *			   (as a string to be compiled)
 			 */
-			TokenClass::TokenClass(string name, string regx) : m_name(name)
-			{
-				m_regex = regex(regx);
-			}
+			TokenClass::TokenClass(string name, string regx) : m_name(name), m_regex(regx) {}
+
+			/**
+			 * Creates a TokenClass with the given name and regex
+			 *
+			 * @param name the name of the TokenClass
+			 * @param regx the regex that matches tokens of this class
+			 */
+			TokenClass::TokenClass(string name, regex regx) : m_name(name), m_regex(regx) {}
 
 			/**
 			 * Creates a TokenClass with the given name and regex and ignore boolean
@@ -61,10 +66,16 @@ namespace Jump
 			 *			   (as a string to be compiled)
 			 * @param ignore true if tokens of this class should be ignored
 			 */
-			TokenClass::TokenClass(string name, string regx, bool ignore) : m_name(name), m_ignore(ignore)
-			{
-				m_regex = regex(regx);
-			}
+			TokenClass::TokenClass(string name, string regx, bool ignore) : m_name(name), m_regex(regx), m_ignore(ignore) {}
+
+			/**
+			 * Creates a TokenClass with the given name and regex and ignore boolean
+			 *
+			 * @param name the name of the TokenClass
+			 * @param regx the regex that matches tokens of this class
+			 * @param ignore true if tokens of this class should be ignored
+			 */
+			TokenClass::TokenClass(string name, regex regx, bool ignore) : m_name(name), m_regex(regx), m_ignore(ignore) {}
 
 			/**
 			 * Copy constructor for TokenClass

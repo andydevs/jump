@@ -12,10 +12,11 @@ Created: 7 - 15 - 2016
 // Headers being used
 #include "Jump/Compiler/grammarparser.h"
 #include "Jump/Core/Values/string.h"
-#include "Jump/Core/Values/Numbers/int32.h"
+#include "Jump/Core/Values/Numbers/parser.h"
 
 // Libraries being used
 #include <cstdlib>
+#include <string>
 
 // Namespaces being used
 using namespace std;
@@ -59,7 +60,7 @@ namespace Jump
 			 */
 			static bool isKeyword(queue<Token> tks)
 			{
-				return tks.front().m_klass == "keyword";
+				return tks.front().klass() == "keyword";
 			}
 
 			/**
@@ -102,7 +103,7 @@ namespace Jump
 			 */
 			static bool isIdentifier(queue<Token> tks)
 			{
-				return tks.front().m_klass == "identifier";
+				return tks.front().klass() == "identifier";
 			}
 
 			/**
@@ -116,7 +117,7 @@ namespace Jump
 			 */
 			static bool isString(queue<Token> tks)
 			{
-				return tks.front().m_klass == "string";
+				return tks.front().klass() == "string";
 			}
 
 			/**
@@ -130,7 +131,7 @@ namespace Jump
 			 */
 			static bool isNumber(queue<Token> tks)
 			{
-				return tks.front().m_klass == "number";
+				return tks.front().klass() == "number";
 			}
 
 			/**
@@ -158,7 +159,7 @@ namespace Jump
 			 */
 			static bool isEndline(queue<Token> tks)
 			{
-				return tks.front().m_klass == "endline";
+				return tks.front().klass() == "endline";
 			}
 
 			/**
@@ -204,7 +205,7 @@ namespace Jump
 				if (isString(tks))
 					return new Values::String(tks.front().attribute());
 				else if (isNumber(tks))
-					return new Values::Numbers::Int32(atoi(tks.front().attribute().c_str()));
+					return Values::Numbers::parse(tks.front().attribute().c_str());
 				else
 					throw SyntaxError("Unexpected token " + tks.front().toString() +  ". Expected Value Type");
 			}

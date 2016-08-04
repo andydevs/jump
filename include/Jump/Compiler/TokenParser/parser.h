@@ -16,6 +16,7 @@ Created: 7 - 15 - 2016
 #include "token.h"
 #include "tokenclass.h"
 #include "Jump/Compiler/syntaxerror.h"
+#include "Jump/Core/Values/Numbers/parser.h"
 
 // Libraries being used
 #include <queue>
@@ -55,7 +56,7 @@ namespace Jump
 
 				// Values
 				TokenClass("string", "(\"|').*?\\1"),
-				TokenClass("number", "[0-9]+"),
+				TokenClass("number", Jump::Core::Values::Numbers::NUMBER_REGEX),
 
 				// Endline
 				TokenClass("endline", "(#.*?)?\r?\n"),

@@ -88,6 +88,14 @@ namespace Jump
 				TokenClass(std::string name, std::string regx);
 
 				/**
+				 * Creates a TokenClass with the given name and regex
+				 *
+				 * @param name the name of the TokenClass
+				 * @param regx the regex that matches tokens of this class
+				 */
+				TokenClass(std::string name, std::regex regx);
+
+				/**
 				 * Creates a TokenClass with the given name and regex and ignore boolean
 				 *
 				 * @param name   the name of the TokenClass
@@ -96,6 +104,15 @@ namespace Jump
 				 * @param ignore true if tokens of this class should be ignored
 				 */
 				TokenClass(std::string name, std::string regx, bool ignore);
+
+				/**
+				 * Creates a TokenClass with the given name and regex and ignore boolean
+				 *
+				 * @param name   the name of the TokenClass
+				 * @param regx   the regex that matches tokens of this class
+				 * @param ignore true if tokens of this class should be ignored
+				 */
+				TokenClass(std::string name, std::regex regx, bool ignore);
 
 				/**
 				 * Copy constructor for TokenClass

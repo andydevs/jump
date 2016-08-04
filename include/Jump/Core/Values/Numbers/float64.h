@@ -9,14 +9,11 @@ Created: 7 - 15 - 2016
 
 */
 
-#ifndef _CORE_VALUES_NUMBERS_INT32_H_
-#define _CORE_VALUES_NUMBERS_INT32_H_
- 
-// Headers being used
-#include "Jump/Core/Values/value.h"
+#ifndef _CORE_VALUES_NUMBERS_FLOAT64_H_
+#define _CORE_VALUES_NUMBERS_FLOAT64_H_
 
-// Libraries being used
-#include <string>
+// Headres being used
+#include "Jump/Core/Values/value.h"
 
 /**
  * Jump is a new programming language that uses the state machine paradigm
@@ -51,44 +48,44 @@ namespace Jump
 			namespace Numbers
 			{
 				/**
-				 * Represents a standard 32 bit integer in Jump
+				 * Represents a standard 64 bit float in Jump
 				 *
 				 * @author  Anshul Kharbanda
 				 * @created 7 - 30 - 2016
 				 */
-				class Int32 : public Value
+				class Float64 : public Value
 				{
 				private:
 					/**
-					 * The stored integer value
+					 * The stored float value
 					 */
-					int m_store;
+					double m_store;
 				public:
 					/**
-					 * Creates an Int32 with the given store
+					 * Creates an Float64 with the given store
 					 *
-					 * @param store the integer value to store
+					 * @param store the float value to store
 					 */
-					Int32(int store);
+					Float64(double store);
 
 					/**
-					 * Copy constructor for Int32
+					 * Copy constructor for Float64
 					 *
-					 * @param other the other Int32 to copy
+					 * @param other the other Float64 to copy
 					 */ 
-					Int32(const Int32& other);
+					Float64(const Float64& other);
 
 					/**
-					 * Destroys the Int32
+					 * Destroys the Float64
 					 */
-					~Int32();
+					~Float64();
 
 					/**
 					 * Returns the store of the String
 					 *
 					 * @return the store of the String
 					 */
-					int store() const;
+					double store() const;
 
 					/**
 					 * Returns the string representation of the Value
@@ -140,17 +137,6 @@ namespace Jump
 					 * @throw TypeError upon an error during the operation
 					 */
 					Value operator/(const Value& other) const throw(Jump::Core::Errors::TypeError);
-
-					/**
-					 * The modulus operation for Jump values
-					 *
-					 * @param other the other Value in the operation
-					 *
-					 * @return the result of the modulus operation
-					 *
-					 * @throw TypeError upon an error during the operation
-					 */
-					Value operator%(const Value& other) const throw(Jump::Core::Errors::TypeError);
 				};
 			}
 		}

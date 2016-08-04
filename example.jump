@@ -15,4 +15,5 @@ state next
 state final
 	print "I am pig"
 	print #test null print
+	print 64.332
 	print "I do pig stuff"
