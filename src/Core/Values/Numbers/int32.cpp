@@ -103,15 +103,15 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				Value Int32::operator+(const Value& other) const throw(TypeError)
+				Value* Int32::plus(const Value* other) const throw(TypeError)
 				{
-					if (other.type() == "Int32")
-						return Int32(m_store + ((const Int32&)other).store());
-					else if (other.type() == "Float64")
-						return Float64(m_store + ((const Float64&)other).store());
-					else if (other.type() == "String")
-						return String("" + m_store + other.toString());
-					else throw TypeError("Incompatible types for +: Int32 and " + other.type());
+					if (other->type() == "Int32")
+						return new Int32(m_store + ((const Int32*)other)->store());
+					else if (other->type() == "Float64")
+						return new Float64(m_store + ((const Float64*)other)->store());
+					else if (other->type() == "String")
+						return new String("" + m_store + other->toString());
+					else throw TypeError("Incompatible types for +: Int32 and " + other->type());
 				}
 
 				/**
@@ -123,13 +123,13 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				Value Int32::operator-(const Value& other) const throw(TypeError)
+				Value* Int32::minus(const Value* other) const throw(TypeError)
 				{
-					if (other.type() == "Int32")
-						return Int32(m_store - ((const Int32&)other).store());
-					else if (other.type() == "Float64")
-						return Float64(m_store - ((const Float64&)other).store());
-					else throw TypeError("Incompatible types for -: Int32 and " + other.type());
+					if (other->type() == "Int32")
+						return new Int32(m_store - ((const Int32*)other)->store());
+					else if (other->type() == "Float64")
+						return new Float64(m_store - ((const Float64*)other)->store());
+					else throw TypeError("Incompatible types for -: Int32 and " + other->type());
 				}
 
 				/**
@@ -141,13 +141,13 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				Value Int32::operator*(const Value& other) const throw(TypeError)
+				Value* Int32::times(const Value* other) const throw(TypeError)
 				{
-					if (other.type() == "Int32")
-						return Int32(m_store * ((const Int32&)other).store());
-					else if (other.type() == "Float64")
-						return Float64(m_store * ((const Float64&)other).store());
-					else throw TypeError("Incompatible types for *: Int32 and " + other.type());
+					if (other->type() == "Int32")
+						return new Int32(m_store * ((const Int32*)other)->store());
+					else if (other->type() == "Float64")
+						return new Float64(m_store * ((const Float64*)other)->store());
+					else throw TypeError("Incompatible types for *: Int32 and " + other->type());
 				}
 
 				/**
@@ -159,13 +159,13 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				Value Int32::operator/(const Value& other) const throw(TypeError)
+				Value* Int32::divides(const Value* other) const throw(TypeError)
 				{
-					if (other.type() == "Int32")
-						return Int32(m_store / ((const Int32&)other).store());
-					else if (other.type() == "Float64")
-						return Float64(m_store / ((const Float64&)other).store());
-					else throw TypeError("Incompatible types for /: Int32 and " + other.type());
+					if (other->type() == "Int32")
+						return new Int32(m_store / ((const Int32*)other)->store());
+					else if (other->type() == "Float64")
+						return new Float64(m_store / ((const Float64*)other)->store());
+					else throw TypeError("Incompatible types for /: Int32 and " + other->type());
 				}
 
 				/**
@@ -177,11 +177,11 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				Value Int32::operator%(const Value& other) const throw(TypeError)
+				Value* Int32::modulus(const Value* other) const throw(TypeError)
 				{
-					if (other.type() == "Int32")
-						return Int32(m_store % ((const Int32&)other).store());
-					else throw TypeError("Incompatible types for %: Int32 and " + other.type());
+					if (other->type() == "Int32")
+						return new Int32(m_store % ((const Int32*)other)->store());
+					else throw TypeError("Incompatible types for %: Int32 and " + other->type());
 				}	
 			}
 		}

@@ -106,7 +106,7 @@ namespace Jump
 					 *
 					 * @throw TypeError upon an error during the operation
 					 */
-					Value operator+(const Value& other) const throw(Jump::Core::Errors::TypeError);
+					Value* plus(const Value* other) const throw(Jump::Core::Errors::TypeError);
 
 					/**
 					 * The subtraction operation for Jump values
@@ -117,7 +117,7 @@ namespace Jump
 					 *
 					 * @throw TypeError upon an error during the operation
 					 */
-					Value operator-(const Value& other) const throw(Jump::Core::Errors::TypeError);
+					Value* minus(const Value* other) const throw(Jump::Core::Errors::TypeError);
 
 					/**
 					 * The multiplication operation for Jump values
@@ -128,7 +128,7 @@ namespace Jump
 					 *
 					 * @throw TypeError upon an error during the operation
 					 */
-					Value operator*(const Value& other) const throw(Jump::Core::Errors::TypeError);
+					Value* times(const Value* other) const throw(Jump::Core::Errors::TypeError);
 
 					/**
 					 * The division operation for Jump values
@@ -139,7 +139,7 @@ namespace Jump
 					 *
 					 * @throw TypeError upon an error during the operation
 					 */
-					Value operator/(const Value& other) const throw(Jump::Core::Errors::TypeError);
+					Value* divides(const Value* other) const throw(Jump::Core::Errors::TypeError);
 
 					/**
 					 * The modulus operation for Jump values
@@ -150,7 +150,7 @@ namespace Jump
 					 *
 					 * @throw TypeError upon an error during the operation
 					 */
-					Value operator%(const Value& other) const throw(Jump::Core::Errors::TypeError);
+					Value* modulus(const Value* other) const throw(Jump::Core::Errors::TypeError);
 				};
 			}
 		}

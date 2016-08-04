@@ -102,13 +102,13 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				Value Float64::operator+(const Value& other) const throw(TypeError)
+				Value* Float64::plus(const Value* other) const throw(TypeError)
 				{
-					if (other.type() == "Float64")
-						return Float64(m_store + ((const Float64&)other).store());
-					else if (other.type() == "Int32")
-						return Float64(m_store + ((const Int32&)other).store());
-					else throw TypeError("Incompatible types for +: Float64 and " + other.type());
+					if (other->type() == "Float64")
+						return new Float64(m_store + ((const Float64*)other)->store());
+					else if (other->type() == "Int32")
+						return new Float64(m_store + ((const Int32*)other)->store());
+					else throw TypeError("Incompatible types for +: Float64 and " + other->type());
 				}
 
 				/**
@@ -120,13 +120,13 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				Value Float64::operator-(const Value& other) const throw(TypeError)
+				Value* Float64::minus(const Value* other) const throw(TypeError)
 				{
-					if (other.type() == "Float64")
-						return Float64(m_store - ((const Float64&)other).store());
-					else if (other.type() == "Int32")
-						return Float64(m_store - ((const Int32&)other).store());
-					else throw TypeError("Incompatible types for -: Float64 and " + other.type());
+					if (other->type() == "Float64")
+						return new Float64(m_store - ((const Float64*)other)->store());
+					else if (other->type() == "Int32")
+						return new Float64(m_store - ((const Int32*)other)->store());
+					else throw TypeError("Incompatible types for -: Float64 and " + other->type());
 				}
 
 				/**
@@ -138,13 +138,13 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				Value Float64::operator*(const Value& other) const throw(TypeError)
+				Value* Float64::times(const Value* other) const throw(TypeError)
 				{
-					if (other.type() == "Float64")
-						return Float64(m_store * ((const Float64&)other).store());
-					else if (other.type() == "Int32")
-						return Float64(m_store * ((const Int32&)other).store());
-					else throw TypeError("Incompatible types for *: Float64 and " + other.type());
+					if (other->type() == "Float64")
+						return new Float64(m_store * ((const Float64*)other)->store());
+					else if (other->type() == "Int32")
+						return new Float64(m_store * ((const Int32*)other)->store());
+					else throw TypeError("Incompatible types for *: Float64 and " + other->type());
 				}
 
 				/**
@@ -156,13 +156,13 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				Value Float64::operator/(const Value& other) const throw(TypeError)
+				Value* Float64::divides(const Value* other) const throw(TypeError)
 				{
-					if (other.type() == "Float64")
-						return Float64(m_store / ((const Float64&)other).store());
-					else if (other.type() == "Int32")
-						return Float64(m_store / ((const Int32&)other).store());
-					else throw TypeError("Incompatible types for /: Float64 and " + other.type());
+					if (other->type() == "Float64")
+						return new Float64(m_store / ((const Float64*)other)->store());
+					else if (other->type() == "Int32")
+						return new Float64(m_store / ((const Int32*)other)->store());
+					else throw TypeError("Incompatible types for /: Float64 and " + other->type());
 				}
 			}
 		}

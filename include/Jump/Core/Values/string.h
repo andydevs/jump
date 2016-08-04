@@ -99,7 +99,7 @@ namespace Jump
 				 *
 				 * @return the result of the concatenation operator
 				 */
-				Value operator+(const Value& other) const throw(Jump::Core::Errors::TypeError);
+				Value* plus(const Value* other) const throw(Jump::Core::Errors::TypeError);
 			};
 		}
 	}

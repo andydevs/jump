@@ -113,7 +113,7 @@ namespace Jump
 			 *
 			 * @throw TypeError upon an error during the operation
 			 */
-			Value Value::operator&&(const Value& other) const throw(TypeError)
+			Value* Value::andd(const Value* other) const throw(TypeError)
 			{
 				throw TypeError("ValueType " + type() + " does not support operation &&");
 			}
@@ -127,7 +127,7 @@ namespace Jump
 			 *
 			 * @throw TypeError upon an error during the operation
 			 */
-			Value Value::operator||(const Value& other) const throw(TypeError)
+			Value* Value::orr(const Value* other) const throw(TypeError)
 			{
 				throw TypeError("ValueType " + type() + " does not support operation ||");
 			}
@@ -139,7 +139,7 @@ namespace Jump
 			 *
 			 * @throw TypeError upon an error during the operation
 			 */
-			Value Value::operator!() const throw(TypeError)
+			Value* Value::nott() const throw(TypeError)
 			{
 				throw TypeError("ValueType " + type() + " does not support operation !");
 			}
@@ -154,7 +154,7 @@ namespace Jump
 			 *
 			 * @throw TypeError upon an error during the operation
 			 */
-			Value Value::operator>(const Value& other) const throw(TypeError)
+			Value* Value::greater(const Value* other) const throw(TypeError)
 			{
 				throw TypeError("ValueType " + type() + " does not support operation >");
 			}
@@ -168,7 +168,7 @@ namespace Jump
 			 *
 			 * @throw TypeError upon an error during the operation
 			 */
-			Value Value::operator>=(const Value& other) const throw(TypeError)
+			Value* Value::greaterEqual(const Value* other) const throw(TypeError)
 			{
 				throw TypeError("ValueType " + type() + " does not support operation >=");
 			}
@@ -182,7 +182,7 @@ namespace Jump
 			 *
 			 * @throw TypeError upon an error during the operation
 			 */
-			Value Value::operator==(const Value& other) const throw(TypeError)
+			Value* Value::equal(const Value* other) const throw(TypeError)
 			{
 				throw TypeError("ValueType " + type() + " does not support operation ==");
 			}
@@ -196,7 +196,7 @@ namespace Jump
 			 *
 			 * @throw TypeError upon an error during the operation
 			 */
-			Value Value::operator!=(const Value& other) const throw(TypeError)
+			Value* Value::notEqual(const Value* other) const throw(TypeError)
 			{
 				throw TypeError("ValueType " + type() + " does not support operation !=");
 			}
@@ -210,7 +210,7 @@ namespace Jump
 			 *
 			 * @throw TypeError upon an error during the operation
 			 */
-			Value Value::operator<=(const Value& other) const throw(TypeError)
+			Value* Value::lessEqual(const Value* other) const throw(TypeError)
 			{
 				throw TypeError("ValueType " + type() + " does not support operation <=");
 			}
@@ -224,7 +224,7 @@ namespace Jump
 			 *
 			 * @throw TypeError upon an error during the operation
 			 */
-			Value Value::operator<(const Value& other) const throw(TypeError)
+			Value* Value::less(const Value* other) const throw(TypeError)
 			{
 				throw TypeError("ValueType " + type() + " does not support operation <");
 			}
@@ -239,7 +239,7 @@ namespace Jump
 			 *
 			 * @throw TypeError upon an error during the operation
 			 */
-			Value Value::operator+(const Value& other) const throw(TypeError)
+			Value* Value::plus(const Value* other) const throw(TypeError)
 			{
 				throw TypeError("ValueType " + type() + " does not support operation +");
 			}
@@ -253,7 +253,7 @@ namespace Jump
 			 *
 			 * @throw TypeError upon an error during the operation
 			 */
-			Value Value::operator-(const Value& other) const throw(TypeError)
+			Value* Value::minus(const Value* other) const throw(TypeError)
 			{
 				throw TypeError("ValueType " + type() + " does not support operation -");
 			}
@@ -267,7 +267,7 @@ namespace Jump
 			 *
 			 * @throw TypeError upon an error during the operation
 			 */
-			Value Value::operator*(const Value& other) const throw(TypeError)
+			Value* Value::times(const Value* other) const throw(TypeError)
 			{
 				throw TypeError("ValueType " + type() + " does not support operation *");
 			}
@@ -281,7 +281,7 @@ namespace Jump
 			 *
 			 * @throw TypeError upon an error during the operation
 			 */
-			Value Value::operator/(const Value& other) const throw(TypeError)
+			Value* Value::divides(const Value* other) const throw(TypeError)
 			{
 				throw TypeError("ValueType " + type() + " does not support operation /");
 			}
@@ -295,7 +295,7 @@ namespace Jump
 			 *
 			 * @throw TypeError upon an error during the operation
 			 */
-			Value Value::operator%(const Value& other) const throw(TypeError)
+			Value* Value::modulus(const Value* other) const throw(TypeError)
 			{
 				throw TypeError("ValueType " + type() + " does not support operation %");
 			}
