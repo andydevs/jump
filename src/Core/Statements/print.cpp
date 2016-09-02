@@ -124,7 +124,8 @@ namespace Jump
 			 */
 			string Print::conditionedExecute(State* stateRef)
 			{
-				m_streamRef << m_toPrint->toString() << endl;
+				Value* evaluated = m_toPrint->evaluate();
+				m_streamRef << evaluated->toString() << endl;
 				return "";
 			}
 		}

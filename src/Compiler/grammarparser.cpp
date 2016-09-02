@@ -12,11 +12,13 @@ Created: 7 - 15 - 2016
 // Headers being used
 #include "Jump/Compiler/grammarparser.h"
 #include "Jump/Core/Values/string.h"
+#include "Jump/Core/Values/expression.h"
 #include "Jump/Core/Values/Numbers/parser.h"
 
 // Libraries being used
 #include <cstdlib>
 #include <string>
+#include <iostream>
 
 // Namespaces being used
 using namespace std;
@@ -48,6 +50,49 @@ namespace Jump
 		namespace GrammarParser
 		{
 			// ----------------------- MATCHERS -----------------------
+
+			/**
+			 * Returns true if the next token in the given queue
+			 * is an operation and equals the given operation
+			 *
+			 * @param tks  the queue of tokens to check
+			 * @param oper the operation to check for
+			 *
+			 * @return true if the next token in the given queue
+			 *		   is an operation and equals the given operation
+			 */
+			static bool isOperation(queue<Token> tks, string oper)
+			{
+				return tks.front() == Token("operation", oper);
+			}
+
+			/**
+			 * Returns true if the next token in the given queue
+			 * is a lparen
+			 *
+			 * @param tks the queue of tokens to check
+			 *
+			 * @return true if the next token in the given queue
+			 *		   is a lparen
+			 */
+			static bool isLparen(queue<Token> tks)
+			{
+				return tks.front().klass() == "lparen";
+			}
+
+			/**
+			 * Returns true if the next token in the given queue
+			 * is a rparen
+			 *
+			 * @param tks the queue of tokens to check
+			 *
+			 * @return true if the next token in the given queue
+			 *		   is a rparen
+			 */
+			static bool isRparen(queue<Token> tks)
+			{
+				return tks.front().klass() == "rparen";
+			}
 
 			/**
 			 * Returns true if the next token in the given queue
@@ -159,7 +204,7 @@ namespace Jump
 			 */
 			static bool isEndline(queue<Token> tks)
 			{
-				return tks.front().klass() == "endline";
+				return tks.front().klass() == "endline" || tks.front().klass() == "EOF";
 			}
 
 			/**
@@ -192,6 +237,17 @@ namespace Jump
 			// -------------- STATEMENTS --------------
 
 			/**
+			 * Parses an expression
+			 *
+			 * @param tks the token queue to parse
+			 *
+			 * @return the expression parsed
+			 *
+			 * @throw SyntaxError if invalid token sequence
+			 */
+			static Values::Expression* expression(queue<Token>& tks) throw(SyntaxError);
+
+			/**
 			 * Parses a value
 			 *
 			 * @param tks the token queue to parse
@@ -202,12 +258,128 @@ namespace Jump
 			 */
 			static Values::Value* value(queue<Token>& tks) throw(SyntaxError)
 			{
+				string literal = tks.front().attribute();
+				Values::Value* val;
 				if (isString(tks))
-					return new Values::String(tks.front().attribute());
+				{
+					val = new Values::String(literal.substr(1, literal.length() - 2));
+				}
 				else if (isNumber(tks))
-					return Values::Numbers::parse(tks.front().attribute().c_str());
+				{
+					val = Values::Numbers::parse(literal.c_str());
+				}
+				else if (isLparen(tks))
+				{
+					tks.pop();
+					val = expression(tks);
+					if (!isRparen(tks)) throw SyntaxError("Expected RPAREN");
+				}
 				else
 					throw SyntaxError("Unexpected token " + tks.front().toString() +  ". Expected Value Type");
+				tks.pop();
+				return val;
+			}
+
+			/**
+			 * Parses a muldivmodOp
+			 *
+			 * @param expr the muldivmod expression being parsed
+			 * @param tks  the token queue to parse
+			 *
+			 * @throw SyntaxError if invalid token sequence
+			 */
+			static void muldivmodOp(Values::Expression* expr, queue<Token>& tks) throw(SyntaxError)
+			{
+				if (isOperation(tks, "*"))
+				{
+					tks.pop();
+					expr->add(value(tks), 0);
+					muldivmodOp(expr, tks);
+				}
+				else if (isOperation(tks, "/"))
+				{
+					tks.pop();
+					expr->add(value(tks), 1);
+					muldivmodOp(expr, tks);
+				}
+				else if (isOperation(tks, "%"))
+				{
+					tks.pop();
+					expr->add(value(tks), 2);
+					muldivmodOp(expr, tks);
+				}
+			}
+
+			/**
+			 * Parses a muldivmod
+			 *
+			 * @param tks the token queue to parse
+			 *
+			 * @return the muldivmod parsed
+			 *
+			 * @throw SyntaxError if invalid token sequence
+			 */
+			static Values::Expression* muldivmod(queue<Token>& tks) throw(SyntaxError)
+			{
+				Values::Expression* expr = new Values::Expression(Values::OperLayer::MULDIVMOD);
+				expr->add(value(tks), 0);
+				muldivmodOp(expr, tks);
+				return expr;
+			}
+
+			/**
+			 * Parses a addsubOp
+			 *
+			 * @param expr the addsub expression being parsed
+			 * @param tks  the token queue to parse
+			 *
+			 * @throw SyntaxError if invalid token sequence
+			 */
+			static void addsubOp(Values::Expression* expr, queue<Token>& tks) throw(SyntaxError)
+			{
+				if (isOperation(tks, "+"))
+				{
+					tks.pop();
+					expr->add(muldivmod(tks), 0);
+					addsubOp(expr, tks);
+				}
+				else if (isOperation(tks, "-"))
+				{
+					tks.pop();
+					expr->add(muldivmod(tks), 1);
+					addsubOp(expr, tks);
+				}
+			}
+
+			/**
+			 * Parses an addsub
+			 *
+			 * @param tks the token queue to parse
+			 *
+			 * @return the addsub parsed
+			 *
+			 * @throw SyntaxError if invalid token sequence
+			 */
+			static Values::Expression* addsub(queue<Token>& tks) throw(SyntaxError)
+			{
+				Values::Expression* expr = new Values::Expression(Values::OperLayer::ADDSUB);
+				expr->add(muldivmod(tks), 0);
+				addsubOp(expr, tks);
+				return expr;
+			}
+
+			/**
+			 * Parses an expression
+			 *
+			 * @param tks the token queue to parse
+			 *
+			 * @return the expression parsed
+			 *
+			 * @throw SyntaxError if invalid token sequence
+			 */
+			static Values::Expression* expression(queue<Token>& tks) throw(SyntaxError)
+			{
+				return addsub(tks);
 			}
 
 			/**
@@ -249,10 +421,7 @@ namespace Jump
 				if (isValue(tks))
 				{
 					// Add print statement with the value token
-					state->add(new Statements::Print(value(tks)));
-
-					// Pop token
-					tks.pop();
+					state->add(new Statements::Print(addsub(tks)));
 				}
 				// Else if endline add blank print statement
 				else if (isEndline(tks))

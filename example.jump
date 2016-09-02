@@ -4,16 +4,22 @@ state start
 	print "Good afternoon world"
 	print "I am Chef Gordon Ramsay"
 	print "And I like cat food"
-	to next
+	to first
 
-state next
+state first
 	print "I am dog"
 	print "I also like cat food"
 	print 32
-	to final
+	to second
 
-state final
+state second
 	print "I am pig"
 	print #test null print
 	print 64.332
 	print "I do pig stuff"
+	to third
+
+state third
+	print 3 + 2
+	print "I am " + "Jamie Oliver."
+	print 2 * 3 - (4 + 7) / 2 * 5 % 6

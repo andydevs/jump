@@ -92,6 +92,16 @@ namespace Jump
 			}
 
 			/**
+			 * Evaluates the value
+			 *
+			 * @return the evaluated value
+			 */
+			Value* Value::evaluate()
+			{
+				return this;
+			}
+
+			/**
 			 * Operator for passing value to output stream
 			 *
 			 * @param out the output stream to write to

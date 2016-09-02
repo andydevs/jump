@@ -14,7 +14,7 @@ Created: 7 - 15 - 2016
 #include "Jump/Compiler/syntaxerror.h"
 
 // Libraries being used
-#include <exception>
+#include <iostream>
 
 // Namespaces being used
 using namespace std;
@@ -44,6 +44,30 @@ namespace Jump
 		 */
 		namespace TokenParser
 		{
+			/**
+			 * The token classes to parse input with
+			 */
+			static TokenClass TOKEN_CLASSES[] = {
+				// Words
+				TokenClass("keyword", "state|print|to"),
+				TokenClass("identifier", "[a-zA-Z][a-zA-Z0-9_]*"),
+
+				// Values
+				TokenClass("string", "(\"|').*?\\1"),
+				TokenClass("number", Jump::Core::Values::Numbers::NUMBER_REGEX),
+
+				// Operations
+				TokenClass("operation", "[\\*\\+-/%]"),
+				TokenClass("lparen", "\\("),
+				TokenClass("rparen", "\\)"),
+
+				// Endline
+				TokenClass("endline", "(#.*?)?\r?\n"),
+
+				// Ignore whitespaces
+				TokenClass("wspace", "[ \t]+", true)
+			};
+
 			/**
 			 * Parses the given input into a queue of tokens tokens.
 			 *
@@ -89,6 +113,9 @@ namespace Jump
 					// Throw SyntaxError if error
 					if (error) throw SyntaxError("Unexpected character: \"" + input.substr(0, 1) + "\"");
 				}
+
+				// Add EOF Token
+				tkq.push(Token("EOF", "EOF"));
 
 				// Return queue
 				return tkq;

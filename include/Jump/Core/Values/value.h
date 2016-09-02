@@ -50,7 +50,7 @@ namespace Jump
 			 */
 			class Value
 			{
-			private:
+			protected:
 				/**
 				 * The type of the value
 				 */
@@ -95,6 +95,13 @@ namespace Jump
 				 * @return the string representation of the Value
 				 */
 				virtual std::string toString() const;
+
+				/**
+				 * Evaluates the value
+				 *
+				 * @return the evaluated value
+				 */
+				virtual Value* evaluate();
 
 				/**
 				 * Operator for passing value to output stream

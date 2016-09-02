@@ -80,7 +80,7 @@ namespace Jump
 			 */
 			string String::toString() const
 			{
-				return m_store.substr(1, m_store.length() - 2);
+				return m_store;
 			}
 
 			/**
@@ -92,7 +92,7 @@ namespace Jump
 			 */
 			Value* String::plus(const Value* other) const throw(Jump::Core::Errors::TypeError)
 			{
-				return new String(m_store + other->toString());
+				return new String(toString() + other->toString());
 			}
 		}
 	}

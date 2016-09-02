@@ -47,25 +47,6 @@ namespace Jump
 		namespace TokenParser
 		{
 			/**
-			 * The token classes to parse input with
-			 */
-			static TokenClass TOKEN_CLASSES[] = {
-				// Words
-				TokenClass("keyword", "state|print|to"),
-				TokenClass("identifier", "[a-zA-Z][a-zA-Z0-9_]*"),
-
-				// Values
-				TokenClass("string", "(\"|').*?\\1"),
-				TokenClass("number", Jump::Core::Values::Numbers::NUMBER_REGEX),
-
-				// Endline
-				TokenClass("endline", "(#.*?)?\r?\n"),
-
-				// Ignore whitespaces
-				TokenClass("wspace", "[ \t]+", true)
-			};
-
-			/**
 			 * Parses the given input into a queue of tokens tokens.
 			 *
 			 * @param input the input to parse from
