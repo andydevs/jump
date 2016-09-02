@@ -76,13 +76,13 @@ namespace Jump
 				std::string inspect();
 
 				/**
-				 * Executes the To if the condition is true
+				 * Executes the To
 				 *
 				 * @param stateRef reference to containing state (pointer)
 				 *
 				 * @return reference to another state (the state's name)
 				 */
-				std::string conditionedExecute(State* stateRef);
+				std::string execute(State* stateRef);
 			};
 		}
 	}

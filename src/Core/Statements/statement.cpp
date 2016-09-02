@@ -39,38 +39,19 @@ namespace Jump
 			/**
 			 * Creates an empty Statement
 			 */
-			Statement::Statement() : m_condition(true) {}
-
-			/**
-			 * Creates a Statement with the given condition
-			 *
-			 * @param condition the condition being checked
-			 */
-			Statement::Statement(bool condition) : m_condition(condition) {}
+			Statement::Statement() {}
 
 			/**
 			 * Copy constructor
 			 *
 			 * @param other the Statement to copy
 			 */
-			Statement::Statement(const Statement& other) : m_condition(other.m_condition) {}
+			Statement::Statement(const Statement& other) {}
 
 			/**
 			 * Destroys the Statement
 			 */
 			Statement::~Statement() {}
-
-			/**
-			 * Executes the Statement
-			 *
-			 * @param stateRef reference to the containing state (pointer)
-			 *
-			 * @return a reference to the next state (the state's name)
-			 */
-			std::string Statement::execute(State* stateRef)
-			{
-				return m_condition ? conditionedExecute(stateRef) : "";
-			}
 		}
 	}
 }

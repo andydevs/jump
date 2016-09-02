@@ -68,27 +68,6 @@ namespace Jump
 															   m_streamRef(streamRef) {}
 
 			/**
-			 * Creates a print statement with the given condition to check and value to print
-			 *
-			 * @param condition the condition to ckeck
-			 * @param toPrint   the value to print
-			 */
-			Print::Print(bool condition, Value* toPrint) : Statement(condition),
-														   m_toPrint(toPrint),
-														   m_streamRef(cout) {}
-
-			/**
-			 * Creates a print statement with the given condition to check and value to print
-			 *
-			 * @param condition the condition to ckeck
-			 * @param toPrint   the value to print
-			 * @param streamRef the stream to print to (referenced)
-			 */
-			Print::Print(bool condition, Value* toPrint, ostream& streamRef) : Statement(condition),
-																			   m_toPrint(toPrint),
-																			   m_streamRef(streamRef) {}
-
-			/**
 			 * Copy constructor for print statement
 			 *
 			 * @param other the Print to copy
@@ -116,13 +95,13 @@ namespace Jump
 			}
 
 			/**
-			 * Executes the print statement if the condition is true
+			 * Executes the print statement
 			 *
 			 * @param stateRef reference to the containing state (pointer)
 			 *
 			 * @return a reference to the next state (the state's name)
 			 */
-			string Print::conditionedExecute(State* stateRef)
+			string Print::execute(State* stateRef)
 			{
 				Value* evaluated = m_toPrint->evaluate();
 				m_streamRef << evaluated->toString() << endl;

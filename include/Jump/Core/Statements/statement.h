@@ -55,23 +55,11 @@ namespace Jump
 			 */
 			class Statement
 			{
-			protected:
-				/**
-				 * The condition being checked
-				 */
-				bool m_condition;
 			public:
 				/**
 				 * Creates an empty Statement
 				 */
 				Statement();
-
-				/**
-				 * Creates a Statement with the given condition
-				 *
-				 * @param condition the condition being checked
-				 */
-				Statement(bool condition);
 
 				/**
 				 * Copy constructor
@@ -99,16 +87,7 @@ namespace Jump
 				 * 
 				 * @return a reference to the next state (the state's name)
 				 */
-				std::string execute(State* stateRef);
-
-				/**
-				 * Executes the Statement if the condition is true
-				 *
-				 * @param stateRef reference to the containing state (pointer)
-				 *
-				 * @return a reference to the next state (the state's name)
-				 */
-				virtual std::string conditionedExecute(State* stateRef) = 0;
+				virtual std::string execute(State* stateRef) = 0;
 			};
 		}
 	}

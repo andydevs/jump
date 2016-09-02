@@ -85,23 +85,6 @@ namespace Jump
 				Print(Jump::Core::Values::Value* toPrint, std::ostream& streamRef);
 
 				/**
-				 * Creates a print statement with the given condition to check and value to print
-				 *
-				 * @param condition the condition to ckeck
-				 * @param toPrint   the value to print
-				 */
-				Print(bool condition, Jump::Core::Values::Value* toPrint);
-
-				/**
-				 * Creates a print statement with the given condition to check and value to print
-				 *
-				 * @param condition the condition to ckeck
-				 * @param toPrint   the value to print
-				 * @param streamRef the stream to print to (referenced)
-				 */
-				Print(bool condition, Jump::Core::Values::Value* toPrint, std::ostream& streamRef);
-
-				/**
 				 * Copy constructor for print statement
 				 *
 				 * @param other the Print to copy
@@ -121,13 +104,13 @@ namespace Jump
 				std::string inspect();
 
 				/**
-				 * Executes the print statement if the condition is true
+				 * Executes the print statement
 				 *
 				 * @param stateRef reference to the containing state (pointer)
 				 *
 				 * @return a reference to the next state (the state's name)
 				 */
-				std::string conditionedExecute(State* stateRef);
+				std::string execute(State* stateRef);
 			};
 		}
 	}
