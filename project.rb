@@ -19,6 +19,12 @@ path: "src/@(path)",
 template: "source.general",
 extension: "cpp"
 
+# Error file
+file :error,
+path: "include/@(project_name)/Core/Errors/@(class -> lowercase)",
+template: "error.general",
+extension: "h"
+
 # Module includes a source and include
 task :module do |args|
 	# Add header id
