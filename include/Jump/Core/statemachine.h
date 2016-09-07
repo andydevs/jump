@@ -13,6 +13,7 @@ Created: 7 - 15 - 2016
 #define _CORE_STATEMACHINE_H_
 
 // Headers being used
+#include "Values/value.h"
 #include "state.h"
 
 // Libraries being used
@@ -48,6 +49,11 @@ namespace Jump
 			 * Holds the states
 			 */
 			std::map<std::string, State*> m_statetable;
+
+			/**
+			 * Holds the values
+			 */
+			std::map<std::string, Values::Value*> m_vartable;
 		public:
 			/**
 			 * Creates an empty StateMachine
@@ -88,6 +94,23 @@ namespace Jump
 			 * @return the state represented by the name
 			 */
 			State* stateGet(std::string name);
+
+			/**
+			 * Enters a variable into the StateMachine
+			 *
+			 * @param name  the name of the variable to enter
+			 * @param value the value of the variable to enter
+			 */
+			void varSet(std::string name, Values::Value* value);
+
+			/**
+			 * Gets a variable from the StateMachine with the given name
+			 *
+			 * @param name the name of the variable to retrieve
+			 *
+			 * @return the variable represented by the name
+			 */
+			Values::Value* varGet(std::string name);
 
 			/**
 			 * Executes the StateMachine with no flags

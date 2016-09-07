@@ -49,7 +49,7 @@ namespace Jump
 			 */
 			static TokenClass TOKEN_CLASSES[] = {
 				// Words
-				TokenClass("keyword", "state|print|to"),
+				TokenClass("keyword", "\\b(var|state|print|to)\\b"),
 				TokenClass("identifier", "[a-zA-Z][a-zA-Z0-9_]*"),
 
 				// Values
@@ -57,7 +57,7 @@ namespace Jump
 				TokenClass("number", Jump::Core::Values::Numbers::NUMBER_REGEX),
 
 				// Operations
-				TokenClass("operation", "[\\*\\+-/%]"),
+				TokenClass("operation", "[\\*\\+-/%=]"),
 				TokenClass("lparen", "\\("),
 				TokenClass("rparen", "\\)"),
 

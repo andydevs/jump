@@ -51,6 +51,7 @@ namespace Jump
 			 */
 			 enum OperLayer
 			 {
+			 	ASSIGN,
 			 	ADDSUB,
 			 	MULDIVMOD
 			 };
@@ -80,18 +81,31 @@ namespace Jump
 				std::vector<int> m_types;
 
 				/**
+				 * Assigns the left hand side to the right hand side
+				 *
+				 * @param stateRef reference to the state that contains the Expression
+				 *
+				 * @return the value to be assigned
+				 */ 
+				Value* assign(State* stateRef, int flags) throw(Errors::ValueError);
+
+				/**
 				 * Returns the addsub operation of the values
+				 *
+				 * @param stateRef reference to the state that contains the Expression
 				 *
 				 * @return the addsub operation of the values
 				 */
-				Value* addsub();
+				Value* addsub(State* stateRef, int flags) throw(Errors::ValueError);
 
 				/**
 				 * Returns the muldivmod operation of the values
 				 *
+				 * @param stateRef reference to the state that contains the Expression 
+				 *
 				 * @return the muldivmod operation of the values
 				 */
-				Value* muldivmod();
+				Value* muldivmod(State* stateRef, int flags) throw(Errors::ValueError);
 			public:
 				/**
 				 * Creates an Expression with the given operation
@@ -120,18 +134,14 @@ namespace Jump
 				void add(Value* value, int type);
 
 				/**
-				 * Evaluates the value
+				 * Evaluates the value in the context of the given state
+				 *
+				 * @param stateRef a reference to the state being evaluated
+				 * @param flags    flags to evauate the state with
 				 *
 				 * @return the evaluated value
 				 */
-				Value* evaluate();
-
-				/**
-				 * Returns the string representation of the Value
-				 *
-				 * @return the string representation of the Value
-				 */
-				std::string toString() const;
+				Value* evaluate(State* stateRef, int flags) throw(Errors::ValueError);
 			};
 		}
 	}

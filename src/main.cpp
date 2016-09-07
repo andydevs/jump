@@ -11,6 +11,7 @@ Created: 7 - 15 - 2016
 
 // Headers being used
 #include "Jump/Compiler/compiler.h"
+#include "Jump/Core/Errors/jumperror.h"
 #include "Jump/Core/Values/Numbers/parser.h"
 #include "Jump/Core/Values/expression.h"
 
@@ -52,7 +53,7 @@ int main(int argc, char const *argv[])
 	}
 	else
 	{
-		cout << "ERROR! Program name not specified!" << endl;
+		cout << "ERROR! Script name not specified!" << endl;
 		return 1;
 	}
 
@@ -66,7 +67,14 @@ int main(int argc, char const *argv[])
 	}
 	catch (Compiler::SyntaxError& e)
 	{
+		// Print Error and exit
 		cout << "SyntaxError: " << e.what() << endl;
+		return 1;
+	}
+	catch (Core::Errors::JumpError& e)
+	{
+		// Print Error and exit
+		cout << "JumpError: " << e.what() << endl;
 		return 1;
 	}
 }

@@ -13,8 +13,7 @@ Created: 7 - 15 - 2016
 #define _CORE_ERRORS_TYPEERROR_H_
 
 // Libraries being used
-#include <exception>
-#include <string>
+#include "jumperror.h"
 
 /**
  * Jump is a new programming language that uses the state machine paradigm
@@ -47,13 +46,8 @@ namespace Jump
 			 * @author  Anshul Kharbanda
 			 * @created 7 - 27 - 2016
 			 */
-			class TypeError: public std::exception
+			class TypeError: public JumpError
 			{
-			private:
-				/**
-				 * The message of the TypeError
-				 */
-				std::string m_message;
 			public:
 				/**
 				 * Creates a TypeError with the given message

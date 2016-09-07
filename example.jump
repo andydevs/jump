@@ -1,25 +1,46 @@
-# Sample Jump program
+# Sample Jump Program
+#
+# Tests the Jump Script Interpreter
+#
+# Author:  Anshul Kharbanda
+# Created: 7 - 15 - 2016
+
+# Defining a variable
+var variable
+
+# Defining a variable and setting it to a value
+var name = "Jamie Oliver"
 
 state start
+	# Testing printing
 	print "Good afternoon world"
 	print "I am Chef Gordon Ramsay"
 	print "And I like cat food"
+
+	# Test transition
 	to first
 
 state first
-	print "I am dog"
-	print "I also like cat food"
-	print 32
+	# Test Number print
+	print 32 # Integer
+	print 64.332 # Float
+	print #test null print
 	to second
 
 state second
-	print "I am pig"
-	print #test null print
-	print 64.332
-	print "I do pig stuff"
-	to third
-
-state third
+	# Test arithmetic
 	print 3 + 2
-	print "I am " + "Jamie Oliver."
+	print "I am " + name
+	print "The number is " + 3
 	print 2 * 3 - (4 + 7) / 2 * 5 % 6
+
+	# Test variable setting
+	variable = 5
+	print variable
+
+	# Transition
+	to fourth
+
+state fourth
+	# Test variable persistence
+	print variable

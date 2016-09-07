@@ -15,6 +15,7 @@ Created: 7 - 15 - 2016
 // Namespaces being used
 using namespace std;
 using namespace Jump::Core::Errors;
+using namespace Jump::Core::Statements;
 
 /**
  * Jump is a new programming language that uses the state machine paradigm
@@ -45,14 +46,20 @@ namespace Jump
 			 *
 			 * @param type the type of the value
 			 */
-			Value::Value(string type): m_type(type) {}
+			Value::Value(string type):
+			Statement(),
+			m_type(type)
+			{}
 
 			/**
 			 * Copy constructor for value
 			 *
 			 * @param other the other Value to copy
 			 */ 
-			Value::Value(const Value& other) : m_type(other.m_type) {}
+			Value::Value(const Value& other):
+			Statement(other),
+			m_type(other.m_type)
+			{}
 
 			/**
 			 * Destroys the value
@@ -92,13 +99,52 @@ namespace Jump
 			}
 
 			/**
-			 * Evaluates the value
+			 * Returns an inspection of the Statement
+			 *
+			 * @return an inspection of the Statement
+			 */ 
+			string Value::inspect()
+			{
+				return toString();
+			}
+
+			/**
+			 * Evaluates the value in the context of the given state
+			 *
+			 * @param stateRef a reference to the state being evaluated
+			 * @param flags    flags to evauate the state with
 			 *
 			 * @return the evaluated value
 			 */
-			Value* Value::evaluate()
+			Value* Value::evaluate(State* stateRef, int flags) throw(ValueError)
 			{
 				return this;
+			}
+
+			/**
+			 * Executes the statement
+			 *
+			 * @param stateRef reference to the containing state (pointer)
+			 * 
+			 * @return a reference to the next state (the state's name)
+			 */
+			std::string Value::execute(State* stateRef)
+			{
+				// Evaluate then return
+				evaluate(stateRef, 0); return "";
+			}
+
+			/**
+			 * The assignment operation for Jump values
+			 *
+			 * @param stateRef a reference to the state being assigned
+			 * @param value    the value being assigned to
+			 *
+			 * @return the value being assigned to
+			 */
+			Value* Value::assign(State* stateRef, Value* value) throw(ValueError)
+			{
+				throw ValueError("ValueType " + type() + " cannot being assigned.");
 			}
 
 			/**

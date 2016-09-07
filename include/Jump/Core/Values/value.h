@@ -13,6 +13,8 @@ Created: 7 - 15 - 2016
 #define _CORE_VALUES_VALUE_H_
 
 // Headers being used
+#include "Jump/Core/Statements/statement.h"
+#include "Jump/Core/Errors/valueerror.h"
 #include "Jump/Core/Errors/typeerror.h"
 
 // Libraries being used
@@ -43,12 +45,17 @@ namespace Jump
 		namespace Values
 		{
 			/**
+			 * Do not evaluate the value in the identifier
+			 */
+			const int NO_EVALUATE_IDENTIFIER = 1;
+
+			/**
 			 * The base value type in Jump
 			 *
 			 * @author  Anshul Kharbanda
 			 * @created 7 - 27 - 2016
 			 */
-			class Value
+			class Value: public Statements::Statement
 			{
 			protected:
 				/**
@@ -97,11 +104,40 @@ namespace Jump
 				virtual std::string toString() const;
 
 				/**
-				 * Evaluates the value
+				 * Returns an inspection of the Statement
+				 *
+				 * @return an inspection of the Statement
+				 */ 
+				std::string inspect();
+
+				/**
+				 * Evaluates the value in the context of the given state
+				 *
+				 * @param stateRef a reference to the state being evaluated
+				 * @param flags    flags to evauate the state with
 				 *
 				 * @return the evaluated value
 				 */
-				virtual Value* evaluate();
+				virtual Value* evaluate(State* stateRef, int flags) throw(Errors::ValueError);
+
+				/**
+				 * The assignment operation for Jump values
+				 *
+				 * @param stateRef a reference to the state being assigned
+				 * @param value    the value being assigned to
+				 *
+				 * @return the value being assigned to
+				 */
+				virtual Value* assign(State* stateRef, Value* value) throw(Errors::ValueError);
+
+				/**
+				 * Executes the statement
+				 *
+				 * @param stateRef reference to the containing state (pointer)
+				 * 
+				 * @return a reference to the next state (the state's name)
+				 */
+				std::string execute(State* stateRef);
 
 				/**
 				 * Operator for passing value to output stream
@@ -122,7 +158,7 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				virtual Value* andd(const Value* other) const throw(Jump::Core::Errors::TypeError);
+				virtual Value* andd(const Value* other) const throw(Errors::TypeError);
 
 				/**
 				 * The boolean or operation for Jump values
@@ -133,7 +169,7 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				virtual Value* orr(const Value* other) const throw(Jump::Core::Errors::TypeError);
+				virtual Value* orr(const Value* other) const throw(Errors::TypeError);
 
 				/**
 				 * The boolean not operation for Jump values
@@ -142,8 +178,7 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				virtual Value* nott() const throw(Jump::Core::Errors::TypeError);
-
+				virtual Value* nott() const throw(Errors::TypeError);
 
 				/**
 				 * The greater ththe operation for Jump values
@@ -154,7 +189,7 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				virtual Value* greater(const Value* other) const throw(Jump::Core::Errors::TypeError);
+				virtual Value* greater(const Value* other) const throw(Errors::TypeError);
 
 				/**
 				 * The greater equals operation for Jump values
@@ -165,7 +200,7 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				virtual Value* greaterEqual(const Value* other) const throw(Jump::Core::Errors::TypeError);
+				virtual Value* greaterEqual(const Value* other) const throw(Errors::TypeError);
 
 				/**
 				 * The equals operation for Jump values
@@ -176,7 +211,7 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				virtual Value* equal(const Value* other) const throw(Jump::Core::Errors::TypeError);
+				virtual Value* equal(const Value* other) const throw(Errors::TypeError);
 
 				/**
 				 * The not equals operation for Jump values
@@ -187,7 +222,7 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				virtual Value* notEqual(const Value* other) const throw(Jump::Core::Errors::TypeError);
+				virtual Value* notEqual(const Value* other) const throw(Errors::TypeError);
 
 				/**
 				 * The less equals operation for Jump values
@@ -198,7 +233,7 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				virtual Value* lessEqual(const Value* other) const throw(Jump::Core::Errors::TypeError);
+				virtual Value* lessEqual(const Value* other) const throw(Errors::TypeError);
 
 				/**
 				 * The less ththe operation for Jump values
@@ -209,7 +244,7 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				virtual Value* less(const Value* other) const throw(Jump::Core::Errors::TypeError);
+				virtual Value* less(const Value* other) const throw(Errors::TypeError);
 
 
 				/**
@@ -221,7 +256,7 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				virtual Value* plus(const Value* other) const throw(Jump::Core::Errors::TypeError);
+				virtual Value* plus(const Value* other) const throw(Errors::TypeError);
 
 				/**
 				 * The subtraction operation for Jump values
@@ -232,7 +267,7 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				virtual Value* minus(const Value* other) const throw(Jump::Core::Errors::TypeError);
+				virtual Value* minus(const Value* other) const throw(Errors::TypeError);
 
 				/**
 				 * The multiplication operation for Jump values
@@ -243,7 +278,7 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				virtual Value* times(const Value* other) const throw(Jump::Core::Errors::TypeError);
+				virtual Value* times(const Value* other) const throw(Errors::TypeError);
 
 				/**
 				 * The division operation for Jump values
@@ -254,7 +289,7 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				virtual Value* divides(const Value* other) const throw(Jump::Core::Errors::TypeError);
+				virtual Value* divides(const Value* other) const throw(Errors::TypeError);
 
 				/**
 				 * The modulus operation for Jump values
@@ -265,7 +300,7 @@ namespace Jump
 				 *
 				 * @throw TypeError upon an error during the operation
 				 */
-				virtual Value* modulus(const Value* other) const throw(Jump::Core::Errors::TypeError);
+				virtual Value* modulus(const Value* other) const throw(Errors::TypeError);
 			};
 		}
 	}

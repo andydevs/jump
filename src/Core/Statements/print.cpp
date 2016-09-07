@@ -103,7 +103,7 @@ namespace Jump
 			 */
 			string Print::execute(State* stateRef)
 			{
-				Value* evaluated = m_toPrint->evaluate();
+				Value* evaluated = m_toPrint->evaluate(stateRef, 0);
 				m_streamRef << evaluated->toString() << endl;
 				return "";
 			}

@@ -87,6 +87,16 @@ namespace Jump
 		}
 
 		/**
+		 * Returns the StateMachine of the state
+		 *
+		 * @return the StateMachine of the state
+		 */
+		StateMachine* State::statemachine()
+		{
+			return m_machine;
+		}
+
+		/**
 		 * Adds the given statement to the State
 		 *
 		 * @param statement the statement to add

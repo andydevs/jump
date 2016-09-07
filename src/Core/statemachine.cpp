@@ -14,6 +14,7 @@ Created: 7 - 15 - 2016
 
 // Namespaces being used
 using namespace std;
+using namespace Jump::Core::Values;
 
 /**
  * Jump is a new programming language that uses the state machine paradigm
@@ -64,8 +65,14 @@ namespace Jump
 		string StateMachine::inspect()
 		{
 			string s = "[STATEMACHINE]\n";
+
+			s += "\t[VARTABLE]\n";
+			for (map<string, Value*>::iterator it = m_vartable.begin(); it != m_vartable.end(); ++it)
+				s += "\t\t" + it->first + " - " + it->second->inspect() + "\n";
+
 			for (map<string, State*>::iterator it = m_statetable.begin(); it != m_statetable.end(); ++it)
 				s += "\t" + it->second->inspect();
+
 			return s;
 		}
 
@@ -97,6 +104,34 @@ namespace Jump
 
 			// Return state if found, else NULL
 			return it == m_statetable.end() ? NULL : m_statetable.find(name)->second;
+		}
+
+		/**
+		 * Enters a variable into the StateMachine
+		 *
+		 * @param name  the name of the variable to enter
+		 * @param value the value of the variable to enter
+		 */
+		void StateMachine::varSet(string name, Value* value)
+		{
+			// Add variable to vartable
+			m_vartable[name] = value;
+		}
+
+		/**
+		 * Gets a variable from the StateMachine with the given name
+		 *
+		 * @param name the name of the variable to retrieve
+		 *
+		 * @return the variable represented by the name
+		 */
+		Value* StateMachine::varGet(string name)
+		{
+			// Find variable with name
+			map<string, Value*>::iterator it = m_vartable.find(name);
+
+			// Return variable if found, else NULL
+			return it == m_vartable.end() ? NULL : m_vartable.find(name)->second;
 		}
 
 		/**

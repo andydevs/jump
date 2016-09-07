@@ -11,9 +11,12 @@ Created: 7 - 15 - 2016
 
 // Headers being used
 #include "Jump/Compiler/grammarparser.h"
+#include "Jump/Core/Statements/statements.h"
+#include "Jump/Core/Values/identifier.h"
 #include "Jump/Core/Values/string.h"
-#include "Jump/Core/Values/expression.h"
+#include "Jump/Core/Values/null.h"
 #include "Jump/Core/Values/Numbers/parser.h"
+#include "Jump/Core/Values/expression.h"
 
 // Libraries being used
 #include <cstdlib>
@@ -190,7 +193,8 @@ namespace Jump
 			 */
 			static bool isValue(queue<Token> tks)
 			{
-				return isString(tks) || isNumber(tks) || isIdentifier(tks);
+				return isString(tks) || isNumber(tks) 
+					|| isIdentifier(tks) || isLparen(tks);
 			}
 
 			/**
@@ -268,6 +272,10 @@ namespace Jump
 				{
 					val = Values::Numbers::parse(literal.c_str());
 				}
+				else if (isIdentifier(tks))
+				{
+					val = new Values::Identifier(literal);
+				}
 				else if (isLparen(tks))
 				{
 					tks.pop();
@@ -275,7 +283,9 @@ namespace Jump
 					if (!isRparen(tks)) throw SyntaxError("Expected RPAREN");
 				}
 				else
+				{
 					throw SyntaxError("Unexpected token " + tks.front().toString() +  ". Expected Value Type");
+				}
 				tks.pop();
 				return val;
 			}
@@ -383,6 +393,27 @@ namespace Jump
 			}
 
 			/**
+			 * Parses an assign
+			 *
+			 * @param tks the token queue to parse
+			 *
+			 * @return the assign parsed
+			 *
+			 * @throw SyntaxError if invalid token sequence
+			 */
+			static void assign(State* state, queue<Token>& tks) throw(SyntaxError)
+			{
+				Values::Expression* expr = new Values::Expression(Values::OperLayer::ASSIGN);
+				expr->add(expression(tks), 0);
+				if (isOperation(tks, "="))
+				{
+					tks.pop();
+					expr->add(expression(tks), 0);
+				}
+				state->add(expr);
+			}
+
+			/**
 			 * Parses a to statement
 			 *
 			 * @param state the state to add the statement to
@@ -421,7 +452,7 @@ namespace Jump
 				if (isValue(tks))
 				{
 					// Add print statement with the value token
-					state->add(new Statements::Print(addsub(tks)));
+					state->add(new Statements::Print(expression(tks)));
 				}
 				// Else if endline add blank print statement
 				else if (isEndline(tks))
@@ -447,7 +478,7 @@ namespace Jump
 				else if (isKeyword(tks, "to"))
 					to(state, tks);
 				else
-					throw SyntaxError("Unexpected State keyword: " + tks.front().attribute());
+					assign(state, tks);
 			}
 
 			// -------------- STATEMACHINE --------------
@@ -477,7 +508,7 @@ namespace Jump
 					{
 						// Parse statements until next state declaration (or end of program)
 						while (continuing(tks) && !isDeclaration(tks))
-							if (isKeyword(tks))
+							if (isKeyword(tks) || isValue(tks))
 								statement(state, tks);
 							else if (isEndline(tks))
 								endline(tks);
@@ -487,7 +518,7 @@ namespace Jump
 						// Set state in machine
 						machine.stateSet(state);
 					}
-					catch (exception& e)
+					catch (SyntaxError& e)
 					{
 						// Delete state if error
 						delete state;
@@ -496,6 +527,39 @@ namespace Jump
 				}
 				// Throw error
 				else throw SyntaxError("Expected identifier after \"state\" keyword");
+			}
+
+			/**
+			 * Parses a variable
+			 *
+			 * @param machine the StateMachine to add the variable to
+			 * @param tks     the token queue to parse
+			 *
+			 * @throw SyntaxError if invalid token sequence
+			 */
+			static void variable(StateMachine& machine, queue<Token>& tks) throw(SyntaxError)
+			{
+				// Next
+				tks.pop();
+
+				// Get variable name
+				string name = tks.front().attribute();
+				tks.pop();
+				
+				// If assignment is given, set value
+				// Else set to null
+				if (isOperation(tks, "="))
+				{
+					tks.pop();
+					machine.varSet(name, expression(tks));
+				}
+				else
+				{
+					machine.varSet(name, new Values::Null());
+				}
+
+				// Endline
+				endline(tks);
 			}
 
 			/**
@@ -511,6 +575,8 @@ namespace Jump
 				// Parse declaration
 				if (isKeyword(tks, "state"))
 					state(machine, tks);
+				else if (isKeyword(tks, "var"))
+					variable(machine, tks);
 				else
 					throw SyntaxError("Unexpected StateMachine keyword: " + tks.front().attribute());
 			}

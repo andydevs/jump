@@ -108,6 +108,13 @@ namespace Jump
 			void statemachineSet(StateMachine* machine);
 
 			/**
+			 * Returns the StateMachine of the state
+			 *
+			 * @return the StateMachine of the state
+			 */
+			StateMachine* statemachine();
+
+			/**
 			 * Adds the given statement to the State
 			 *
 			 * @param statement the statement to add

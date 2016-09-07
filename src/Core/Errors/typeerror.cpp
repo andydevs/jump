@@ -44,7 +44,7 @@ namespace Jump
 			 * 
 			 * @param message the message of the TypeError
 			 */
-			TypeError::TypeError(string message) : m_message(message) {}
+			TypeError::TypeError(string message): JumpError(message) {}
 
 			/**
 			 * Destroys the TypeError
