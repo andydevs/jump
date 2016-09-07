@@ -64,15 +64,24 @@ namespace Jump
 		 */
 		string StateMachine::inspect()
 		{
+			// Put start
 			string s = "[STATEMACHINE]\n";
 
+			// Put const table
+			s += "\t[CONSTTABLE]\n";
+			for (map<string, Value*>::iterator it = m_consttable.begin(); it != m_consttable.end(); ++it)
+				s += "\t\t" + it->first + " - " + it->second->inspect() + "\n";
+
+			// Put vartable
 			s += "\t[VARTABLE]\n";
 			for (map<string, Value*>::iterator it = m_vartable.begin(); it != m_vartable.end(); ++it)
 				s += "\t\t" + it->first + " - " + it->second->inspect() + "\n";
 
+			// Put states
 			for (map<string, State*>::iterator it = m_statetable.begin(); it != m_statetable.end(); ++it)
 				s += "\t" + it->second->inspect();
 
+			// Return string
 			return s;
 		}
 
@@ -103,7 +112,7 @@ namespace Jump
 			map<string, State*>::iterator it = m_statetable.find(name);
 
 			// Return state if found, else NULL
-			return it == m_statetable.end() ? NULL : m_statetable.find(name)->second;
+			return it == m_statetable.end() ? NULL : it->second;
 		}
 
 		/**
@@ -131,7 +140,39 @@ namespace Jump
 			map<string, Value*>::iterator it = m_vartable.find(name);
 
 			// Return variable if found, else NULL
-			return it == m_vartable.end() ? NULL : m_vartable.find(name)->second;
+			return it == m_vartable.end() ? NULL : it->second;
+		}
+
+		/**
+		 * Enters a constant into the StateMachine
+		 * Constants can only be set once!
+		 *
+		 * @param name  the name of the constant to enter
+		 * @param value the value of the constant to enter
+		 */
+		void StateMachine::constSet(std::string name, Values::Value* value)
+		{
+			// Find variable with name
+			map<string, Value*>::iterator it = m_consttable.find(name);
+
+			// Set variable if not defined, else throw error
+			if (it == m_consttable.end()) m_consttable[name] = value;
+		}
+
+		/**
+		 * Gets a constant from the StateMachine with the given name
+		 *
+		 * @param name the name of the constant to retrieve
+		 *
+		 * @return the constant represented by the name
+		 */
+		Value* StateMachine::constGet(std::string name)
+		{
+			// Find variable with name
+			map<string, Value*>::iterator it = m_consttable.find(name);
+
+			// Return variable if found, else NULL
+			return it == m_consttable.end() ? NULL : it->second;
 		}
 
 		/**
@@ -159,7 +200,7 @@ namespace Jump
 			// Return error if null found
 			if (next == NULL) return 1;
 
-			// Loop untill end state is reached
+			// Loop until end state is reached
 			while (next->getName() != "end")
 			{
 				// Get next state from execution

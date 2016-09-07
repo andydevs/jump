@@ -5,6 +5,9 @@
 # Author:  Anshul Kharbanda
 # Created: 7 - 15 - 2016
 
+# Defining a constant
+const PI = 3.1415926535897932
+
 # Defining a variable
 var variable
 
@@ -44,3 +47,6 @@ state second
 state fourth
 	# Test variable persistence
 	print variable
+
+	# Test constant
+	print "The value of PI is " + PI

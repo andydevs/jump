@@ -14,6 +14,7 @@ Created: 7 - 15 - 2016
 
 // Headers being used
 #include "Values/value.h"
+#include "Errors/valueerror.h"
 #include "state.h"
 
 // Libraries being used
@@ -51,9 +52,14 @@ namespace Jump
 			std::map<std::string, State*> m_statetable;
 
 			/**
-			 * Holds the values
+			 * Holds the variable values
 			 */
 			std::map<std::string, Values::Value*> m_vartable;
+
+			/**
+			 * Holds the constant values
+			 */
+			std::map<std::string, Values::Value*> m_consttable;
 		public:
 			/**
 			 * Creates an empty StateMachine
@@ -111,6 +117,24 @@ namespace Jump
 			 * @return the variable represented by the name
 			 */
 			Values::Value* varGet(std::string name);
+
+			/**
+			 * Enters a constant into the StateMachine
+			 * Constants can only be set once!
+			 *
+			 * @param name  the name of the constant to enter
+			 * @param value the value of the constant to enter
+			 */
+			void constSet(std::string name, Values::Value* value);
+
+			/**
+			 * Gets a constant from the StateMachine with the given name
+			 *
+			 * @param name the name of the constant to retrieve
+			 *
+			 * @return the constant represented by the name
+			 */
+			Values::Value* constGet(std::string name);
 
 			/**
 			 * Executes the StateMachine with no flags

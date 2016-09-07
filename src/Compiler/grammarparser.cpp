@@ -530,6 +530,35 @@ namespace Jump
 			}
 
 			/**
+			 * Parses a constant
+			 *
+			 * @param machine the StateMachine to add the constant to
+			 * @param tks     the token queue to parse
+			 *
+			 * @throw SyntaxError if invalid token sequence
+			 */
+			static void constant(StateMachine& machine, queue<Token>& tks) throw(SyntaxError)
+			{
+				// Next
+				tks.pop();
+
+				// Get constant name
+				string name = tks.front().attribute();
+				tks.pop();
+
+				// If assignment is given, set value, else set to null
+				if (isOperation(tks, "="))
+				{
+					tks.pop();
+					machine.constSet(name, expression(tks));
+				}
+				else throw SyntaxError("Expected = after constant declaration.");
+
+				// Endline
+				endline(tks);
+			}
+
+			/**
 			 * Parses a variable
 			 *
 			 * @param machine the StateMachine to add the variable to
@@ -575,6 +604,8 @@ namespace Jump
 				// Parse declaration
 				if (isKeyword(tks, "state"))
 					state(machine, tks);
+				else if (isKeyword(tks, "const"))
+					constant(machine, tks);
 				else if (isKeyword(tks, "var"))
 					variable(machine, tks);
 				else
