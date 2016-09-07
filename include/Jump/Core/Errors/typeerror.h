@@ -13,7 +13,7 @@ Created: 7 - 15 - 2016
 #define _CORE_ERRORS_TYPEERROR_H_
 
 // Libraries being used
-#include "jumperror.h"
+#include "valueerror.h"
 
 /**
  * Jump is a new programming language that uses the state machine paradigm
@@ -46,7 +46,7 @@ namespace Jump
 			 * @author  Anshul Kharbanda
 			 * @created 7 - 27 - 2016
 			 */
-			class TypeError: public JumpError
+			class TypeError: public ValueError
 			{
 			public:
 				/**
@@ -54,19 +54,14 @@ namespace Jump
 				 * 
 				 * @param message the message of the TypeError
 				 */
-				TypeError(std::string message);
-
-				/**
-				 * Destroys the TypeError
-				 */
-				~TypeError();
+				using ValueError::ValueError;
 
 				/**
 				 * Returns the message of the TypeError
 				 *
 				 * @return the message of the TypeError
 				 */
-				const char* what() const throw();
+				using ValueError::what;
 			};
 		}
 	}
