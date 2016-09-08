@@ -1,7 +1,6 @@
 # --------------------- PROJECT ----------------------
 
 PROJECT = jump
-VERSION = 0.2.0
 
 # -------------------- DIRECTORIES -------------------
 
@@ -30,7 +29,7 @@ FLAGS = -std=c++14 -Wall
 
 # ---------------------- MAKEFILE --------------------
 
-TARGET = $(PROJECT)-$(VERSION)
+TARGET = $(PROJECT)
 
 INCLUDS = $(shell ls $(INCDIR)/**/*.h)
 SOURCES = $(shell ls $(SRCDIR)/**/*.cpp)

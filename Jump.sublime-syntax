@@ -6,20 +6,17 @@ file_extensions:
 scope: source.jump
 
 contexts:
-  comments:
+  main:
     - comment: Comment
       match: \#.*\r?\n
       scope: comment.line.number-sign.jump
-
-  main:
-    - include: comments
 
     - comment: Keywords
       match: \b(var|const|print|read|to|loop|end|check|if|otherwise)\b
       scope: keyword.control.jump
     
     - comment: Numbers
-      match: \b\d+(\.\d+)?((e|E)(\+|-)?\d+)?\b
+      match: \b\d+(\.\d+)?((e|E)(\+|-)?\d+)?((i|f)[0-9]+)?\b
       scope: constant.numeric.jump
     
     - comment: Boolean

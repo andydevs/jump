@@ -50,3 +50,13 @@ state fourth
 
 	# Test constant
 	print "The value of PI is " + PI
+
+	# Transition
+	to fifth
+
+state fifth
+	# Test declaring different values
+	variable = 23i8
+
+	# Test variable print
+	print variable

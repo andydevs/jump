@@ -11,8 +11,8 @@ Created: 7 - 15 - 2016
 
 // Headers being used
 #include "Jump/Core/Values/Numbers/parser.h"
-#include "Jump/Core/Values/Numbers/int32.h"
-#include "Jump/Core/Values/Numbers/float64.h"
+#include "Jump/Core/Values/Numbers/integer.h"
+#include "Jump/Core/Values/Numbers/float.h"
 
 // Libraries being used
 #include <cstdlib>
@@ -89,10 +89,18 @@ namespace Jump
 					smatch match;
 					regex_match(text, match, NUMBER_REGEX);
 
-					if (suffix(match) == "i32")
-						return new Int32(atoi(text.c_str()));
+					if (suffix(match) == "i8")
+						return new Integer<char>((char)atoi(text.c_str()));
+					else if (suffix(match) == "i16")
+						return new Integer<short>((short)atoi(text.c_str()));
+					else if (suffix(match) == "i32")
+						return new Integer<int>((int)atoi(text.c_str()));
+					else if (suffix(match) == "i64")
+						return new Integer<long>((long)atoi(text.c_str()));
+					else if (suffix(match) == "f32")
+						return new Float<float>((float)atof(text.c_str()));
 					else if (suffix(match) == "f64")
-						return new Float64(atof(text.c_str()));
+						return new Float<double>((double)atof(text.c_str()));
 					else
 						throw TypeError("Undefined numerical type: " + suffix(match));
 				}
