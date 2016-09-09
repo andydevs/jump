@@ -80,3 +80,15 @@ state sixth
 	print False or True
 	print not False
 	print not (False or True and not True)
+
+	# Test conditioned transition
+	to seventh_a if 4 > 5
+	to seventh_b otherwise
+
+state seventh_a
+	# Print state title
+	print "Seventh A"
+
+state seventh_b
+	# Print state title
+	print "Seventh B"

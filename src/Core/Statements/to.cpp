@@ -11,9 +11,11 @@ Created: 7 - 15 - 2016
 
 // Headers being used
 #include "Jump/Core/Statements/to.h"
+#include "Jump/Core/Values/boolean.h"
 
 // Namespaces being used
 using namespace std;
+using namespace Jump::Core::Values;
 
 /**
  * Jump is a new programming language that uses the state machine paradigm
@@ -44,7 +46,23 @@ namespace Jump
 			 *
 			 * @param stateRef reference to another state (the state's name)
 			 */
-			To::To(string stateRef) : Statement(), m_stateRef(stateRef) {}
+			To::To(string stateRef):
+			Statement(),
+			m_stateRef(stateRef),
+			m_condition(new Boolean(true))
+			{}
+
+			/**
+			 * Creates a new To with the given stateRef and condition
+			 *
+			 * @param stateRef  reference to another state (the state's name)
+			 * @param condition transition condition
+			 */
+			To::To(std::string stateRef, Value* condition):
+			Statement(),
+			m_stateRef(stateRef),
+			m_condition(condition)
+			{}
 
 			/**
 			 * Destroys the To
@@ -70,7 +88,14 @@ namespace Jump
 			 */
 			std::string To::execute(State* stateRef)
 			{
-				return m_stateRef;
+				if (m_condition->evaluate(stateRef, 0)->toBool())
+				{
+					return m_stateRef;
+				}
+				else
+				{
+					return "";
+				}
 			}
 		}
 	}

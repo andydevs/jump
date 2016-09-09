@@ -574,9 +574,29 @@ namespace Jump
 				// If next is identifier
 				if (isIdentifier(tks))
 				{
-					// Add to statement with the identifier token
-					state->add(new Statements::To(tks.front().attribute()));
+					// Get identifier
+					string id = tks.front().attribute();
 					tks.pop();
+
+					// Get condition
+					Values::Value* condition;
+					if (isKeyword(tks, "if"))
+					{
+						tks.pop();
+						condition = expression(tks);
+					}
+					else if (isKeyword(tks, "otherwise"))
+					{
+						tks.pop();
+						condition = new Values::Boolean(true);
+					}
+					else
+					{
+						condition = new Values::Boolean(true);
+					}
+
+					// Add to statement with the identifier token
+					state->add(new Statements::To(id, condition));
 				}
 				// Else throw SyntaxError
 				else throw SyntaxError("Expected identifier after \"to\" keyword");

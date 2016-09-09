@@ -14,6 +14,7 @@ Created: 7 - 15 - 2016
 
 // Headers being used
 #include "statement.h"
+#include "Jump/Core/Values/value.h"
 
 // Libraries being used
 #include <string>
@@ -55,6 +56,11 @@ namespace Jump
 				 * Reference to another state (the state's name)
 				 */
 				std::string m_stateRef;
+
+				/**
+				 * Transition condition
+				 */
+				Values::Value* m_condition;
 			public:
 				/**
 				 * Creates a new To with the given stateRef
@@ -62,6 +68,14 @@ namespace Jump
 				 * @param stateRef reference to another state (the state's name)
 				 */
 				To(std::string stateRef);
+
+				/**
+				 * Creates a new To with the given stateRef and condition
+				 *
+				 * @param stateRef  reference to another state (the state's name)
+				 * @param condition transition condition
+				 */
+				To(std::string stateRef, Values::Value* condition);
 
 				/**
 				 * Destroys the To
