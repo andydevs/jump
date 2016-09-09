@@ -11,9 +11,11 @@ Created: 7 - 15 - 2016
 
 // Headers being used
 #include "Jump/Core/Values/Numbers/number.h"
+#include "Jump/Core/Values/boolean.h"
 
 // Namespaces being used
 using namespace std;
+using namespace Jump::Core::Errors;
 
 /**
  * Jump is a new programming language that uses the state machine paradigm
@@ -120,6 +122,132 @@ namespace Jump
 				template <class T> std::string Number<T>::toString() const
 				{
 					return to_string(m_store);
+				}
+
+				/**
+				 * The greater ththe operation for Jump values
+				 *
+				 * @param other the other Value in the operation
+				 *
+				 * @return the result of the greater ththe operation
+				 *
+				 * @throw TypeError upon an error during the operation
+				 */
+				template <class T> Value* Number<T>::greater(const Value* other) const throw(TypeError)
+				{
+					if (other->type() == "UnsignedInteger")
+						return new Boolean((unsigned)m_store > other->toUnsigned());
+					else if (other->type() == "Integer")
+						return new Boolean((int)m_store > other->toInt());
+					else if (other->type() == "Float")
+						return new Boolean((double)m_store > other->toFloat());
+					else
+						return Value::greater(other);
+				}
+
+				/**
+				 * The greater equals operation for Jump values
+				 *
+				 * @param other the other Value in the operation
+				 *
+				 * @return the result of the greater equals operation
+				 *
+				 * @throw TypeError upon an error during the operation
+				 */
+				template <class T> Value* Number<T>::greaterEqual(const Value* other) const throw(TypeError)
+				{
+					if (other->type() == "UnsignedInteger")
+						return new Boolean((unsigned)m_store >= other->toUnsigned());
+					else if (other->type() == "Integer")
+						return new Boolean((int)m_store >= other->toInt());
+					else if (other->type() == "Float")
+						return new Boolean((double)m_store >= other->toFloat());
+					else
+						return Value::greaterEqual(other);
+				}
+
+				/**
+				 * The equals operation for Jump values
+				 *
+				 * @param other the other Value in the operation
+				 *
+				 * @return the result of the equals operation
+				 *
+				 * @throw TypeError upon an error during the operation
+				 */
+				template <class T> Value* Number<T>::equal(const Value* other) const throw(TypeError)
+				{
+					if (other->type() == "UnsignedInteger")
+						return new Boolean((unsigned)m_store == other->toUnsigned());
+					else if (other->type() == "Integer")
+						return new Boolean((int)m_store == other->toInt());
+					else if (other->type() == "Float")
+						return new Boolean((double)m_store == other->toFloat());
+					else
+						return Value::equal(other);
+				}
+
+				/**
+				 * The not equals operation for Jump values
+				 *
+				 * @param other the other Value in the operation
+				 *
+				 * @return the result of the not equals operation
+				 *
+				 * @throw TypeError upon an error during the operation
+				 */
+				template <class T> Value* Number<T>::notEqual(const Value* other) const throw(TypeError)
+				{
+					if (other->type() == "UnsignedInteger")
+						return new Boolean((unsigned)m_store != other->toUnsigned());
+					else if (other->type() == "Integer")
+						return new Boolean((int)m_store != other->toInt());
+					else if (other->type() == "Float")
+						return new Boolean((double)m_store != other->toFloat());
+					else
+						return Value::notEqual(other);
+				}
+
+				/**
+				 * The less equals operation for Jump values
+				 *
+				 * @param other the other Value in the operation
+				 *
+				 * @return the result of the less equals operation
+				 *
+				 * @throw TypeError upon an error during the operation
+				 */
+				template <class T> Value* Number<T>::lessEqual(const Value* other) const throw(TypeError)
+				{
+					if (other->type() == "UnsignedInteger")
+						return new Boolean((unsigned)m_store <= other->toUnsigned());
+					else if (other->type() == "Integer")
+						return new Boolean((int)m_store <= other->toInt());
+					else if (other->type() == "Float")
+						return new Boolean((double)m_store <= other->toFloat());
+					else
+						return Value::lessEqual(other);
+				}
+
+				/**
+				 * The less ththe operation for Jump values
+				 *
+				 * @param other the other Value in the operation
+				 *
+				 * @return the result of the less ththe operation
+				 *
+				 * @throw TypeError upon an error during the operation
+				 */
+				template <class T> Value* Number<T>::less(const Value* other) const throw(TypeError)
+				{
+					if (other->type() == "UnsignedInteger")
+						return new Boolean((unsigned)m_store < other->toUnsigned());
+					else if (other->type() == "Integer")
+						return new Boolean((int)m_store < other->toInt());
+					else if (other->type() == "Float")
+						return new Boolean((double)m_store < other->toFloat());
+					else
+						return Value::less(other);
 				}
 
 				// Types

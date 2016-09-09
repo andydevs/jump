@@ -87,6 +87,16 @@ namespace Jump
 			}
 
 			/**
+			 * The bit size of the stored value
+			 *
+			 * @return the size of the stored value
+			 */
+			int Value::size() const
+			{
+				return 0;
+			}
+
+			/**
 			 * Returns the string representation of the Value
 			 *
 			 * @return the string representation of the Value
@@ -96,16 +106,6 @@ namespace Jump
 				char buff[50];
 				sprintf(buff, "<%s@%lx>", m_type.c_str(), (unsigned long)this);
 				return string(buff);
-			}
-
-			/**
-			 * The bit size of the stored value
-			 *
-			 * @return the size of the stored value
-			 */
-			int Value::size() const
-			{
-				return 0;
 			}
 
 			/**
@@ -136,6 +136,16 @@ namespace Jump
 			double Value::toFloat() const
 			{
 				return 0;
+			}
+
+			/**
+			 * Returns the value as a boolean
+			 *
+			 * @return the value as a boolean
+			 */
+			bool Value::toBool() const
+			{
+				return false;
 			}
 
 			/**

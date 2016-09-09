@@ -97,18 +97,18 @@ namespace Jump
 				virtual bool isNull() const;
 
 				/**
-				 * Returns the string representation of the Value
-				 *
-				 * @return the string representation of the Value
-				 */
-				virtual std::string toString() const;
-
-				/**
 				 * The bit size of the stored value
 				 *
 				 * @return the size of the stored value
 				 */
 				virtual int size() const;
+
+				/**
+				 * Returns the string representation of the Value
+				 *
+				 * @return the string representation of the Value
+				 */
+				virtual std::string toString() const;
 
 				/**
 				 * Returns the value as an unsigned integer
@@ -130,6 +130,13 @@ namespace Jump
 				 * @return the value as a float
 				 */
 				virtual double toFloat() const;
+
+				/**
+				 * Returns the value as a boolean
+				 *
+				 * @return the value as a boolean
+				 */
+				virtual bool toBool() const;
 
 				/**
 				 * Returns an inspection of the Statement

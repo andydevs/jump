@@ -52,6 +52,10 @@ namespace Jump
 			 enum OperLayer
 			 {
 			 	ASSIGN,
+			 	OR,
+			 	AND,
+			 	NOT,
+			 	COMPARE,
 			 	ADDSUB,
 			 	MULDIVMOD
 			 };
@@ -88,6 +92,42 @@ namespace Jump
 				 * @return the value to be assigned
 				 */ 
 				Value* assign(State* stateRef, int flags) throw(Errors::ValueError);
+
+				/**
+				 * Returns the orr operation of the values
+				 *
+				 * @param stateRef reference to the state that contains the Expression
+				 *
+				 * @return the orr operation of the values
+				 */
+				Value* orr(State* stateRef, int flags) throw(Errors::ValueError);
+
+				/**
+				 * Returns the andd operation of the values
+				 *
+				 * @param stateRef reference to the state that contains the Expression
+				 *
+				 * @return the andd operation of the values
+				 */
+				Value* andd(State* stateRef, int flags) throw(Errors::ValueError);
+
+				/**
+				 * Returns the nott operation of the values
+				 *
+				 * @param stateRef reference to the state that contains the Expression
+				 *
+				 * @return the nott operation of the values
+				 */
+				Value* nott(State* stateRef, int flags) throw(Errors::ValueError);
+
+				/**
+				 * Returns the compare operation of the values
+				 *
+				 * @param stateRef reference to the state that contains the Expression
+				 *
+				 * @return the compare operation of the values
+				 */
+				Value* compare(State* stateRef, int flags) throw(Errors::ValueError);
 
 				/**
 				 * Returns the addsub operation of the values

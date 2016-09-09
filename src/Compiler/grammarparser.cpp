@@ -15,6 +15,7 @@ Created: 7 - 15 - 2016
 #include "Jump/Core/Values/identifier.h"
 #include "Jump/Core/Values/string.h"
 #include "Jump/Core/Values/null.h"
+#include "Jump/Core/Values/boolean.h"
 #include "Jump/Core/Values/Numbers/parser.h"
 #include "Jump/Core/Values/expression.h"
 
@@ -272,6 +273,10 @@ namespace Jump
 				{
 					val = Values::Numbers::parse(literal.c_str());
 				}
+				else if (isKeyword(tks, "True") || isKeyword(tks, "False"))
+				{
+					val = new Values::Boolean(tks.front().attribute() == "True");
+				}
 				else if (isIdentifier(tks))
 				{
 					val = new Values::Identifier(literal);
@@ -379,6 +384,146 @@ namespace Jump
 			}
 
 			/**
+			 * Parses an compare
+			 *
+			 * @param tks the token queue to parse
+			 *
+			 * @return the compare parsed
+			 *
+			 * @throw SyntaxError if invalid token sequence
+			 */
+			static Values::Expression* compare(queue<Token>& tks) throw(SyntaxError)
+			{
+				Values::Expression* expr = new Values::Expression(Values::OperLayer::COMPARE);
+				expr->add(addsub(tks), 0);
+				if (isOperation(tks, ">"))
+				{
+					tks.pop();
+					expr->add(addsub(tks), 0);
+				}
+				else if (isOperation(tks, ">="))
+				{
+					tks.pop();
+					expr->add(addsub(tks), 1);
+				}
+				else if (isOperation(tks, "=="))
+				{
+					tks.pop();
+					expr->add(addsub(tks), 2);
+				}
+				else if (isOperation(tks, "!="))
+				{
+					tks.pop();
+					expr->add(addsub(tks), 3);
+				}
+				else if (isOperation(tks, "<="))
+				{
+					tks.pop();
+					expr->add(addsub(tks), 4);
+				}
+				else if (isOperation(tks, "<"))
+				{
+					tks.pop();
+					expr->add(addsub(tks), 5);
+				}
+				return expr;
+			}
+
+			/**
+			 * Parses an nott
+			 *
+			 * @param tks the token queue to parse
+			 *
+			 * @return the nott parsed
+			 *
+			 * @throw SyntaxError if invalid token sequence
+			 */
+			static Values::Expression* nott(queue<Token>& tks) throw(SyntaxError)
+			{
+				if (isKeyword(tks, "not"))
+				{
+					tks.pop();
+					Values::Expression* expr = new Values::Expression(Values::OperLayer::NOT);
+					expr->add(compare(tks), 0);
+					return expr;
+				}
+				else
+				{
+					return compare(tks);
+				}
+			}
+
+			/**
+			 * Parses a andOp
+			 *
+			 * @param expr the addsub expression being parsed
+			 * @param tks  the token queue to parse
+			 *
+			 * @throw SyntaxError if invalid token sequence
+			 */
+			static void andOp(Values::Expression* expr, queue<Token>& tks) throw(SyntaxError)
+			{
+				if (isKeyword(tks, "and"))
+				{
+					tks.pop();
+					expr->add(nott(tks), 0);
+					andOp(expr, tks);
+				}
+			}
+
+			/**
+			 * Parses an and
+			 *
+			 * @param tks the token queue to parse
+			 *
+			 * @return the and parsed
+			 *
+			 * @throw SyntaxError if invalid token sequence
+			 */
+			static Values::Expression* andd(queue<Token>& tks) throw(SyntaxError)
+			{
+				Values::Expression* expr = new Values::Expression(Values::OperLayer::AND);
+				expr->add(nott(tks), 0);
+				andOp(expr, tks);
+				return expr;
+			}
+
+			/**
+			 * Parses a orOp
+			 *
+			 * @param expr the addsub expression being parsed
+			 * @param tks  the token queue to parse
+			 *
+			 * @throw SyntaxError if invalid token sequence
+			 */
+			static void orOp(Values::Expression* expr, queue<Token>& tks) throw(SyntaxError)
+			{
+				if (isKeyword(tks, "or"))
+				{
+					tks.pop();
+					expr->add(andd(tks), 0);
+					orOp(expr, tks);
+				}
+			}
+
+			/**
+			 * Parses an orr
+			 *
+			 * @param tks the token queue to parse
+			 *
+			 * @return the orr parsed
+			 *
+			 * @throw SyntaxError if invalid token sequence
+			 */
+			static Values::Expression* orr(queue<Token>& tks) throw(SyntaxError)
+			{
+				Values::Expression* expr = new Values::Expression(Values::OperLayer::OR);
+				expr->add(andd(tks), 0);
+				orOp(expr, tks);
+				return expr;
+			}
+
+			/**
 			 * Parses an expression
 			 *
 			 * @param tks the token queue to parse
@@ -389,7 +534,7 @@ namespace Jump
 			 */
 			static Values::Expression* expression(queue<Token>& tks) throw(SyntaxError)
 			{
-				return addsub(tks);
+				return orr(tks);
 			}
 
 			/**
@@ -449,7 +594,7 @@ namespace Jump
 				tks.pop();
 
 				// If next is value
-				if (isValue(tks))
+				if (isValue(tks) || isKeyword(tks))
 				{
 					// Add print statement with the value token
 					state->add(new Statements::Print(expression(tks)));

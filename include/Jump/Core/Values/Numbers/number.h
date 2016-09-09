@@ -118,6 +118,72 @@ namespace Jump
 					 * @return the value as a float
 					 */
 					double toFloat() const;
+
+					/**
+					 * The greater ththe operation for Jump values
+					 *
+					 * @param other the other Value in the operation
+					 *
+					 * @return the result of the greater ththe operation
+					 *
+					 * @throw TypeError upon an error during the operation
+					 */
+					Value* greater(const Value* other) const throw(Errors::TypeError);
+
+					/**
+					 * The greater equals operation for Jump values
+					 *
+					 * @param other the other Value in the operation
+					 *
+					 * @return the result of the greater equals operation
+					 *
+					 * @throw TypeError upon an error during the operation
+					 */
+					Value* greaterEqual(const Value* other) const throw(Errors::TypeError);
+
+					/**
+					 * The equals operation for Jump values
+					 *
+					 * @param other the other Value in the operation
+					 *
+					 * @return the result of the equals operation
+					 *
+					 * @throw TypeError upon an error during the operation
+					 */
+					Value* equal(const Value* other) const throw(Errors::TypeError);
+
+					/**
+					 * The not equals operation for Jump values
+					 *
+					 * @param other the other Value in the operation
+					 *
+					 * @return the result of the not equals operation
+					 *
+					 * @throw TypeError upon an error during the operation
+					 */
+					Value* notEqual(const Value* other) const throw(Errors::TypeError);
+
+					/**
+					 * The less equals operation for Jump values
+					 *
+					 * @param other the other Value in the operation
+					 *
+					 * @return the result of the less equals operation
+					 *
+					 * @throw TypeError upon an error during the operation
+					 */
+					Value* lessEqual(const Value* other) const throw(Errors::TypeError);
+
+					/**
+					 * The less ththe operation for Jump values
+					 *
+					 * @param other the other Value in the operation
+					 *
+					 * @return the result of the less ththe operation
+					 *
+					 * @throw TypeError upon an error during the operation
+					 */
+					Value* less(const Value* other) const throw(Errors::TypeError);
 				};
 			}
 		}

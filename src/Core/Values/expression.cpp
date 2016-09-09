@@ -102,6 +102,10 @@ namespace Jump
 				switch(m_layer)
 				{
 					case ASSIGN:    return assign(stateRef, flags);
+					case OR:        return orr(stateRef, flags);
+					case AND:       return andd(stateRef, flags);
+					case NOT:       return nott(stateRef, flags);
+					case COMPARE:   return compare(stateRef, flags);
 					case ADDSUB:    return addsub(stateRef, flags);
 					case MULDIVMOD: return muldivmod(stateRef, flags);
 					default:        return new Null();
@@ -127,6 +131,98 @@ namespace Jump
 			}
 
 			/**
+			 * Returns the orr operation of the values
+			 *
+			 * @param stateRef reference to the state that contains the Expression
+			 *
+			 * @return the orr operation of the values
+			 */
+			Value* Expression::orr(State* stateRef, int flags) throw(ValueError)
+			{
+				// Set buffer to first value
+				Value* toret = m_values[0]->evaluate(stateRef, flags);
+
+				// For each value
+				for (unsigned i = 1; i < m_values.size(); ++i)
+				{
+					// Perform the operation
+					toret = toret->orr(m_values[i]->evaluate(stateRef, flags));
+				}
+
+				// Return buffer
+				return toret;
+			}
+
+			/**
+			 * Returns the andd operation of the values
+			 *
+			 * @param stateRef reference to the state that contains the Expression
+			 *
+			 * @return the andd operation of the values
+			 */
+			Value* Expression::andd(State* stateRef, int flags) throw(ValueError)
+			{
+				// Set buffer to first value
+				Value* toret = m_values[0]->evaluate(stateRef, flags);
+
+				// For each value
+				for (unsigned i = 1; i < m_values.size(); ++i)
+				{
+					// Perform the operation
+					toret = toret->andd(m_values[i]->evaluate(stateRef, flags));
+				}
+
+				// Return buffer
+				return toret;
+			}
+
+			/**
+			 * Returns the nott operation of the values
+			 *
+			 * @param stateRef reference to the state that contains the Expression
+			 *
+			 * @return the nott operation of the values
+			 */
+			Value* Expression::nott(State* stateRef, int flags) throw(ValueError)
+			{
+				return m_values[0]->evaluate(stateRef, flags)->nott();
+			}
+
+			/**
+			 * Returns the compare operation of the values
+			 *
+			 * @param stateRef reference to the state that contains the Expression
+			 *
+			 * @return the compare operation of the values
+			 */
+			Value* Expression::compare(State* stateRef, int flags) throw(ValueError)
+			{
+				// If two values are given
+				if (m_values.size() == 2)
+				{
+					// Evaluate left and right values
+					Value* left  = m_values[0]->evaluate(stateRef, flags);
+					Value* right = m_values[1]->evaluate(stateRef, flags);
+
+					// Return compare operation
+					switch (m_types[1])
+					{
+						case 5:  return left->less(right);
+						case 4:  return left->lessEqual(right);
+						case 3:  return left->notEqual(right);
+						case 2:  return left->equal(right);
+						case 1:  return left->greaterEqual(right);
+						default: return left->greater(right);
+					}
+				}
+				else
+				{
+					// Return left values
+					return m_values[0]->evaluate(stateRef, flags);
+				}
+			}
+
+			/**
 			 * Returns the addsub operation of the values
 			 *
 			 * @param stateRef reference to the state that contains the Expression
@@ -136,7 +232,7 @@ namespace Jump
 			 */
 			Value* Expression::addsub(State* stateRef, int flags) throw(ValueError)
 			{
-				// Set buffer to zero
+				// Set buffer to first value
 				Value* toret = m_values[0]->evaluate(stateRef, flags);
 
 				// For each value
@@ -164,7 +260,7 @@ namespace Jump
 			 */
 			Value* Expression::muldivmod(State* stateRef, int flags) throw(ValueError)
 			{
-				// Set buffer to zero
+				// Set buffer to first value
 				Value* toret = m_values[0]->evaluate(stateRef, flags);
 
 				// For each value
