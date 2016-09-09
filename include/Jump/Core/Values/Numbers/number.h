@@ -92,6 +92,13 @@ namespace Jump
 					std::string toString() const;
 
 					/**
+					 * The size of the numerical type
+					 *
+					 * @return the size of the numerical type
+					 */
+					int size() const;
+
+					/**
 					 * Returns the value as an unsigned integer
 					 *
 					 * @return the value as an unsigned integer

@@ -73,6 +73,16 @@ namespace Jump
 				template <class T> Number<T>::~Number() {}
 
 				/**
+				 * The size of the numerical type
+				 *
+				 * @return the size of the numerical type
+				 */
+				template <class T> int Number<T>::size() const
+				{
+					return (int)sizeof(m_store)*8;
+				}
+
+				/**
 				 * Returns the value as an unsigned integer
 				 *
 				 * @return the value as an unsigned integer

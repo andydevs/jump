@@ -80,14 +80,22 @@ namespace Jump
 				 */
 				template <class T> Value* Float<T>::plus(const Value* other) const throw(TypeError)
 				{
-					if (other->type() == "Integer" 
-						|| other->type() == "UnsignedInteger" 
-						|| other->type() == "Float")
-						return new Float64(m_store + other->toFloat());
+					if (other->type() == "Integer" || other->type() == "UnsignedInteger" || other->type() == "Float")
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new Float64(m_store + other->toFloat());
+							default: return new Float32(m_store + other->toFloat());
+						}
+					}
 					else if (other->type() == "String")
+					{
 						return new String(to_string(m_store) + other->toString());
+					}
 					else 
+					{
 						throw Number<T>::plus(other);
+					}
 				}
 
 				/**
@@ -101,12 +109,18 @@ namespace Jump
 				 */
 				template <class T> Value* Float<T>::minus(const Value* other) const throw(TypeError)
 				{
-					if (other->type() == "Integer" 
-						|| other->type() == "UnsignedInteger" 
-						|| other->type() == "Float")
-						return new Float64(m_store - other->toFloat());
-					else 
+					if (other->type() == "Integer" || other->type() == "UnsignedInteger" || other->type() == "Float")
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new Float64(m_store - other->toFloat());
+							default: return new Float32(m_store - other->toFloat());
+						}
+					}
+					else
+					{
 						throw Number<T>::minus(other);
+					}
 				}
 
 				/**
@@ -120,12 +134,18 @@ namespace Jump
 				 */
 				template <class T> Value* Float<T>::times(const Value* other) const throw(TypeError)
 				{
-					if (other->type() == "Integer" 
-						|| other->type() == "UnsignedInteger" 
-						|| other->type() == "Float")
-						return new Float64(m_store * other->toFloat());
-					else 
+					if (other->type() == "Integer" || other->type() == "UnsignedInteger" || other->type() == "Float")
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new Float64(m_store * other->toFloat());
+							default: return new Float32(m_store * other->toFloat());
+						}
+					}
+					else
+					{
 						throw Number<T>::times(other);
+					}
 				}
 
 				/**
@@ -139,12 +159,18 @@ namespace Jump
 				 */
 				template <class T> Value* Float<T>::divides(const Value* other) const throw(TypeError)
 				{
-					if (other->type() == "Integer" 
-						|| other->type() == "UnsignedInteger" 
-						|| other->type() == "Float")
-						return new Float64(m_store / other->toFloat());
+					if (other->type() == "Integer" || other->type() == "UnsignedInteger" || other->type() == "Float")
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new Float64(m_store / other->toFloat());
+							default: return new Float32(m_store / other->toFloat());
+						}
+					}
 					else 
+					{
 						throw Number<T>::divides(other);
+					}
 				}
 
 				// Types

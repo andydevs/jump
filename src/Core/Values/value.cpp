@@ -99,6 +99,16 @@ namespace Jump
 			}
 
 			/**
+			 * The bit size of the stored value
+			 *
+			 * @return the size of the stored value
+			 */
+			int Value::size() const
+			{
+				return 0;
+			}
+
+			/**
 			 * Returns the value as an unsigned integer
 			 *
 			 * @return the value as an unsigned integer

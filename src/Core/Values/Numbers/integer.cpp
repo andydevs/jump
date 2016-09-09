@@ -81,13 +81,31 @@ namespace Jump
 				template <class T> Value* Integer<T>::plus(const Value* other) const throw(TypeError)
 				{
 					if (other->type() == "Integer" || other->type() == "UnsignedInteger")
-						return new Integer<int>(m_store + other->toInt());
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new Int64(m_store + other->toInt());
+							case 32: return new Int32(m_store + other->toInt());
+							case 16: return new Int16(m_store + other->toInt());
+							default: return new Int8(m_store + other->toInt());
+						}
+					}
 					else if (other->type() == "Float")
-						return new Float<double>(m_store + other->toFloat());
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new Float64(m_store + other->toFloat());
+							default: return new Float32(m_store + other->toFloat());
+						}
+					}
 					else if (other->type() == "String")
+					{
 						return new String(to_string(m_store) + other->toString());
-					else 
+					}
+					else
+					{
 						throw Number<T>::plus(other);
+					}
 				}
 
 				/**
@@ -102,11 +120,27 @@ namespace Jump
 				template <class T> Value* Integer<T>::minus(const Value* other) const throw(TypeError)
 				{
 					if (other->type() == "Integer" || other->type() == "UnsignedInteger")
-						return new Integer<int>(m_store - other->toInt());
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new Int64(m_store - other->toInt());
+							case 32: return new Int32(m_store - other->toInt());
+							case 16: return new Int16(m_store - other->toInt());
+							default: return new Int8(m_store - other->toInt());
+						}
+					}
 					else if (other->type() == "Float")
-						return new Float<double>(m_store - other->toFloat());
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new Float64(m_store - other->toFloat());
+							default: return new Float32(m_store - other->toFloat());
+						}
+					}
 					else
-						throw Number<T>::plus(other);
+					{
+						throw Number<T>::minus(other);
+					}
 				}
 
 				/**
@@ -121,11 +155,27 @@ namespace Jump
 				template <class T> Value* Integer<T>::times(const Value* other) const throw(TypeError)
 				{
 					if (other->type() == "Integer" || other->type() == "UnsignedInteger")
-						return new Integer<int>(m_store * other->toInt());
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new Int64(m_store * other->toInt());
+							case 32: return new Int32(m_store * other->toInt());
+							case 16: return new Int16(m_store * other->toInt());
+							default: return new Int8(m_store * other->toInt());
+						}
+					}
 					else if (other->type() == "Float")
-						return new Float<double>(m_store * other->toFloat());
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new Float64(m_store * other->toFloat());
+							default: return new Float32(m_store * other->toFloat());
+						}
+					}
 					else
-						throw Number<T>::plus(other);
+					{
+						throw Number<T>::times(other);
+					}
 				}
 
 				/**
@@ -140,11 +190,27 @@ namespace Jump
 				template <class T> Value* Integer<T>::divides(const Value* other) const throw(TypeError)
 				{
 					if (other->type() == "Integer" || other->type() == "UnsignedInteger")
-						return new Integer<int>(m_store / other->toInt());
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new Int64(m_store / other->toInt());
+							case 32: return new Int32(m_store / other->toInt());
+							case 16: return new Int16(m_store / other->toInt());
+							default: return new Int8(m_store / other->toInt());
+						}
+					}
 					else if (other->type() == "Float")
-						return new Float<double>(m_store / other->toFloat());
-					else 
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new Float64(m_store / other->toFloat());
+							default: return new Float32(m_store / other->toFloat());
+						}
+					}
+					else
+					{
 						throw Number<T>::divides(other);
+					}
 				}
 
 				/**
@@ -159,9 +225,19 @@ namespace Jump
 				template <class T> Value* Integer<T>::modulus(const Value* other) const throw(TypeError)
 				{
 					if (other->type() == "Integer" || other->type() == "UnsignedInteger")
-						return new Integer<int>(m_store / other->toInt());
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new Int64(m_store % other->toInt());
+							case 32: return new Int32(m_store % other->toInt());
+							case 16: return new Int16(m_store % other->toInt());
+							default: return new Int8(m_store % other->toInt());
+						}
+					}
 					else
+					{
 						throw Number<T>::modulus(other);
+					}
 				}
 
 				// Types

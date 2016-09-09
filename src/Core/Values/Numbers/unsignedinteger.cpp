@@ -82,15 +82,37 @@ namespace Jump
 				template <class T> Value* UnsignedInteger<T>::plus(const Value* other) const throw(TypeError)
 				{
 					if (other->type() == "UnsignedInteger")
-						return new UInt32(m_store + other->toUnsigned());
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new UInt64(m_store + other->toUnsigned());
+							case 32: return new UInt32(m_store + other->toUnsigned());
+							case 16: return new UInt16(m_store + other->toUnsigned());
+							default: return new UInt8(m_store + other->toUnsigned());
+						}
+					}
 					else if (other->type() == "Integer")
-						return new Int32(m_store + other->toInt());
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new Int64(m_store + other->toInt());
+							case 32: return new Int32(m_store + other->toInt());
+							case 16: return new Int16(m_store + other->toInt());
+							default: return new Int8(m_store + other->toInt());
+						}
+					}
 					else if (other->type() == "Float")
-						return new Float64(m_store + other->toFloat());
-					else if (other->type() == "String")
-						return new String(to_string(m_store) + other->toString());
-					else 
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new Float64(m_store + other->toFloat());
+							default: return new Float32(m_store + other->toFloat());
+						}
+					}
+					else
+					{
 						throw Number<T>::plus(other);
+					}
 				}
 
 				/**
@@ -105,13 +127,37 @@ namespace Jump
 				template <class T> Value* UnsignedInteger<T>::minus(const Value* other) const throw(TypeError)
 				{
 					if (other->type() == "UnsignedInteger")
-						return new UInt32(m_store - other->toUnsigned());
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new UInt64(m_store - other->toUnsigned());
+							case 32: return new UInt32(m_store - other->toUnsigned());
+							case 16: return new UInt16(m_store - other->toUnsigned());
+							default: return new UInt8(m_store - other->toUnsigned());
+						}
+					}
 					else if (other->type() == "Integer")
-						return new Int32(m_store - other->toInt());
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new Int64(m_store - other->toInt());
+							case 32: return new Int32(m_store - other->toInt());
+							case 16: return new Int16(m_store - other->toInt());
+							default: return new Int8(m_store - other->toInt());
+						}
+					}
 					else if (other->type() == "Float")
-						return new Float64(m_store - other->toFloat());
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new Float64(m_store - other->toFloat());
+							default: return new Float32(m_store - other->toFloat());
+						}
+					}
 					else
-						throw Number<T>::plus(other);
+					{
+						throw Number<T>::minus(other);
+					}
 				}
 
 				/**
@@ -126,13 +172,37 @@ namespace Jump
 				template <class T> Value* UnsignedInteger<T>::times(const Value* other) const throw(TypeError)
 				{
 					if (other->type() == "UnsignedInteger")
-						return new UInt32(m_store * other->toUnsigned());
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new UInt64(m_store * other->toUnsigned());
+							case 32: return new UInt32(m_store * other->toUnsigned());
+							case 16: return new UInt16(m_store * other->toUnsigned());
+							default: return new UInt8(m_store * other->toUnsigned());
+						}
+					}
 					else if (other->type() == "Integer")
-						return new Int32(m_store * other->toInt());
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new Int64(m_store * other->toInt());
+							case 32: return new Int32(m_store * other->toInt());
+							case 16: return new Int16(m_store * other->toInt());
+							default: return new Int8(m_store * other->toInt());
+						}
+					}
 					else if (other->type() == "Float")
-						return new Float64(m_store * other->toFloat());
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new Float64(m_store * other->toFloat());
+							default: return new Float32(m_store * other->toFloat());
+						}
+					}
 					else
-						throw Number<T>::plus(other);
+					{
+						throw Number<T>::times(other);
+					}
 				}
 
 				/**
@@ -147,13 +217,37 @@ namespace Jump
 				template <class T> Value* UnsignedInteger<T>::divides(const Value* other) const throw(TypeError)
 				{
 					if (other->type() == "UnsignedInteger")
-						return new UInt32(m_store / other->toUnsigned());
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new UInt64(m_store / other->toUnsigned());
+							case 32: return new UInt32(m_store / other->toUnsigned());
+							case 16: return new UInt16(m_store / other->toUnsigned());
+							default: return new UInt8(m_store / other->toUnsigned());
+						}
+					}
 					else if (other->type() == "Integer")
-						return new Int32(m_store / other->toInt());
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new Int64(m_store / other->toInt());
+							case 32: return new Int32(m_store / other->toInt());
+							case 16: return new Int16(m_store / other->toInt());
+							default: return new Int8(m_store / other->toInt());
+						}
+					}
 					else if (other->type() == "Float")
-						return new Float64(m_store / other->toFloat());
-					else 
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new Float64(m_store / other->toFloat());
+							default: return new Float32(m_store / other->toFloat());
+						}
+					}
+					else
+					{
 						throw Number<T>::divides(other);
+					}
 				}
 
 				/**
@@ -168,11 +262,29 @@ namespace Jump
 				template <class T> Value* UnsignedInteger<T>::modulus(const Value* other) const throw(TypeError)
 				{
 					if (other->type() == "UnsignedInteger")
-						return new UInt32(m_store % other->toUnsigned());
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new UInt64(m_store % other->toUnsigned());
+							case 32: return new UInt32(m_store % other->toUnsigned());
+							case 16: return new UInt16(m_store % other->toUnsigned());
+							default: return new UInt8(m_store % other->toUnsigned());
+						}
+					}
 					else if (other->type() == "Integer")
-						return new Int32(m_store % other->toInt());
+					{
+						switch(this->size() >= other->size() ? this->size() : other->size())
+						{
+							case 64: return new Int64(m_store % other->toInt());
+							case 32: return new Int32(m_store % other->toInt());
+							case 16: return new Int16(m_store % other->toInt());
+							default: return new Int8(m_store % other->toInt());
+						}
+					}
 					else
+					{
 						throw Number<T>::modulus(other);
+					}
 				}
 
 				// Types

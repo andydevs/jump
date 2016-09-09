@@ -50,12 +50,17 @@ state fourth
 
 	# Test constant
 	print "The value of PI is " + PI
+	print
 
 	# Transition
 	to fifth
 
 state fifth
-	# Test declaring different values
-	print "Int8: " + 23i8
-	print "UInt16: " + 24u16
-	print "Float32: " + 123e10f32
+	# Test different value types
+	print "Int8:             " + 23i8
+	print "UInt16:           " + 24u16
+	print "Float32:          " + 123e10f32
+	print "Sum of UInt8:     " + (255u8 + 8u8)  # 7
+	print "Sum of Int8:      " + (127i8 + 5i8)  # 124
+	print "Sum of Int16:     " + (127i16 + 5u8) # 132
+	print "Sum of Int16 (2): " + (127i8 + 5u16) # 132

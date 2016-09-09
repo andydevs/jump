@@ -104,6 +104,13 @@ namespace Jump
 				virtual std::string toString() const;
 
 				/**
+				 * The bit size of the stored value
+				 *
+				 * @return the size of the stored value
+				 */
+				virtual int size() const;
+
+				/**
 				 * Returns the value as an unsigned integer
 				 *
 				 * @return the value as an unsigned integer
