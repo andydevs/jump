@@ -54,7 +54,7 @@ namespace Jump
 				/**
 				 * The regex for matching numbers
 				 */
-				const std::regex NUMBER_REGEX("[0-9]+((?:\\.[0-9]+)?(?:(?:e|E)(?:\\+|\\-)?[0-9]+)?)([if][0-9]*)?");
+				const std::regex NUMBER_REGEX("[0-9]+((?:\\.[0-9]+)?(?:(?:e|E)(?:\\+|\\-)?[0-9]+)?)([uif][0-9]*)?");
 
 				/**
 				 * Default number type
@@ -65,6 +65,11 @@ namespace Jump
 				 * Default suffix for Integers
 				 */
 				const std::string DEFAULT_INTEGER_SUFFIX = "i32";
+
+				/**
+				 * Default suffix for Unsigned Integers
+				 */
+				const std::string DEFAULT_UNSIGNED_SUFFIX = "u32";
 
 				/**
 				 * Default suffix for Floats

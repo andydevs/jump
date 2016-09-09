@@ -16,7 +16,7 @@ contexts:
       scope: keyword.control.jump
     
     - comment: Numbers
-      match: \b\d+(\.\d+)?((e|E)(\+|-)?\d+)?((i|f)[0-9]+)?\b
+      match: \b\d+(\.\d+)?((e|E)(\+|-)?\d+)?([uif][0-9]+)?\b
       scope: constant.numeric.jump
     
     - comment: Boolean

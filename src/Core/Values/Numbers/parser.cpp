@@ -11,8 +11,10 @@ Created: 7 - 15 - 2016
 
 // Headers being used
 #include "Jump/Core/Values/Numbers/parser.h"
+#include "Jump/Core/Values/Numbers/unsignedinteger.h"
 #include "Jump/Core/Values/Numbers/integer.h"
 #include "Jump/Core/Values/Numbers/float.h"
+#include "Jump/Core/Values/null.h"
 
 // Libraries being used
 #include <string>
@@ -70,6 +72,8 @@ namespace Jump
 							return DEFAULT_INTEGER_SUFFIX;
 						else if (match[2].str() == "f")
 							return DEFAULT_FLOAT_SUFFIX;
+						else if (match[2].str() == "u")
+							return DEFAULT_UNSIGNED_SUFFIX;
 						else
 							return match[2].str();
 					}
@@ -82,6 +86,7 @@ namespace Jump
 						switch (DEFAULT_NUMBER_TYPE)
 						{
 							case 'f': return DEFAULT_FLOAT_SUFFIX;
+							case 'u': return DEFAULT_UNSIGNED_SUFFIX;
 							default:  return DEFAULT_INTEGER_SUFFIX;
 						}
 					}
@@ -118,9 +123,9 @@ namespace Jump
 				 *
 				 * @throw TypeError with the undefined suffix
 				 */
-				static void undefined(string suffix) throw(TypeError)
+				static TypeError undefined(string suffix)
 				{
-					throw TypeError("Undefined numerical suffix: " + suffix);
+					return TypeError("Undefined numerical suffix: " + suffix);
 				}
 
 				/**
@@ -146,10 +151,27 @@ namespace Jump
 								case 32: return new Int32(stoi(text));
 								case 64: return new Int64(stol(text));
 
-								// Undefined integer length
-								default: undefined(suffix);
+								// Undefined Integer length
+								default: throw undefined(suffix);
 							}
-							break;
+							// Undefined Integer length
+							throw undefined(suffix);
+
+						// Unsigned Integer suffix
+						case 'u':
+							switch(bitLength(suffix))
+							{
+								// Unsigned Integer types
+								case 8:  return new UInt8((char)stoi(text));
+								case 16: return new UInt16((short)stoi(text));
+								case 32: return new UInt32(stoi(text));
+								case 64: return new UInt64(stol(text));
+
+								// Undefined Unsigned Integer length
+								default: throw undefined(suffix);
+							}
+							// Undefined Unsigned Integer length
+							throw undefined(suffix);
 
 						// Float suffix
 						case 'f':
@@ -159,13 +181,14 @@ namespace Jump
 								case 32: return new Float32(stof(text));
 								case 64: return new Float64(stod(text));
 
-								// Undefined float type
-								default: undefined(suffix);
+								// Undefined Float length
+								default: throw undefined(suffix);
 							}
-							break;
+							// Undefined Float length
+							throw undefined(suffix);
 
 						// Undefined suffix
-						default: undefined(suffix);
+						default: throw undefined(suffix);
 					}
 				}
 			}

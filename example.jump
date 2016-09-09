@@ -56,7 +56,6 @@ state fourth
 
 state fifth
 	# Test declaring different values
-	variable = 23i8
-
-	# Test variable print
-	print variable
+	print "Int8: " + 23i8
+	print "UInt16: " + 24u16
+	print "Float32: " + 123e10f32

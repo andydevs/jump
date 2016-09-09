@@ -99,6 +99,16 @@ namespace Jump
 			}
 
 			/**
+			 * Returns the value as an unsigned integer
+			 *
+			 * @return the value as an unsigned integer
+			 */
+			unsigned Value::toUnsigned() const
+			{
+				return 0;
+			}
+
+			/**
 			 * Returns the value as an integer
 			 *
 			 * @return the value as an integer

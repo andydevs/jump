@@ -73,6 +73,16 @@ namespace Jump
 				template <class T> Number<T>::~Number() {}
 
 				/**
+				 * Returns the value as an unsigned integer
+				 *
+				 * @return the value as an unsigned integer
+				 */
+				template <class T> unsigned Number<T>::toUnsigned() const
+				{
+					return (unsigned)m_store;
+				}
+
+				/**
 				 * Returns the value as an integer
 				 *
 				 * @return the value as an integer
@@ -103,6 +113,10 @@ namespace Jump
 				}
 
 				// Types
+				template class Number<unsigned char>;
+				template class Number<unsigned short>;
+				template class Number<unsigned int>;
+				template class Number<unsigned long>;
 				template class Number<char>;
 				template class Number<short>;
 				template class Number<int>;

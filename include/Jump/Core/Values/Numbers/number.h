@@ -92,6 +92,13 @@ namespace Jump
 					std::string toString() const;
 
 					/**
+					 * Returns the value as an unsigned integer
+					 *
+					 * @return the value as an unsigned integer
+					 */
+					unsigned toUnsigned() const;
+
+					/**
 					 * Returns the value as an integer
 					 *
 					 * @return the value as an integer
