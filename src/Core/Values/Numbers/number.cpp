@@ -48,33 +48,67 @@ namespace Jump
 			namespace Numbers
 			{
 				/**
-				 * Creates a number with the given numericType
+				 * Creates a number with the given type
 				 *
-				 * @param numericType the numeric type of the number
+				 * @param type the numeric type of the number
 				 */
-				Number::Number(string numericType) : Value("Number"), m_numericType(numericType) {}
+				template <class T> Number<T>::Number(string type, T store):
+				Value(type),
+				m_store(store)
+				{}
 
 				/**
 				 * Copy constructor for Number
 				 *
 				 * @param other the other Number to copy
 				 */
-				Number::Number(const Number& other) : Value(other), m_numericType(other.m_numericType) {}
+				template <class T> Number<T>::Number(const Number& other):
+				Value(other),
+				m_store(other.m_store)
+				{}
 
 				/**
 				 * Destroys the number
 				 */
-				Number::~Number() {}
+				template <class T> Number<T>::~Number() {}
 
 				/**
-				 * Returns the numeric type of the number
+				 * Returns the value as an integer
 				 *
-				 * @return the numeric type of the number
+				 * @return the value as an integer
 				 */
-				string Number::numericType() const
+				template <class T> int Number<T>::toInt() const
 				{
-					return m_numericType;
+					return (int)m_store;
 				}
+
+				/**
+				 * Returns the value as a float
+				 *
+				 * @return the value as a float
+				 */
+				template <class T> double Number<T>::toFloat() const
+				{
+					return (double)m_store;
+				}
+
+				/**
+				 * Returns the string representation of the Value
+				 *
+				 * @return the string representation of the Value
+				 */
+				template <class T> std::string Number<T>::toString() const
+				{
+					return to_string(m_store);
+				}
+
+				// Types
+				template class Number<char>;
+				template class Number<short>;
+				template class Number<int>;
+				template class Number<long>;
+				template class Number<float>;
+				template class Number<double>;
 			}
 		}
 	}

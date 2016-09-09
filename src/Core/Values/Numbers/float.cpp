@@ -55,49 +55,19 @@ namespace Jump
 				 *
 				 * @param store the float value to store
 				 */
-				template <class T> Float<T>::Float(T store) : Number("Float"), m_store(store) {}
+				template <class T> Float<T>::Float(T store): Number<T>("Float", store) {}
 
 				/**
 				 * Copy constructor for Float
 				 *
 				 * @param other the other Float to copy
 				 */ 
-				template <class T> Float<T>::Float(const Float& other) : Number(other), m_store(other.m_store) {}
+				template <class T> Float<T>::Float(const Float& other): Number<T>(other) {}
 
 				/**
 				 * Destroys the Float
 				 */
 				template <class T> Float<T>::~Float() {}
-
-				/**
-				 * Returns the value as an integer
-				 *
-				 * @return the value as an integer
-				 */
-				template <class T> int Float<T>::toInt() const
-				{
-					return (int)m_store;
-				}
-
-				/**
-				 * Returns the value as a float
-				 *
-				 * @return the value as a float
-				 */
-				template <class T> double Float<T>::toFloat() const
-				{
-					return (double)m_store;
-				}
-
-				/**
-				 * Returns the string representation of the Value
-				 *
-				 * @return the string representation of the Value
-				 */
-				template <class T> std::string Float<T>::toString() const
-				{
-					return to_string(m_store);
-				}
 
 				/**
 				 * The addition operation for Jump values
@@ -111,10 +81,11 @@ namespace Jump
 				template <class T> Value* Float<T>::plus(const Value* other) const throw(TypeError)
 				{
 					if (other->type() == "Number")
-						return new Float<double>(m_store + ((const Number*)other)->toFloat());
+						return new Float<double>(m_store + other->toFloat());
 					else if (other->type() == "String")
 						return new String(to_string(m_store) + other->toString());
-					else throw TypeError("Incompatible types for +: Float and " + other->type());
+					else 
+						throw Number<T>::plus(other);
 				}
 
 				/**
@@ -129,8 +100,9 @@ namespace Jump
 				template <class T> Value* Float<T>::minus(const Value* other) const throw(TypeError)
 				{
 					if (other->type() == "Number")
-						return new Float<double>(m_store - ((const Number*)other)->toFloat());
-					else throw TypeError("Incompatible types for -: Float and " + other->type());
+						return new Float<double>(m_store - other->toFloat());
+					else 
+						throw Number<T>::minus(other);
 				}
 
 				/**
@@ -145,8 +117,9 @@ namespace Jump
 				template <class T> Value* Float<T>::times(const Value* other) const throw(TypeError)
 				{
 					if (other->type() == "Number")
-						return new Float<double>(m_store * ((const Number*)other)->toFloat());
-					else throw TypeError("Incompatible types for -: Float and " + other->type());
+						return new Float<double>(m_store * other->toFloat());
+					else 
+						throw Number<T>::times(other);
 				}
 
 				/**
@@ -161,8 +134,9 @@ namespace Jump
 				template <class T> Value* Float<T>::divides(const Value* other) const throw(TypeError)
 				{
 					if (other->type() == "Number")
-						return new Float<double>(m_store / ((const Number*)other)->toFloat());
-					else throw TypeError("Incompatible types for -: Float and " + other->type());
+						return new Float<double>(m_store / other->toFloat());
+					else 
+						throw Number<T>::divides(other);
 				}
 
 				// Types

@@ -57,9 +57,9 @@ namespace Jump
 				const std::regex NUMBER_REGEX("[0-9]+((?:\\.[0-9]+)?(?:(?:e|E)(?:\\+|\\-)?[0-9]+)?)([if][0-9]*)?");
 
 				/**
-				 * Is the default value a floating point
+				 * Default number type
 				 */
-				const bool DEFAULT_IS_FLOAT = false;
+				const char DEFAULT_NUMBER_TYPE = 'i';
 
 				/**
 				 * Default suffix for Integers

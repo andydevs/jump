@@ -9,8 +9,8 @@ Created: 7 - 15 - 2016
 
 */
 
-#ifndef _CORE_VALUES_NUMBERS_FLOAT64_H_
-#define _CORE_VALUES_NUMBERS_FLOAT64_H_
+#ifndef _CORE_VALUES_NUMBERS_FLOAT_H_
+#define _CORE_VALUES_NUMBERS_FLOAT_H_
 
 // Headres being used
 #include "number.h"
@@ -54,14 +54,14 @@ namespace Jump
 				 * @created 7 - 30 - 2016
 				 */
 				template <class T>
-				class Float : public Number
+				class Float : public Number<T>
 				{
-				private:
-					/**
-					 * The stored float value
-					 */
-					T m_store;
 				public:
+					/**
+					 * The value to store
+					 */
+					using Number<T>::m_store;
+
 					/**
 					 * Creates an Float with the given store
 					 *
@@ -80,27 +80,6 @@ namespace Jump
 					 * Destroys the Float
 					 */
 					~Float();
-
-					/**
-					 * Returns the value as an integer
-					 *
-					 * @return the value as an integer
-					 */
-					int toInt() const;
-
-					/**
-					 * Returns the value as a float
-					 *
-					 * @return the value as a float
-					 */
-					double toFloat() const;
-
-					/**
-					 * Returns the string representation of the Value
-					 *
-					 * @return the string representation of the Value
-					 */
-					std::string toString() const override;
 
 					/**
 					 * The addition operation for Jump values
@@ -146,6 +125,10 @@ namespace Jump
 					 */
 					Value* divides(const Value* other) const throw(Jump::Core::Errors::TypeError);
 				};
+
+				// Float types
+				typedef Float<float> Float32;
+				typedef Float<double> Float64;
 			}
 		}
 	}

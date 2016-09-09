@@ -55,49 +55,19 @@ namespace Jump
 				 *
 				 * @param store the integer value to store
 				 */
-				template <class T> Integer<T>::Integer(T store): Number("Integer"), m_store(store) {}
+				template <class T> Integer<T>::Integer(T store): Number<T>("Integer", store) {}
 
 				/**
 				 * Copy constructor for Integer
 				 *
 				 * @param other the other Integer to copy
 				 */ 
-				template <class T> Integer<T>::Integer(const Integer& other): Number(other), m_store(other.m_store) {}
+				template <class T> Integer<T>::Integer(const Integer& other): Number<T>(other) {}
 
 				/**
 				 * Destroys the Integer
 				 */
 				template <class T> Integer<T>::~Integer() {}
-
-				/**
-				 * Returns the value as an integer
-				 *
-				 * @return the value as an integer
-				 */
-				template <class T> int Integer<T>::toInt() const
-				{
-					return (int)m_store;
-				}
-
-				/**
-				 * Returns the value as a float
-				 *
-				 * @return the value as a float
-				 */
-				template <class T> double Integer<T>::toFloat() const
-				{
-					return (double)m_store;
-				}
-
-				/**
-				 * Returns the string representation of the Value
-				 *
-				 * @return the string representation of the Value
-				 */
-				template <class T> std::string Integer<T>::toString() const
-				{
-					return to_string(m_store);
-				}
 
 				/**
 				 * The addition operation for Jump values
@@ -110,19 +80,14 @@ namespace Jump
 				 */
 				template <class T> Value* Integer<T>::plus(const Value* other) const throw(TypeError)
 				{
-					if (other->type() == "Number")
-					{
-						const Number* number = (const Number*)other;
-						if (number->numericType() == "Integer")
-							return new Integer<int>(m_store + number->toInt());
-						else if (number->numericType() == "Float")
-							return new Float<double>(m_store + number->toFloat());
-						else
-							throw TypeError("Incompatible numeric types for +: Integer and " + number->numericType());
-					}
+					if (other->type() == "Integer")
+						return new Integer<int>(m_store + other->toInt());
+					else if (other->type() == "Float")
+						return new Float<double>(m_store + other->toFloat());
 					else if (other->type() == "String")
 						return new String(to_string(m_store) + other->toString());
-					else throw TypeError("Incompatible types for +: Integer and " + other->type());
+					else 
+						throw Number<T>::plus(other);
 				}
 
 				/**
@@ -136,17 +101,12 @@ namespace Jump
 				 */
 				template <class T> Value* Integer<T>::minus(const Value* other) const throw(TypeError)
 				{
-					if (other->type() == "Number")
-					{
-						const Number* number = (const Number*)other;
-						if (number->numericType() == "Integer")
-							return new Integer<int>(m_store - number->toInt());
-						else if (number->numericType() == "Float")
-							return new Float<double>(m_store - number->toFloat());
-						else
-							throw TypeError("Incompatible numeric types for -: Integer and " + number->numericType());
-					}
-					else throw TypeError("Incompatible types for -: Integer and " + other->type());
+					if (other->type() == "Integer")
+						return new Integer<int>(m_store - other->toInt());
+					else if (other->type() == "Float")
+						return new Float<double>(m_store - other->toFloat());
+					else
+						throw Number<T>::plus(other);
 				}
 
 				/**
@@ -160,17 +120,12 @@ namespace Jump
 				 */
 				template <class T> Value* Integer<T>::times(const Value* other) const throw(TypeError)
 				{
-					if (other->type() == "Number")
-					{
-						const Number* number = (const Number*)other;
-						if (number->numericType() == "Integer")
-							return new Integer<int>(m_store * number->toInt());
-						else if (number->numericType() == "Float")
-							return new Float<double>(m_store * number->toFloat());
-						else
-							throw TypeError("Incompatible numeric types for *: Integer and " + number->numericType());
-					}
-					else throw TypeError("Incompatible types for *: Integer and " + other->type());
+					if (other->type() == "Integer")
+						return new Integer<int>(m_store * other->toInt());
+					else if (other->type() == "Float")
+						return new Float<double>(m_store * other->toFloat());
+					else
+						throw Number<T>::plus(other);
 				}
 
 				/**
@@ -184,17 +139,12 @@ namespace Jump
 				 */
 				template <class T> Value* Integer<T>::divides(const Value* other) const throw(TypeError)
 				{
-					if (other->type() == "Number")
-					{
-						const Number* number = (const Number*)other;
-						if (number->numericType() == "Integer")
-							return new Integer<int>(m_store / number->toInt());
-						else if (number->numericType() == "Float")
-							return new Float<double>(m_store / number->toFloat());
-						else
-							throw TypeError("Incompatible numeric types for /: Integer and " + number->numericType());
-					}
-					else throw TypeError("Incompatible types for /: Integer and " + other->type());
+					if (other->type() == "Integer")
+						return new Integer<int>(m_store / other->toInt());
+					else if (other->type() == "Float")
+						return new Float<double>(m_store / other->toFloat());
+					else 
+						throw Number<T>::divides(other);
 				}
 
 				/**
@@ -208,15 +158,10 @@ namespace Jump
 				 */
 				template <class T> Value* Integer<T>::modulus(const Value* other) const throw(TypeError)
 				{
-					if (other->type() == "Number")
-					{
-						const Number* number = (const Number*)other;
-						if (number->numericType() == "Integer")
-							return new Integer<int>(m_store / number->toInt());
-						else
-							throw TypeError("Incompatible numeric types for %: Integer and " + number->numericType());
-					}
-					else throw TypeError("Incompatible types for /: Integer and " + other->type());
+					if (other->type() == "Integer")
+						return new Integer<int>(m_store / other->toInt());
+					else
+						throw Number<T>::modulus(other);
 				}
 
 				// Types

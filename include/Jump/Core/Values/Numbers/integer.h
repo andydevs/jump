@@ -9,8 +9,8 @@ Created: 7 - 15 - 2016
 
 */
 
-#ifndef _CORE_VALUES_NUMBERS_INT32_H_
-#define _CORE_VALUES_NUMBERS_INT32_H_
+#ifndef _CORE_VALUES_NUMBERS_INTEGER_H_
+#define _CORE_VALUES_NUMBERS_INTEGER_H_
  
 // Headers being used
 #include "number.h"
@@ -57,14 +57,14 @@ namespace Jump
 				 * @created 7 - 30 - 2016
 				 */
 				template <class T>
-				class Integer : public Number
+				class Integer : public Number<T>
 				{
-				private:
-					/**
-					 * The stored integer value
-					 */
-					T m_store;
 				public:
+					/**
+					 * The value to store
+					 */
+					using Number<T>::m_store;
+
 					/**
 					 * Creates an Integer with the given store
 					 *
@@ -83,27 +83,6 @@ namespace Jump
 					 * Destroys the Integer
 					 */
 					~Integer();
-
-					/**
-					 * Returns the value as an integer
-					 *
-					 * @return the value as an integer
-					 */
-					int toInt() const;
-
-					/**
-					 * Returns the value as a float
-					 *
-					 * @return the value as a float
-					 */
-					double toFloat() const;
-
-					/**
-					 * Returns the string representation of the Value
-					 *
-					 * @return the string representation of the Value
-					 */
-					std::string toString() const override;
 
 					/**
 					 * The addition operation for Jump values
@@ -160,6 +139,12 @@ namespace Jump
 					 */
 					Value* modulus(const Value* other) const throw(Jump::Core::Errors::TypeError);
 				};
+
+				// Integer types
+				typedef Integer<char>  Int8;
+				typedef Integer<short> Int16;
+				typedef Integer<int>   Int32;
+				typedef Integer<long>  Int64;
 			}
 		}
 	}

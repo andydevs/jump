@@ -99,6 +99,26 @@ namespace Jump
 			}
 
 			/**
+			 * Returns the value as an integer
+			 *
+			 * @return the value as an integer
+			 */
+			int Value::toInt() const
+			{
+				return 0;
+			}
+
+			/**
+			 * Returns the value as a float
+			 *
+			 * @return the value as a float
+			 */
+			double Value::toFloat() const
+			{
+				return 0;
+			}
+
+			/**
 			 * Returns an inspection of the Statement
 			 *
 			 * @return an inspection of the Statement

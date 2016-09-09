@@ -15,7 +15,7 @@ Created: 7 - 15 - 2016
 #include "Jump/Core/Values/Numbers/float.h"
 
 // Libraries being used
-#include <cstdlib>
+#include <string>
 
 // Namespaces being used
 using namespace std;
@@ -60,20 +60,67 @@ namespace Jump
 				 *
 				 * @return the suffix for a given integer match
 				 */
-				static string suffix(smatch match)
+				static string getSuffix(string text)
 				{
+					smatch match;
+					regex_match(text, match, NUMBER_REGEX);
 					if (!match[2].str().empty())
+					{
 						if (match[2].str() == "i")
 							return DEFAULT_INTEGER_SUFFIX;
 						else if (match[2].str() == "f")
 							return DEFAULT_FLOAT_SUFFIX;
 						else
 							return match[2].str();
+					}
+					else if (!match[1].str().empty())
+					{
+						return DEFAULT_FLOAT_SUFFIX;
+					}
 					else
-						if (!match[1].str().empty() || DEFAULT_IS_FLOAT)
-							return DEFAULT_FLOAT_SUFFIX;
-						else
-							return DEFAULT_INTEGER_SUFFIX;
+					{
+						switch (DEFAULT_NUMBER_TYPE)
+						{
+							case 'f': return DEFAULT_FLOAT_SUFFIX;
+							default:  return DEFAULT_INTEGER_SUFFIX;
+						}
+					}
+				}
+
+				/** 
+				 * Returns the type represented by the given suffix
+				 *
+				 * @param suffix the suffix being processed
+				 *
+				 * @return the type represented by the given suffix
+				 */
+				static char type(string suffix)
+				{
+					return suffix[0];
+				}
+
+				/** 
+				 * Returns the bit length represented by the given suffix
+				 *
+				 * @param suffix the suffix being processed
+				 *
+				 * @return the bit length represented by the given suffix
+				 */
+				static char bitLength(string suffix)
+				{
+					return stoi(suffix.substr(1, 2));
+				}
+
+				/** 
+				 * Throws a type error with the undefined suffix
+				 *
+				 * @param suffix the suffix being processed
+				 *
+				 * @throw TypeError with the undefined suffix
+				 */
+				static void undefined(string suffix) throw(TypeError)
+				{
+					throw TypeError("Undefined numerical suffix: " + suffix);
 				}
 
 				/**
@@ -85,24 +132,41 @@ namespace Jump
 				 */
 				Value* parse(string text) throw(TypeError)
 				{
-					// Get match
-					smatch match;
-					regex_match(text, match, NUMBER_REGEX);
+					// Determine numerical type based on suffix
+					string suffix = getSuffix(text);
+					switch(type(suffix))
+					{
+						// Integer suffix
+						case 'i':
+							switch(bitLength(suffix))
+							{
+								// Integer types
+								case 8:  return new Int8((char)stoi(text));
+								case 16: return new Int16((short)stoi(text));
+								case 32: return new Int32(stoi(text));
+								case 64: return new Int64(stol(text));
 
-					if (suffix(match) == "i8")
-						return new Integer<char>((char)atoi(text.c_str()));
-					else if (suffix(match) == "i16")
-						return new Integer<short>((short)atoi(text.c_str()));
-					else if (suffix(match) == "i32")
-						return new Integer<int>((int)atoi(text.c_str()));
-					else if (suffix(match) == "i64")
-						return new Integer<long>((long)atoi(text.c_str()));
-					else if (suffix(match) == "f32")
-						return new Float<float>((float)atof(text.c_str()));
-					else if (suffix(match) == "f64")
-						return new Float<double>((double)atof(text.c_str()));
-					else
-						throw TypeError("Undefined numerical type: " + suffix(match));
+								// Undefined integer length
+								default: undefined(suffix);
+							}
+							break;
+
+						// Float suffix
+						case 'f':
+							switch(bitLength(suffix))
+							{
+								// Float types
+								case 32: return new Float32(stof(text));
+								case 64: return new Float64(stod(text));
+
+								// Undefined float type
+								default: undefined(suffix);
+							}
+							break;
+
+						// Undefined suffix
+						default: undefined(suffix);
+					}
 				}
 			}
 		}

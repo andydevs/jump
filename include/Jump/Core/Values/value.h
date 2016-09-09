@@ -104,6 +104,20 @@ namespace Jump
 				virtual std::string toString() const;
 
 				/**
+				 * Returns the value as an integer
+				 *
+				 * @return the value as an integer
+				 */
+				virtual int toInt() const;
+
+				/**
+				 * Returns the value as a float
+				 *
+				 * @return the value as a float
+				 */
+				virtual double toFloat() const;
+
+				/**
 				 * Returns an inspection of the Statement
 				 *
 				 * @return an inspection of the Statement

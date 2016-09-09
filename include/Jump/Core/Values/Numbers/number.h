@@ -56,20 +56,21 @@ namespace Jump
 				 * @author  Anshul Kharbanda
 				 * @created 8 - 04 - 2016
 				 */
+				template <class T>
 				class Number : public Value
 				{
-				private:
+				protected:
 					/**
-					 * The numeric type of the number
+					 * The value to store
 					 */
-					std::string m_numericType;
+					T m_store;
 				public:
 					/**
-					 * Creates a number with the given numericType
+					 * Creates a number with the given type
 					 *
-					 * @param numericType the numeric type of the number
+					 * @param type the type of the number
 					 */
-					Number(std::string numericType);
+					Number(std::string type, T store);
 
 					/**
 					 * Copy constructor for Number
@@ -84,25 +85,25 @@ namespace Jump
 					~Number();
 
 					/**
-					 * Returns the numeric type of the number
+					 * Returns the string representation of the Value
 					 *
-					 * @return the numeric type of the number
+					 * @return the string representation of the Value
 					 */
-					std::string numericType() const;
+					std::string toString() const;
 
 					/**
 					 * Returns the value as an integer
 					 *
 					 * @return the value as an integer
 					 */
-					virtual int toInt() const = 0;
+					int toInt() const;
 
 					/**
 					 * Returns the value as a float
 					 *
 					 * @return the value as a float
 					 */
-					virtual double toFloat() const = 0;
+					double toFloat() const;
 				};
 			}
 		}
