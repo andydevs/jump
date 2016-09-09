@@ -120,6 +120,13 @@ namespace Jump
 					double toFloat() const;
 
 					/**
+					 * Returns the value as a boolean
+					 *
+					 * @return the value as a boolean
+					 */
+					bool toBool() const;
+
+					/**
 					 * The greater ththe operation for Jump values
 					 *
 					 * @param other the other Value in the operation

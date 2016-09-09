@@ -125,6 +125,16 @@ namespace Jump
 				}
 
 				/**
+				 * Returns the value as a boolean
+				 *
+				 * @return the value as a boolean
+				 */
+				template <class T> bool Number<T>::toBool() const
+				{
+					return m_store > 0;
+				}
+
+				/**
 				 * The greater ththe operation for Jump values
 				 *
 				 * @param other the other Value in the operation
