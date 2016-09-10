@@ -60,6 +60,16 @@ namespace Jump
 			 * Holds the constant values
 			 */
 			std::map<std::string, Values::Value*> m_consttable;
+
+			/**
+			 * Holds the input stream values
+			 */
+			std::map<std::string, std::istream&> m_instream_table;
+
+			/**
+			 * Holds the output stream values
+			 */
+			std::map<std::string, std::ostream&> m_ostream_table;
 		public:
 			/**
 			 * Creates an empty StateMachine
