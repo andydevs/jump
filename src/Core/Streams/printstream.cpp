@@ -10,10 +10,11 @@ Created: 7 - 15 - 2016
 */
 
 // Headers being used
-#include "Jump/Core/Streams/stream.h"
+#include "Jump/Core/Streams/printstream.h"
 
 // Namespaces being used
 using namespace std;
+using namespace Jump::Core::Values;
 using namespace Jump::Core::Errors;
 
 /**
@@ -43,42 +44,36 @@ namespace Jump
 			/**
 			 * Creates a stream
 			 */
-			Stream::Stream() {}
+			PrintStream::PrintStream(ostream& printstream):
+			Stream(),
+			m_printstream(printstream)
+			{}
 
 			/**
 			 * Copy constructor for Stream
 			 *
 			 * @param other the other Stream to copy
 			 */
-			Stream::Stream(const Stream& other) {}
+			PrintStream::PrintStream(const PrintStream& other):
+			Stream(other),
+			m_printstream(other.m_printstream)
+			{}
 
 			/**
 			 * Destroys the string
 			 */
-			Stream::~Stream() {}
+			PrintStream::~PrintStream() {}
 
 			/**
 			 * Writes the given Value to the Stream
 			 *
 			 * @param value the value to print to the Stream
 			 *
-			 * @throw StreamError upon an error when printing to Stream
+			 * @throw StreamError upon an error when writing to Stream
 			 */
-			void Stream::print(Values::Value* value) throw(StreamError)
+			void PrintStream::print(Value* value) throw(StreamError)
 			{
-				throw StreamError("Stream cannot be written to.");
-			}
-
-			/**
-			 * Reads a value from the Stream
-			 *
-			 * @return value read from the Stream
-			 *
-			 * @throw StreamError upon an error when reading from Stream
-			 */
-			Values::Value* Stream::read() throw(StreamError)
-			{
-				throw StreamError("Stream cannot be read from.");
+				m_printstream << *value << endl;
 			}
 		}
 	}

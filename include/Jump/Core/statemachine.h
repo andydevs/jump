@@ -15,6 +15,7 @@ Created: 7 - 15 - 2016
 // Headers being used
 #include "Values/value.h"
 #include "Errors/valueerror.h"
+#include "Streams/stream.h"
 #include "state.h"
 
 // Libraries being used
@@ -62,14 +63,9 @@ namespace Jump
 			std::map<std::string, Values::Value*> m_consttable;
 
 			/**
-			 * Holds the input stream values
+			 * Holds the streams
 			 */
-			std::map<std::string, std::istream&> m_instream_table;
-
-			/**
-			 * Holds the output stream values
-			 */
-			std::map<std::string, std::ostream&> m_ostream_table;
+			std::map<std::string, Streams::Stream*> m_streamtable;
 		public:
 			/**
 			 * Creates an empty StateMachine
@@ -145,6 +141,23 @@ namespace Jump
 			 * @return the constant represented by the name
 			 */
 			Values::Value* constGet(std::string name);
+
+			/**
+			 * Enters a stream into the StateMachine
+			 *
+			 * @param name   the name of the constant to enter
+			 * @param stream the stream of the constant to enter
+			 */
+			void streamSet(std::string name, Streams::Stream* stream);
+
+			/**
+			 * Gets a constant from the StateMachine with the given name
+			 *
+			 * @param name the name of the constant to retrieve
+			 *
+			 * @return the constant represented by the name
+			 */
+			Streams::Stream* streamGet(std::string name);
 
 			/**
 			 * Executes the StateMachine with no flags

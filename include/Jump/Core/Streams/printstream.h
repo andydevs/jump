@@ -9,12 +9,14 @@ Created: 7 - 15 - 2016
 
 */
 
-#ifndef _CORE_STREAMS_STREAM_H_
-#define _CORE_STREAMS_STREAM_H_
+#ifndef _CORE_STREAMS_STDOUT_H_
+#define _CORE_STREAMS_STDOUT_H_
 
 // Headers being used
-#include "Jump/Core/Values/value.h"
-#include "Jump/Core/Errors/streamerror.h"
+#include "stream.h"
+
+// Libraries being used
+#include <iostream>
 
 /**
  * Jump is a new programming language that uses the state machine paradigm
@@ -41,30 +43,35 @@ namespace Jump
 		namespace Streams
 		{
 			/**
-			 * Basic stream object
+			 * Print stream object
 			 *
 			 * @author  Anshul Kharbanda
 			 * @created 9 - 9 - 2016
 			 */
-			class Stream
+			class PrintStream: public Stream
 			{
+			private:
+				/**
+				 * Standard out stream
+				 */
+				std::ostream& m_printstream;
 			public:
 				/**
 				 * Creates a stream
 				 */
-				Stream();
+				PrintStream(std::ostream& printstream);
 
 				/**
 				 * Copy constructor for Stream
 				 *
 				 * @param other the other Stream to copy
 				 */
-				Stream(const Stream& other);
+				PrintStream(const PrintStream& other);
 
 				/**
 				 * Destroys the string
 				 */
-				~Stream();
+				~PrintStream();
 
 				/**
 				 * Writes the given Value to the Stream
@@ -73,16 +80,7 @@ namespace Jump
 				 *
 				 * @throw StreamError upon an error when writing to Stream
 				 */
-				virtual void print(Values::Value* value) throw(Errors::StreamError);
-
-				/**
-				 * Reads a value from the Stream
-				 *
-				 * @return value read from the Stream
-				 *
-				 * @throw StreamError upon an error when reading from Stream
-				 */
-				virtual Values::Value* read() throw(Errors::StreamError);
+				void print(Values::Value* value) throw(Errors::StreamError);
 			};
 		}
 	}

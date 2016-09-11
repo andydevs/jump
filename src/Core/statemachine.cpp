@@ -11,10 +11,15 @@ Created: 7 - 15 - 2016
 
 // Headers being used
 #include "Jump/Core/statemachine.h"
+#include "Jump/Core/Streams/printstream.h"
+
+// Libraries being used
+#include <iostream>
 
 // Namespaces being used
 using namespace std;
 using namespace Jump::Core::Values;
+using namespace Jump::Core::Streams;
 
 /**
  * Jump is a new programming language that uses the state machine paradigm
@@ -35,9 +40,14 @@ namespace Jump
 		/**
 		 * Creates an empty StateMachine
 		 */
-		StateMachine::StateMachine() : m_statetable(map<string, State*>())
+		StateMachine::StateMachine():
+		m_statetable(),
+		m_consttable(),
+		m_vartable(),
+		m_streamtable()
 		{
 			stateSet(new State("end"));
+			streamSet("stdout", new PrintStream(cout));
 		}
 
 		/**
@@ -45,15 +55,36 @@ namespace Jump
 		 *
 		 * @param other the other StateMachine to copy
 		 */
-		StateMachine::StateMachine(const StateMachine& other) : m_statetable(other.m_statetable) {}
+		StateMachine::StateMachine(const StateMachine& other):
+		m_statetable(other.m_statetable),
+		m_consttable(other.m_consttable),
+		m_vartable(other.m_vartable),
+		m_streamtable(other.m_streamtable)
+		{}
 
 		/**
 		 * Destroys the StateMachine
 		 */
 		StateMachine::~StateMachine()
 		{
+			// Delete all constants
+			for (map<string, Value*>::iterator it = m_consttable.begin();
+				it != m_consttable.end(); ++it)
+				delete it->second;
+
+			// Delete all variables
+			for (map<string, Value*>::iterator it = m_vartable.begin();
+				it != m_vartable.end(); ++it)
+				delete it->second;
+
+			// Delete all streams
+			for (map<string, Stream*>::iterator it = m_streamtable.begin();
+				it != m_streamtable.end(); ++it)
+				delete it->second;
+
 			// Delete all states
-			for (map<string, State*>::iterator it = m_statetable.begin(); it != m_statetable.end(); ++it)
+			for (map<string, State*>::iterator it = m_statetable.begin();
+				it != m_statetable.end(); ++it)
 				delete it->second;
 		}
 
@@ -113,6 +144,34 @@ namespace Jump
 
 			// Return state if found, else NULL
 			return it == m_statetable.end() ? NULL : it->second;
+		}
+
+		/**
+		 * Enters a stream into the StateMachine
+		 *
+		 * @param name   the name of the constant to enter
+		 * @param stream the stream of the constant to enter
+		 */
+		void StateMachine::streamSet(std::string name, Stream* stream)
+		{
+			// Add stream to streamtable
+			m_streamtable.insert(pair<string, Stream*>(name, stream));
+		}
+
+		/**
+		 * Gets a constant from the StateMachine with the given namje
+		 *
+		 * @param name the name of the constant to retrieve
+		 *
+		 * @return the constant represented by the name
+		 */
+		Stream* StateMachine::streamGet(std::string name)
+		{
+			// Find stream with name
+			map<string, Stream*>::iterator it = m_streamtable.find(name);
+
+			// Return stream if found, else NULL
+			return it == m_streamtable.end() ? NULL : it->second;
 		}
 
 		/**

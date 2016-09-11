@@ -16,6 +16,7 @@ Created: 7 - 15 - 2016
 // Namespace being used
 using namespace std;
 using namespace Jump::Core::Values;
+using namespace Jump::Core::Streams;
 
 /**
  * Jump is a new programming language that uses the state machine paradigm
@@ -46,7 +47,7 @@ namespace Jump
 			 */
 			Print::Print() : Statement(), 
 							 m_toPrint(new Null()),
-							 m_streamRef(cout) {}
+							 m_streamRef(new PrintStream(cout)) {}
 
 			/**
 			 * Creates a print statement with the given value to print
@@ -55,7 +56,7 @@ namespace Jump
 			 */
 			Print::Print(Value* toPrint) : Statement(),  
 										   m_toPrint(toPrint),
-										   m_streamRef(cout) {}
+										   m_streamRef(new PrintStream(cout)) {}
 
 			/**
 			 * Creates a print statement with the given value to print and the stream to print to
@@ -63,7 +64,7 @@ namespace Jump
 			 * @param toPrint   the value to print
 			 * @param streamRef the stream to print to
 			 */
-			Print::Print(Value* toPrint, ostream& streamRef) : Statement(),
+			Print::Print(Value* toPrint, Stream* streamRef) : Statement(),
 															   m_toPrint(toPrint),
 															   m_streamRef(streamRef) {}
 
@@ -104,7 +105,7 @@ namespace Jump
 			string Print::execute(State* stateRef)
 			{
 				Value* evaluated = m_toPrint->evaluate(stateRef, 0);
-				m_streamRef << evaluated->toString() << endl;
+				m_streamRef->print(evaluated);
 				return "";
 			}
 		}
