@@ -81,7 +81,7 @@ namespace Jump
 			 *
 			 * @return the string representation of the Expression
 			 */
-			string Expression::toString()
+			string Expression::toString() const
 			{
 				string str;
 				switch(m_layer)

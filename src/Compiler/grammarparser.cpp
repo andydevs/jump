@@ -23,8 +23,6 @@ Created: 7 - 15 - 2016
 #include "Jump/Core/Values/Numbers/integer.h"
 #include "Jump/Core/Values/Numbers/float.h"
 #include "Jump/Core/Values/evaluate.h"
-#include "Jump/Core/Streams/printstream.h"
-#include "Jump/Core/Streams/readstream.h"
 
 // Libraries being used
 #include <cstdlib>
@@ -35,7 +33,6 @@ Created: 7 - 15 - 2016
 using namespace std;
 using namespace Jump::Core;
 using namespace Jump::Core::Streams;
-using namespace Jump::Core::Values;
 using namespace Jump::Core::Errors;
 using namespace Jump::Compiler::TokenParser;
 
@@ -615,10 +612,14 @@ namespace Jump
 				// Next token
 				tks.pop();
 
+				// Declare variables
+				Values::Identifier* identifier;
+				string streamRef;
+
 				// If next is identifier, add read statement with the value token
 				if (isIdentifier(tks))
 				{
-					state->add(new Statements::Read(new Values::Identifier(tks.front().attribute())));
+					identifier = new Values::Identifier(tks.front().attribute());
 					tks.pop();
 				}
 				// Else throw SyntaxError
@@ -626,6 +627,33 @@ namespace Jump
 				{
 					throw SyntaxError("Unexpected token " + tks.front().toString() + ". expected Identifier");
 				}
+
+				// If next is stream operator
+				if (isOperation(tks, "->"))
+				{
+					// Next token
+					tks.pop();
+
+					// Get stdin
+					if (isIdentifier(tks))
+					{
+						streamRef = tks.front().attribute();
+						tks.pop();
+					}
+					// Else throw SyntaxError
+					else
+					{
+						throw SyntaxError("Unexpected token " + tks.front().toString() + ". expected Identifier");
+					}
+				}
+				// Else streamRef is stdin
+				else
+				{
+					streamRef = "stdin";
+				}
+
+				// Add statement
+				state->add(new Statements::Read(identifier, streamRef));
 			}
 
 			/**
@@ -639,21 +667,52 @@ namespace Jump
 				// Next token
 				tks.pop();
 
+				// Declare variables
+				Values::Value* toPrint;
+				string streamRef;
+
 				// If next is value, add print statement with the value token
 				if (isValue(tks) || isKeyword(tks))
 				{
-					state->add(new Statements::Print(expression(tks)));
+					toPrint = expression(tks);
 				}
 				// Else if endline add blank print statement
 				else if (isEndline(tks))
 				{
-					state->add(new Statements::Print());
+					toPrint = new Values::Null();
 				}
 				// Else throw SyntaxError
 				else
 				{
 					throw SyntaxError("Unexpected token " + tks.front().toString() + ". expected ValueType, Keyword or Endline");
 				}
+
+				// If next is stream operator
+				if (isOperation(tks, "->"))
+				{
+					// Next token
+					tks.pop();
+
+					// Get streamref if identifier is given
+					if (isIdentifier(tks))
+					{
+						streamRef = tks.front().attribute();
+						tks.pop();
+					}
+					// Else throw error
+					else
+					{
+						throw SyntaxError("Unexpected token " + tks.front().toString() + ". expected Identifier");
+					}
+				}
+				// Else streamref is stdout
+				else
+				{
+					streamRef = "stdout";
+				}
+
+				// Add statement to state
+				state->add(new Statements::Print(toPrint, streamRef));
 			}
 
 			/**
@@ -742,13 +801,13 @@ namespace Jump
 				string name = tks.front().attribute();
 				tks.pop();
 
-				// If assignment is given, set value, else set to null
+				// If assignment is given, set value, else throw error
 				if (isOperation(tks, "="))
 				{
 					tks.pop();
 					machine.constSet(name, expression(tks));
 				}
-				else throw SyntaxError("Expected = after constant declaration.");
+				else throw SyntaxError("Expected \"=\" after constant declaration.");
 
 				// Endline
 				endline(tks);
@@ -805,7 +864,7 @@ namespace Jump
 				else if (isKeyword(tks, "var"))
 					variable(machine, tks);
 				else
-					throw SyntaxError("Unexpected StateMachine keyword: " + tks.front().attribute());
+					throw SyntaxError("Undefined StateMachine declaration: " + tks.front().attribute());
 			}
 
 			/**

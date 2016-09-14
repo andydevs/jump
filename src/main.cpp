@@ -12,7 +12,6 @@ Created: 7 - 15 - 2016
 // Headers being used
 #include "Jump/Compiler/compiler.h"
 #include "Jump/Core/Errors/jumperror.h"
-#include "Jump/Core/Values/Numbers/parser.h"
 #include "Jump/Core/Values/expression.h"
 
 // Libraries being used

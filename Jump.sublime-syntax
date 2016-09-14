@@ -8,12 +8,16 @@ scope: source.jump
 contexts:
   main:
     - comment: Comment
-      match: \#.*\r?\n
+      match: \#.*$
       scope: comment.line.number-sign.jump
 
     - comment: Keywords
       match: \b(var|const|print|read|to|loop|end|check|if|otherwise)\b
       scope: keyword.control.jump
+
+    - comment: Boolean Operators
+      match: \b(and|or|not)\b
+      scope: keyword.operator.jump
     
     - comment: Numbers
       match: \b\d+(\.\d+)?((e|E)(\+|-)?\d+)?([uif][0-9]+)?\b
@@ -31,7 +35,7 @@ contexts:
       match: "'"
       push: single_quoted_string
     
-    - comment: State definition
+    - comment: State Definition
       match: \b(state)\s+(\w+)\b
       captures:
         1: support.function.jump

@@ -94,7 +94,7 @@ state seventh_b
 	print "Seventh B"
 
 	# Prompt name
-	print "Enter your name:"
+	print "Enter your name:" -> prompt
 	read name
 
 	# Print output

@@ -171,7 +171,7 @@ namespace Jump
 				 *
 				 * @return the string representation of the Expression
 				 */
-				std::string toString();
+				std::string toString() const;
 
 				/**
 				 * Adds the value to the Expression

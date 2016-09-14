@@ -15,7 +15,6 @@ Created: 7 - 15 - 2016
 // Headers being used
 #include "statement.h"
 #include "Jump/Core/Values/identifier.h"
-#include "Jump/Core/Streams/readstream.h"
 
 // Libaries being used
 #include <string>
@@ -59,9 +58,9 @@ namespace Jump
 				Values::Identifier* m_toStore;
 
 				/**
-				 * The stream to read from (pointer)
+				 * The stream to read from (referenced by name)
 				 */
-				Streams::Stream* m_streamRef;
+				std::string m_streamRef;
 		
 				/**
 				 * Creates a Read statement with the given value to Read
@@ -71,12 +70,12 @@ namespace Jump
 				Read(Values::Identifier* toStore);
 
 				/**
-				 * Creates a Read statement with the given identifier to store and the stream to Read from
+				 * Creates a Read statement with the given identifier streamRef
 				 *
 				 * @param toStore   the value to store
-				 * @param streamRef the stream to read from
+				 * @param streamRef the stream to read from (referenced by name)
 				 */
-				Read(Values::Identifier* toStore, Streams::Stream* streamRef);
+				Read(Values::Identifier* toStore, std::string streamRef);
 
 				/**
 				 * Copy constructor for Read statement

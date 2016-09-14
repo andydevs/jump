@@ -11,6 +11,7 @@ Created: 7 - 15 - 2016
 
 // Headers being used
 #include "Jump/Core/Values/identifier.h"
+#include "Jump/Core/Errors/referenceerror.h"
 
 // Namespaces being used
 using namespace std;
@@ -76,13 +77,13 @@ namespace Jump
 			}
 
 			/**
-			 * Returns true if the Identifier is a constant
+			 * Returns the string representation of the Identifier
 			 *
-			 * @return true if the Identifier is a constant
+			 * @return the string representation of the Identifier
 			 */
-			bool Identifier::isConstant(State* stateRef)
+			string Identifier::toString()
 			{
-				return stateRef->statemachine()->constGet(m_name) != NULL;
+				return m_name;
 			}
 
 			/**
@@ -98,11 +99,20 @@ namespace Jump
 				// If the no evaluate identifier flag is on just return the identifier
 				// Else, return evaluated identifer
 				if ((flags & NO_EVALUATE_IDENTIFIER) == NO_EVALUATE_IDENTIFIER)
+				{
 					return this;
-				else if (isConstant(stateRef))
-					return stateRef->statemachine()->constGet(m_name)->evaluate(stateRef, flags);
+				}
 				else
-					return stateRef->statemachine()->varGet(m_name)->evaluate(stateRef, flags);
+				{
+					try
+					{
+						return stateRef->statemachine()->constGet(m_name)->evaluate(stateRef, flags);
+					}
+					catch(ReferenceError& e)
+					{
+						return stateRef->statemachine()->varGet(m_name)->evaluate(stateRef, flags);
+					}
+				}
 			}
 
 			/**
@@ -115,11 +125,8 @@ namespace Jump
 			 */
 			Value* Identifier::assign(State* stateRef, Value* value) throw(ValueError)
 			{
-				// Error if the identifier is a constant or if the variable name is not defined
-				if (isConstant(stateRef))
-					throw TypeError("Constant " + m_name + " cannot be reassigned.");
-				else if (stateRef->statemachine()->varGet(m_name) == NULL)
-					throw ValueError("Undefined variable: " + m_name);
+				// Check if variable exists
+				stateRef->statemachine()->varGet(m_name);
 
 				// Set variable
 				stateRef->statemachine()->varSet(m_name, value);

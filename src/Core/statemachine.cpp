@@ -19,6 +19,7 @@ Created: 7 - 15 - 2016
 
 // Namespaces being used
 using namespace std;
+using namespace Jump::Core::Errors;
 using namespace Jump::Core::Values;
 using namespace Jump::Core::Streams;
 
@@ -141,13 +142,21 @@ namespace Jump
 		 *
 		 * @return the state represented by the name
 		 */
-		State* StateMachine::stateGet(std::string name)
+		State* StateMachine::stateGet(std::string name) throw(ReferenceError)
 		{
 			// Find state with name
 			map<string, State*>::iterator it = m_statetable.find(name);
 
-			// Return state if found, else NULL
-			return it == m_statetable.end() ? NULL : it->second;
+			// Return state if exists
+			// Else throw error
+			if (it != m_statetable.end())
+			{
+				return it->second;
+			}
+			else
+			{
+				throw ReferenceError("Undefined state " + name + " in statemachine.");
+			}
 		}
 
 		/**
@@ -169,13 +178,17 @@ namespace Jump
 		 *
 		 * @return the constant represented by the name
 		 */
-		Stream* StateMachine::streamGet(std::string name)
+		Stream* StateMachine::streamGet(std::string name) throw(ReferenceError)
 		{
 			// Find stream with name
 			map<string, Stream*>::iterator it = m_streamtable.find(name);
 
-			// Return stream if found, else NULL
-			return it == m_streamtable.end() ? NULL : it->second;
+			// Return stream if exists
+			// Else throw error
+			if (it != m_streamtable.end())
+				return it->second;
+			else
+				throw ReferenceError("Undefined stream " + name + " in statemachine.");
 		}
 
 		/**
@@ -197,13 +210,17 @@ namespace Jump
 		 *
 		 * @return the variable represented by the name
 		 */
-		Value* StateMachine::varGet(string name)
+		Value* StateMachine::varGet(string name) throw(ReferenceError)
 		{
 			// Find variable with name
 			map<string, Value*>::iterator it = m_vartable.find(name);
 
-			// Return variable if found, else NULL
-			return it == m_vartable.end() ? NULL : it->second;
+			// Return var if exists
+			// Else throw error
+			if (it != m_vartable.end())
+				return it->second;
+			else
+				throw ReferenceError("Undefined var " + name + " in statemachine.");
 		}
 
 		/**
@@ -213,13 +230,14 @@ namespace Jump
 		 * @param name  the name of the constant to enter
 		 * @param value the value of the constant to enter
 		 */
-		void StateMachine::constSet(std::string name, Values::Value* value)
+		void StateMachine::constSet(string name, Values::Value* value)
 		{
 			// Find variable with name
 			map<string, Value*>::iterator it = m_consttable.find(name);
 
-			// Set variable if not defined, else throw error
-			if (it == m_consttable.end()) m_consttable[name] = value;
+			// Set if not set
+			if (it == m_consttable.end())
+				m_consttable[name] = value;
 		}
 
 		/**
@@ -229,13 +247,17 @@ namespace Jump
 		 *
 		 * @return the constant represented by the name
 		 */
-		Value* StateMachine::constGet(std::string name)
+		Value* StateMachine::constGet(std::string name) throw(ReferenceError)
 		{
 			// Find variable with name
 			map<string, Value*>::iterator it = m_consttable.find(name);
 
-			// Return variable if found, else NULL
-			return it == m_consttable.end() ? NULL : it->second;
+			// Return const if exists
+			// Else throw error
+			if (it != m_consttable.end())
+				return it->second;
+			else
+				throw ReferenceError("Undefined const " + name + " in statemachine.");
 		}
 
 		/**

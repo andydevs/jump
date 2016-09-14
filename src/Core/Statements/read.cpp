@@ -10,9 +10,11 @@ Created: 7 - 15 - 2016
 */
 
 // Headers being used
-#include "Jump/Core/Values/null.h"
+#include "Jump/Core/statemachine.h"
+#include "Jump/Core/state.h"
 #include "Jump/Core/Statements/read.h"
-#include "Jump/Core/Streams/readstream.h"
+#include "Jump/Core/Values/null.h"
+#include "Jump/Core/Streams/stream.h"
 
 // Libraries being used
 #include <iostream>
@@ -55,7 +57,7 @@ namespace Jump
 			Read::Read(Identifier* toStore):
 			Statement(),
 			m_toStore(toStore),
-			m_streamRef(new ReadStream(cin))
+			m_streamRef("stdin")
 			{}
 
 			/**
@@ -64,7 +66,7 @@ namespace Jump
 			 * @param toStore   the value to store
 			 * @param streamRef the stream to read from
 			 */
-			Read::Read(Identifier* toStore, Stream* streamRef):
+			Read::Read(Identifier* toStore, string streamRef):
 			Statement(),
 			m_toStore(toStore),
 			m_streamRef(streamRef)
@@ -107,7 +109,8 @@ namespace Jump
 			 */
 			string Read::execute(State* stateRef) throw(JumpError)
 			{
-				Value* red = m_streamRef->read();
+				Stream* stream = stateRef->statemachine()->streamGet(m_streamRef);
+				Value* red = stream->read();
 				if (red == NULL) red = new Null();
 				m_toStore->assign(stateRef, red);
 				return "";

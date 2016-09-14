@@ -79,20 +79,18 @@ namespace Jump
 				~Identifier();
 
 				/**
+				 * Returns the string representation of the Identifier
+				 *
+				 * @return the string representation of the Identifier
+				 */
+				std::string toString();
+
+				/**
 				 * Returns the name of the Identifier
 				 *
 				 * @return the name of the Identifier
 				 */
 				std::string name();
-
-				/**
-				 * Returns true if the Identifier is a constant
-				 *
-				 * @param stateRef a reference to the state being executed
-				 *
-				 * @return true if the Identifier is a constant
-				 */
-				bool isConstant(State* stateRef);
 
 				/**
 				 * Evaluates the value in the context of the given state

@@ -15,6 +15,7 @@ Created: 7 - 15 - 2016
 // Headers being used
 #include "Values/value.h"
 #include "Errors/valueerror.h"
+#include "Errors/referenceerror.h"
 #include "Streams/stream.h"
 #include "state.h"
 
@@ -105,7 +106,7 @@ namespace Jump
 			 *
 			 * @return the state represented by the name
 			 */
-			State* stateGet(std::string name);
+			State* stateGet(std::string name) throw(Errors::ReferenceError);
 
 			/**
 			 * Enters a variable into the StateMachine
@@ -122,7 +123,7 @@ namespace Jump
 			 *
 			 * @return the variable represented by the name
 			 */
-			Values::Value* varGet(std::string name);
+			Values::Value* varGet(std::string name) throw(Errors::ReferenceError);
 
 			/**
 			 * Enters a constant into the StateMachine
@@ -140,7 +141,7 @@ namespace Jump
 			 *
 			 * @return the constant represented by the name
 			 */
-			Values::Value* constGet(std::string name);
+			Values::Value* constGet(std::string name) throw(Errors::ReferenceError);
 
 			/**
 			 * Enters a stream into the StateMachine
@@ -157,7 +158,7 @@ namespace Jump
 			 *
 			 * @return the constant represented by the name
 			 */
-			Streams::Stream* streamGet(std::string name);
+			Streams::Stream* streamGet(std::string name) throw(Errors::ReferenceError);
 
 			/**
 			 * Executes the StateMachine with no flags

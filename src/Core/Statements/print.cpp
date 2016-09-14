@@ -10,8 +10,11 @@ Created: 7 - 15 - 2016
 */
 
 // Headers being used
+#include "Jump/Core/statemachine.h"
+#include "Jump/Core/state.h"
 #include "Jump/Core/Statements/print.h"
 #include "Jump/Core/Values/null.h"
+#include "Jump/Core/Streams/stream.h"
 
 // Namespace being used
 using namespace std;
@@ -48,7 +51,7 @@ namespace Jump
 			 */
 			Print::Print() : Statement(), 
 							 m_toPrint(new Null()),
-							 m_streamRef(new PrintStream(cout)) {}
+							 m_streamRef("stdout") {}
 
 			/**
 			 * Creates a print statement with the given value to print
@@ -57,7 +60,7 @@ namespace Jump
 			 */
 			Print::Print(Value* toPrint) : Statement(),  
 										   m_toPrint(toPrint),
-										   m_streamRef(new PrintStream(cout)) {}
+										   m_streamRef("stdout") {}
 
 			/**
 			 * Creates a print statement with the given value to print and the stream to print to
@@ -65,7 +68,7 @@ namespace Jump
 			 * @param toPrint   the value to print
 			 * @param streamRef the stream to print to
 			 */
-			Print::Print(Value* toPrint, Stream* streamRef) : Statement(),
+			Print::Print(Value* toPrint, string streamRef) : Statement(),
 															  m_toPrint(toPrint),
 															  m_streamRef(streamRef) {}
 
@@ -93,7 +96,7 @@ namespace Jump
 			 */ 
 			string Print::inspect()
 			{
-				return "[PRINT" + (m_toPrint->isNull() ? "" : " " + m_toPrint->toString()) + "]";
+				return "[PRINT " + (m_toPrint->isNull() ? "" : " " + m_toPrint->toString()) + " -> " + m_streamRef + "]";
 			}
 
 			/**
@@ -108,7 +111,8 @@ namespace Jump
 			string Print::execute(State* stateRef) throw(JumpError)
 			{
 				Value* evaluated = m_toPrint->evaluate(stateRef, 0);
-				m_streamRef->print(evaluated);
+				Stream* stream = stateRef->statemachine()->streamGet(m_streamRef);
+				stream->print(evaluated);
 				return "";
 			}
 		}
