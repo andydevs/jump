@@ -167,6 +167,13 @@ namespace Jump
 				~Expression();
 
 				/**
+				 * Returns the string representation of the Expression
+				 *
+				 * @return the string representation of the Expression
+				 */
+				std::string toString();
+
+				/**
 				 * Adds the value to the Expression
 				 *
 				 * @param value the value to add

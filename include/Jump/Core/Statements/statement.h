@@ -12,6 +12,9 @@ Created: 7 - 15 - 2016
 #ifndef _CORE_STATEMENT_STATEMENT_H_
 #define _CORE_STATEMENT_STATEMENT_H_
 
+// Headers being used
+#include "Jump/Core/Errors/jumperror.h"
+
 // Libraries being used
 #include <string>
 
@@ -86,8 +89,10 @@ namespace Jump
 				 * @param stateRef reference to the containing state (pointer)
 				 * 
 				 * @return a reference to the next state (the state's name)
+				 *
+				 * @throw JumpError upon an error when executing a statement
 				 */
-				virtual std::string execute(State* stateRef) = 0;
+				virtual std::string execute(State* stateRef) throw(Errors::JumpError) = 0;
 			};
 		}
 	}

@@ -13,8 +13,8 @@ Created: 7 - 15 - 2016
 #define _COMPILER_GRAMMARPARSER_H_
 
 // Headers being used
-#include "syntaxerror.h"
 #include "TokenParser/parser.h"
+#include "Jump/Core/Errors/syntaxerror.h"
 #include "Jump/Core/statemachine.h"
 
 /**
@@ -50,7 +50,7 @@ namespace Jump
 			 *
 			 * @throw SyntaxError if an invalid token was detected
 			 */
-			Jump::Core::StateMachine parse(std::queue<Jump::Compiler::TokenParser::Token>& tks) throw(Jump::Compiler::SyntaxError);
+			Jump::Core::StateMachine parse(std::queue<TokenParser::Token>& tks) throw(Core::Errors::SyntaxError);
 		}
 	}
 }

@@ -152,6 +152,8 @@ namespace Jump
 				 * @param flags    flags to evauate the state with
 				 *
 				 * @return the evaluated value
+				 *
+				 * @throw ValueError upon an error when evaluating
 				 */
 				virtual Value* evaluate(State* stateRef, int flags) throw(Errors::ValueError);
 
@@ -171,8 +173,10 @@ namespace Jump
 				 * @param stateRef reference to the containing state (pointer)
 				 * 
 				 * @return a reference to the next state (the state's name)
+				 *
+				 * @throw JumpError upon an error when executing a statement
 				 */
-				std::string execute(State* stateRef);
+				std::string execute(State* stateRef) throw(Errors::JumpError);
 
 				/**
 				 * Operator for passing value to output stream

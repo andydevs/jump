@@ -16,6 +16,9 @@ Created: 7 - 15 - 2016
 #include "Jump/Core/Values/value.h"
 #include "Jump/Core/Errors/streamerror.h"
 
+// Libraries
+#include <iostream>
+
 /**
  * Jump is a new programming language that uses the state machine paradigm
  *
@@ -62,9 +65,9 @@ namespace Jump
 				Stream(const Stream& other);
 
 				/**
-				 * Destroys the string
+				 * Destroys the Stream
 				 */
-				~Stream();
+				virtual ~Stream();
 
 				/**
 				 * Writes the given Value to the Stream

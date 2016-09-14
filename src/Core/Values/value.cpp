@@ -165,6 +165,8 @@ namespace Jump
 			 * @param flags    flags to evauate the state with
 			 *
 			 * @return the evaluated value
+			 *
+			 * @throw ValueError upon an error when evaluating
 			 */
 			Value* Value::evaluate(State* stateRef, int flags) throw(ValueError)
 			{
@@ -177,8 +179,10 @@ namespace Jump
 			 * @param stateRef reference to the containing state (pointer)
 			 * 
 			 * @return a reference to the next state (the state's name)
+			 *
+			 * @throw JumpError upon an error when executing a statement
 			 */
-			std::string Value::execute(State* stateRef)
+			std::string Value::execute(State* stateRef) throw(JumpError)
 			{
 				// Evaluate then return
 				evaluate(stateRef, 0); return "";

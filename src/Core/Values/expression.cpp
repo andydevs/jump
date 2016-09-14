@@ -77,6 +77,31 @@ namespace Jump
 			Expression::~Expression() {}
 
 			/**
+			 * Returns the string representation of the Expression
+			 *
+			 * @return the string representation of the Expression
+			 */
+			string Expression::toString()
+			{
+				string str;
+				switch(m_layer)
+				{
+					case ASSIGN:    str = "="; break;
+					case OR:        str = "or"; break;
+					case AND:       str = "and"; break;
+					case NOT:       str = "not"; break;
+					case COMPARE:   str = "<=>"; break;
+					case ADDSUB:    str = "+-"; break;
+					case MULDIVMOD: str = "*/%"; break;
+					default:        str = "noop"; break; 
+				}
+				str += "(" + m_values[0]->toString();
+				for (unsigned i = 1; i < m_values.size(); ++i)
+					str += ", " + m_values[i]->toString();
+				return str += ")";
+			}
+
+			/**
 			 * Adds the value to the Expression
 			 *
 			 * @param value the value to add
@@ -122,12 +147,21 @@ namespace Jump
 			 */ 
 			Value* Expression::assign(State* stateRef, int flags) throw(ValueError)
 			{
-				// Evaluate assigner and value
-				Value* assigner = m_values[0]->evaluate(stateRef, flags | NO_EVALUATE_IDENTIFIER);
-				Value* assignee = m_values[1]->evaluate(stateRef, flags);
+				// If only one value in assign
+				if (m_values.size() == 1)
+				{
+					// Evaluate value and return
+					return m_values[0]->evaluate(stateRef, flags);
+				}
+				else
+				{
+					// Evaluate assigner and value
+					Value* assigner = m_values[0]->evaluate(stateRef, flags | NO_EVALUATE_IDENTIFIER);
+					Value* assignee = m_values[1]->evaluate(stateRef, flags);
 
-				// Return assignment operation
-				return assigner->assign(stateRef, assignee);
+					// Return assignment operation
+					return assigner->assign(stateRef, assignee);
+				}
 			}
 
 			/**

@@ -12,14 +12,19 @@ Created: 7 - 15 - 2016
 // Headers being used
 #include "Jump/Compiler/grammarparser.h"
 #include "Jump/Core/Statements/print.h"
+#include "Jump/Core/Statements/read.h"
 #include "Jump/Core/Statements/to.h"
 #include "Jump/Core/Values/string.h"
 #include "Jump/Core/Values/null.h"
 #include "Jump/Core/Values/boolean.h"
 #include "Jump/Core/Values/identifier.h"
 #include "Jump/Core/Values/expression.h"
-#include "Jump/Core/Values/Numbers/parser.h"
+#include "Jump/Core/Values/Numbers/unsignedinteger.h"
+#include "Jump/Core/Values/Numbers/integer.h"
+#include "Jump/Core/Values/Numbers/float.h"
+#include "Jump/Core/Values/evaluate.h"
 #include "Jump/Core/Streams/printstream.h"
+#include "Jump/Core/Streams/readstream.h"
 
 // Libraries being used
 #include <cstdlib>
@@ -29,6 +34,9 @@ Created: 7 - 15 - 2016
 // Namespaces being used
 using namespace std;
 using namespace Jump::Core;
+using namespace Jump::Core::Streams;
+using namespace Jump::Core::Values;
+using namespace Jump::Core::Errors;
 using namespace Jump::Compiler::TokenParser;
 
 /**
@@ -267,31 +275,19 @@ namespace Jump
 			{
 				string literal = tks.front().attribute();
 				Values::Value* val;
-				if (isString(tks))
-				{
-					val = new Values::String(literal.substr(1, literal.length() - 2));
-				}
-				else if (isNumber(tks))
-				{
-					val = Values::Numbers::parse(literal.c_str());
-				}
-				else if (isKeyword(tks, "True") || isKeyword(tks, "False"))
-				{
-					val = new Values::Boolean(tks.front().attribute() == "True");
-				}
-				else if (isIdentifier(tks))
-				{
-					val = new Values::Identifier(literal);
-				}
-				else if (isLparen(tks))
+				if (isLparen(tks))
 				{
 					tks.pop();
 					val = expression(tks);
 					if (!isRparen(tks)) throw SyntaxError("Expected RPAREN");
 				}
+				else if (isIdentifier(tks))
+				{
+					val = new Values::Identifier(literal);
+				}
 				else
 				{
-					throw SyntaxError("Unexpected token " + tks.front().toString() +  ". Expected Value Type");
+					val = Values::evaluate(literal);
 				}
 				tks.pop();
 				return val;
@@ -582,16 +578,20 @@ namespace Jump
 
 					// Get condition
 					Values::Value* condition;
+
+					// If condition is given, set to condition
 					if (isKeyword(tks, "if"))
 					{
 						tks.pop();
 						condition = expression(tks);
 					}
+					// If condition is otherwise, set to true
 					else if (isKeyword(tks, "otherwise"))
 					{
 						tks.pop();
 						condition = new Values::Boolean(true);
 					}
+					// Else set to true
 					else
 					{
 						condition = new Values::Boolean(true);
@@ -605,6 +605,30 @@ namespace Jump
 			}
 
 			/**
+			 * Parses a read statement
+			 *
+			 * @param state the state to add the statement to
+			 * @param tks   the token queue to parse
+			 */
+			static void read(State* state, queue<Token>& tks)
+			{
+				// Next token
+				tks.pop();
+
+				// If next is identifier, add read statement with the value token
+				if (isIdentifier(tks))
+				{
+					state->add(new Statements::Read(new Values::Identifier(tks.front().attribute())));
+					tks.pop();
+				}
+				// Else throw SyntaxError
+				else
+				{
+					throw SyntaxError("Unexpected token " + tks.front().toString() + ". expected Identifier");
+				}
+			}
+
+			/**
 			 * Parses a print statement
 			 *
 			 * @param state the state to add the statement to
@@ -615,18 +639,21 @@ namespace Jump
 				// Next token
 				tks.pop();
 
-				// If next is value
+				// If next is value, add print statement with the value token
 				if (isValue(tks) || isKeyword(tks))
 				{
-					// Add print statement with the value token
 					state->add(new Statements::Print(expression(tks)));
 				}
 				// Else if endline add blank print statement
 				else if (isEndline(tks))
+				{
 					state->add(new Statements::Print());
+				}
 				// Else throw SyntaxError
 				else
-					throw SyntaxError("Unexpected token " + tks.front().toString() + ". expected ValueType or Endline");
+				{
+					throw SyntaxError("Unexpected token " + tks.front().toString() + ". expected ValueType, Keyword or Endline");
+				}
 			}
 
 			/**
@@ -640,7 +667,9 @@ namespace Jump
 			static void statement(State* state, queue<Token>& tks) throw(SyntaxError)
 			{
 				// Parse Statements
-				if (isKeyword(tks, "print"))
+				if (isKeyword(tks, "read"))
+					read(state, tks);
+				else if (isKeyword(tks, "print"))
 					print(state, tks);
 				else if (isKeyword(tks, "to"))
 					to(state, tks);

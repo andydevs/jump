@@ -13,8 +13,8 @@ Created: 7 - 15 - 2016
 #define _COMPILER_COMPILER_H_
 
 // Headers being used
-#include "syntaxerror.h"
 #include "Jump/Core/statemachine.h"
+#include "Jump/Core/Errors/syntaxerror.h"
 
 // Libraries being used
 #include <iostream>
@@ -44,7 +44,7 @@ namespace Jump
 		 *
 		 * @throw SyntaxError if there is an error in the syntax of the input
 		 */
-		Jump::Core::StateMachine compile(std::string input) throw(SyntaxError);
+		Jump::Core::StateMachine compile(std::string input) throw(Core::Errors::SyntaxError);
 	}
 }
 

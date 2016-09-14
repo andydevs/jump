@@ -11,6 +11,8 @@ Created: 7 - 15 - 2016
 
 #include "Jump/Core/state.h"
 
+#include <iostream>
+
 using namespace std;
 
 /**

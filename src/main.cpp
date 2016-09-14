@@ -65,12 +65,6 @@ int main(int argc, char const *argv[])
 		// Execute the machine and return status code
 		return machine.execute();
 	}
-	catch (Compiler::SyntaxError& e)
-	{
-		// Print Error and exit
-		cout << "SyntaxError: " << e.what() << endl;
-		return 1;
-	}
 	catch (Core::Errors::JumpError& e)
 	{
 		// Print Error and exit

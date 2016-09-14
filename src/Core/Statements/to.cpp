@@ -16,6 +16,7 @@ Created: 7 - 15 - 2016
 // Namespaces being used
 using namespace std;
 using namespace Jump::Core::Values;
+using namespace Jump::Core::Errors;
 
 /**
  * Jump is a new programming language that uses the state machine paradigm
@@ -85,17 +86,12 @@ namespace Jump
 			 * @param stateRef reference to containing state (pointer)
 			 *
 			 * @return reference to another state (the state's name)
+			 *
+			 * @throw JumpError upon an error when executing a statement
 			 */
-			std::string To::execute(State* stateRef)
+			std::string To::execute(State* stateRef) throw(JumpError)
 			{
-				if (m_condition->evaluate(stateRef, 0)->toBool())
-				{
-					return m_stateRef;
-				}
-				else
-				{
-					return "";
-				}
+				return m_condition->evaluate(stateRef, 0)->toBool() ? m_stateRef : "";
 			}
 		}
 	}

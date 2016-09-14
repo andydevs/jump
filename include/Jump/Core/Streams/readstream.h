@@ -9,14 +9,13 @@ Created: 7 - 15 - 2016
 
 */
 
-#ifndef _CORE_STREAMS_STDOUT_H_
-#define _CORE_STREAMS_STDOUT_H_
+#ifndef _CORE_STREAMS_READSTREAM_H_
+#define _CORE_STREAMS_READSTREAM_H_
 
 // Headers being used
 #include "stream.h"
 
 // Libraries being used
-#include <string>
 #include <iostream>
 
 /**
@@ -49,55 +48,39 @@ namespace Jump
 			 * @author  Anshul Kharbanda
 			 * @created 9 - 9 - 2016
 			 */
-			class PrintStream: public Stream
+			class ReadStream: public Stream
 			{
 			private:
 				/**
-				 * The stream to print to
+				 * The stream to read from
 				 */
-				std::ostream& m_printstream;
-
-				/**
-				 * The delimeter to print at the end
-				 */
-				std::string m_delimeter;
+				std::istream& m_readstream;
 			public:
 				/**
-				 * Creates a PrintStream with the given printstream
-				 *
-				 * @param printstream the print stream
+				 * Creates a stream
 				 */
-				PrintStream(std::ostream& printstream);
-
-				/**
-				 * Creates a PrintStream with the given printstream and
-				 * delimeter
-				 *
-				 * @param printstream the print stream
-				 * @param delimeter   the delimeter to print at the end
-				 */
-				PrintStream(std::ostream& printstream, std::string delimeter);
+				ReadStream(std::istream& readstream);
 
 				/**
 				 * Copy constructor for Stream
 				 *
 				 * @param other the other Stream to copy
 				 */
-				PrintStream(const PrintStream& other);
+				ReadStream(const ReadStream& other);
 
 				/**
-				 * Destroys the PrintStream
+				 * Destroys the ReadStream
 				 */
-				~PrintStream();
+				~ReadStream();
 
 				/**
-				 * Writes the given Value to the Stream
+				 * Reads a value from the Stream
 				 *
-				 * @param value the value to print to the Stream
+				 * @return value read from the Stream
 				 *
-				 * @throw StreamError upon an error when writing to Stream
+				 * @throw StreamError upon an error when reading from Stream
 				 */
-				void print(Values::Value* value) throw(Errors::StreamError);
+				virtual Values::Value* read() throw(Errors::StreamError);
 			};
 		}
 	}

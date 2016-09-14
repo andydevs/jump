@@ -12,6 +12,7 @@ Created: 7 - 15 - 2016
 // Headers being used
 #include "Jump/Core/statemachine.h"
 #include "Jump/Core/Streams/printstream.h"
+#include "Jump/Core/Streams/readstream.h"
 
 // Libraries being used
 #include <iostream>
@@ -42,12 +43,15 @@ namespace Jump
 		 */
 		StateMachine::StateMachine():
 		m_statetable(),
-		m_consttable(),
 		m_vartable(),
+		m_consttable(),
 		m_streamtable()
 		{
 			stateSet(new State("end"));
 			streamSet("stdout", new PrintStream(cout));
+			streamSet("stdin",  new ReadStream(cin));
+			streamSet("stderr", new PrintStream(cerr));
+			streamSet("prompt", new PrintStream(cout, " "));
 		}
 
 		/**
@@ -57,8 +61,8 @@ namespace Jump
 		 */
 		StateMachine::StateMachine(const StateMachine& other):
 		m_statetable(other.m_statetable),
-		m_consttable(other.m_consttable),
 		m_vartable(other.m_vartable),
+		m_consttable(other.m_consttable),
 		m_streamtable(other.m_streamtable)
 		{}
 

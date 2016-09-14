@@ -9,13 +9,13 @@ Created: 7 - 15 - 2016
 
 */
 
-#ifndef _CORE_STATEMENT_PRINT_H_
-#define _CORE_STATEMENT_PRINT_H_
+#ifndef _CORE_STATEMENTS_READ_H_
+#define _CORE_STATEMENTS_READ_H_
 
 // Headers being used
 #include "statement.h"
-#include "Jump/Core/Values/value.h"
-#include "Jump/Core/Streams/printstream.h"
+#include "Jump/Core/Values/identifier.h"
+#include "Jump/Core/Streams/readstream.h"
 
 // Libaries being used
 #include <string>
@@ -45,65 +45,60 @@ namespace Jump
 		namespace Statements
 		{
 			/**
-			 * Prints the given value to the given output stream
-			 *
+			 * Reads a value from the given input stream
+			 * 
 			 * @author  Anshul Kharbanda
 			 * @created 7 - 16 - 2016
 			 */
-			class Print : public Statement
+			class Read : public Statement
 			{
 			public:
 				/**
-				 * The value to print
+				 * The identifier to store
 				 */
-				Values::Value* m_toPrint;
+				Values::Identifier* m_toStore;
 
 				/**
-				 * The stream to print to (pointer)
+				 * The stream to read from (pointer)
 				 */
 				Streams::Stream* m_streamRef;
-
-				/**
-				 * Creates an empty print statement
-				 */
-				Print();
 		
 				/**
-				 * Creates a print statement with the given value to print
+				 * Creates a Read statement with the given value to Read
 				 *
-				 * @param toPrint the value to print
+				 * @param toStore the value to store
 				 */
-				Print(Values::Value* toPrint);
+				Read(Values::Identifier* toStore);
 
 				/**
-				 * Creates a print statement with the given value to print and the stream to print to
+				 * Creates a Read statement with the given identifier to store and the stream to Read from
 				 *
-				 * @param toPrint   the value to print
-				 * @param streamRef the stream to print to
+				 * @param toStore   the value to store
+				 * @param streamRef the stream to read from
 				 */
-				Print(Values::Value* toPrint, Streams::Stream* streamRef);
+				Read(Values::Identifier* toStore, Streams::Stream* streamRef);
 
 				/**
-				 * Copy constructor for print statement
+				 * Copy constructor for Read statement
 				 *
-				 * @param other the Print to copy
+				 * @param other the Read to copy
 				 */
-				Print(const Print& other);
+				Read(const Read& other);
 
 				/**
-				 * Destructor for print statement
+				 * Destructor for Read statement
 				 */
-				~Print();
+				~Read();
 
 				/**
-				 * Returns an inspection of the Print
+				 * Returns an inspection of the Read
 				 *
-				 * @return an inspection of the Print
+				 * @return an inspection of the Read
 				 */ 
 				std::string inspect();
 
 				/**
-				 * Executes the print statement
+				 * Executes the Read statement
 				 *
 				 * @param stateRef reference to the containing state (pointer)
 				 *

@@ -16,6 +16,7 @@ Created: 7 - 15 - 2016
 // Namespace being used
 using namespace std;
 using namespace Jump::Core::Values;
+using namespace Jump::Core::Errors;
 using namespace Jump::Core::Streams;
 
 /**
@@ -65,8 +66,8 @@ namespace Jump
 			 * @param streamRef the stream to print to
 			 */
 			Print::Print(Value* toPrint, Stream* streamRef) : Statement(),
-															   m_toPrint(toPrint),
-															   m_streamRef(streamRef) {}
+															  m_toPrint(toPrint),
+															  m_streamRef(streamRef) {}
 
 			/**
 			 * Copy constructor for print statement
@@ -101,8 +102,10 @@ namespace Jump
 			 * @param stateRef reference to the containing state (pointer)
 			 *
 			 * @return a reference to the next state (the state's name)
+			 *
+			 * @throw JumpError upon an error when executing a statement
 			 */
-			string Print::execute(State* stateRef)
+			string Print::execute(State* stateRef) throw(JumpError)
 			{
 				Value* evaluated = m_toPrint->evaluate(stateRef, 0);
 				m_streamRef->print(evaluated);

@@ -95,8 +95,10 @@ namespace Jump
 				 * @param stateRef reference to containing state (pointer)
 				 *
 				 * @return reference to another state (the state's name)
+				 *
+				 * @throw JumpError upon an error when executing a statement
 				 */
-				std::string execute(State* stateRef);
+				std::string execute(State* stateRef) throw(Errors::JumpError);
 			};
 		}
 	}

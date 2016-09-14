@@ -42,11 +42,27 @@ namespace Jump
 		namespace Streams
 		{
 			/**
-			 * Creates a stream
+			 * Creates a PrintStream with the given printstream
+			 *
+			 * @param printstream the print stream
 			 */
 			PrintStream::PrintStream(ostream& printstream):
 			Stream(),
-			m_printstream(printstream)
+			m_printstream(printstream),
+			m_delimeter("\n")
+			{}
+
+			/**
+			 * Creates a PrintStream with the given printstream and
+			 * delimeter
+			 *
+			 * @param printstream the print stream
+			 * @param delimeter   the delimeter to print at the end
+			 */
+			PrintStream::PrintStream(ostream& printstream, string delimeter):
+			Stream(),
+			m_printstream(printstream),
+			m_delimeter(delimeter)
 			{}
 
 			/**
@@ -56,7 +72,8 @@ namespace Jump
 			 */
 			PrintStream::PrintStream(const PrintStream& other):
 			Stream(other),
-			m_printstream(other.m_printstream)
+			m_printstream(other.m_printstream),
+			m_delimeter(other.m_delimeter)
 			{}
 
 			/**
@@ -73,7 +90,7 @@ namespace Jump
 			 */
 			void PrintStream::print(Value* value) throw(StreamError)
 			{
-				m_printstream << *value << endl;
+				m_printstream << *value << m_delimeter;
 			}
 		}
 	}

@@ -15,8 +15,7 @@ Created: 7 - 15 - 2016
 // Headers being used
 #include "token.h"
 #include "tokenclass.h"
-#include "Jump/Compiler/syntaxerror.h"
-#include "Jump/Core/Values/Numbers/parser.h"
+#include "Jump/Core/Errors/syntaxerror.h"
 
 // Libraries being used
 #include <queue>
@@ -55,7 +54,7 @@ namespace Jump
 			 * 
 			 * @throw SyntaxError if parser could not parse a particular character
 			 */
-			std::queue<Token> parse(std::string input) throw(Jump::Compiler::SyntaxError);
+			std::queue<Token> parse(std::string input) throw(Core::Errors::SyntaxError);
 		}
 	}
 }

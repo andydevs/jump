@@ -92,3 +92,10 @@ state seventh_a
 state seventh_b
 	# Print state title
 	print "Seventh B"
+
+	# Prompt name
+	print "Enter your name:"
+	read name
+
+	# Print output
+	print "Hello, " + name + "!"

@@ -11,13 +11,15 @@ Created: 7 - 15 - 2016
 
 // Headers being used
 #include "Jump/Compiler/TokenParser/parser.h"
-#include "Jump/Compiler/syntaxerror.h"
+#include "Jump/Core/Values/evaluate.h"
 
 // Libraries being used
 #include <iostream>
 
 // Namespaces being used
 using namespace std;
+using namespace Jump::Core::Values;
+using namespace Jump::Core::Errors;
 using namespace Jump::Compiler;
 
 /**
@@ -49,17 +51,17 @@ namespace Jump
 			 */
 			static TokenClass TOKEN_CLASSES[] = {
 				// Words
-				TokenClass("keyword", "\\b(const|var|state|print|to|if|otherwise|and|or|not|True|False)\\b"),
+				TokenClass("keyword", "\\b(const|var|state|print|read|to|if|otherwise|and|or|not|True|False)\\b"),
 				TokenClass("identifier", "[a-zA-Z][a-zA-Z0-9_]*"),
 
 				// Values
-				TokenClass("string", "(\"|').*?\\1"),
-				TokenClass("number", Jump::Core::Values::Numbers::NUMBER_REGEX),
+				TokenClass("string", STRING_REGEX),
+				TokenClass("number", NUMBER_REGEX),
 
 				// Operations
 				TokenClass("operation", "[\\*\\+-/%=!><]+"),
-				TokenClass("lparen", "\\("),
-				TokenClass("rparen", "\\)"),
+				TokenClass("lparen",    "\\("),
+				TokenClass("rparen",    "\\)"),
 
 				// Endline
 				TokenClass("endline", "(#.*?)?\r?\n"),
