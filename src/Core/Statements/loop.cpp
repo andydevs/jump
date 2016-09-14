@@ -79,7 +79,7 @@ namespace Jump
 			 */
 			string Loop::execute(State* stateRef) throw(JumpError)
 			{
-				return m_condition->evaluate(stateRef, 0)->toBool() ? "end" : "";
+				return m_condition->evaluate(stateRef, 0)->toBool() ? stateRef->getName() : "";
 			}
 		}
 	}

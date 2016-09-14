@@ -65,7 +65,7 @@ namespace Jump
 			 */ 
 			string End::inspect()
 			{
-				return "[LOOP if " + m_condition->toString() + "]";
+				return "[END if " + m_condition->toString() + "]";
 			}
 
 			/**
@@ -79,7 +79,7 @@ namespace Jump
 			 */
 			string End::execute(State* stateRef) throw(JumpError)
 			{
-				return m_condition->evaluate(stateRef, 0)->toBool() ? stateRef->getName() : "";
+				return m_condition->evaluate(stateRef, 0)->toBool() ? "end" : "";
 			}
 		}
 	}
