@@ -13,6 +13,8 @@ Created: 7 - 15 - 2016
 #include "Jump/Compiler/grammarparser.h"
 #include "Jump/Core/Statements/print.h"
 #include "Jump/Core/Statements/read.h"
+#include "Jump/Core/Statements/loop.h"
+#include "Jump/Core/Statements/end.h"
 #include "Jump/Core/Statements/to.h"
 #include "Jump/Core/Values/string.h"
 #include "Jump/Core/Values/null.h"
@@ -554,6 +556,72 @@ namespace Jump
 			}
 
 			/**
+			 * Parses a end statement
+			 *
+			 * @param state the state to add the statement to
+			 * @param tks   the token queue to parse
+			 *
+			 * @throw SyntaxError if invalid token sequence
+			 */
+			static void end(State* state, queue<Token>& tks) throw(SyntaxError)
+			{
+				// Next token
+				tks.pop();
+
+				// Declare variable
+				Values::Value* condition;
+
+				// If condition is given (given by if), set condition
+				if (isKeyword(tks, "if"))
+				{
+					tks.pop();
+					condition = expression(tks);
+				}
+				// Else set condition to true
+				// This is unwise, though
+				else
+				{
+					condition = new Values::Boolean(true);
+				}
+
+				// Add end statement
+				state->add(new Statements::End(condition));
+			}
+
+			/**
+			 * Parses a loop statement
+			 *
+			 * @param state the state to add the statement to
+			 * @param tks   the token queue to parse
+			 *
+			 * @throw SyntaxError if invalid token sequence
+			 */
+			static void loop(State* state, queue<Token>& tks) throw(SyntaxError)
+			{
+				// Next token
+				tks.pop();
+
+				// Declare variable
+				Values::Value* condition;
+
+				// If condition is given (given by if), set condition
+				if (isKeyword(tks, "if"))
+				{
+					tks.pop();
+					condition = expression(tks);
+				}
+				// Else set condition to true
+				// This is unwise, though
+				else
+				{
+					condition = new Values::Boolean(true);
+				}
+
+				// Add loop statement
+				state->add(new Statements::Loop(condition));
+			}
+
+			/**
 			 * Parses a to statement
 			 *
 			 * @param state the state to add the statement to
@@ -598,7 +666,7 @@ namespace Jump
 					state->add(new Statements::To(id, condition));
 				}
 				// Else throw SyntaxError
-				else throw SyntaxError("Expected identifier after \"to\" keyword");
+				else throw SyntaxError("Expected identifier after \"to\" keyword. Got: " + tks.front().toString());
 			}
 
 			/**
@@ -732,6 +800,10 @@ namespace Jump
 					print(state, tks);
 				else if (isKeyword(tks, "to"))
 					to(state, tks);
+				else if (isKeyword(tks, "loop"))
+					loop(state, tks);
+				else if (isKeyword(tks, "end"))
+					end(state, tks);
 				else
 					assign(state, tks);
 			}

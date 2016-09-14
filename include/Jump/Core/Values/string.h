@@ -100,6 +100,17 @@ namespace Jump
 				 * @return the result of the concatenation operator
 				 */
 				Value* plus(const Value* other) const throw(Jump::Core::Errors::TypeError);
+
+				/**
+				 * The equals operation for Jump values
+				 *
+				 * @param other the other Value in the operation
+				 *
+				 * @return the result of the equals operation
+				 *
+				 * @throw TypeError upon an error during the operation
+				 */
+				virtual Value* equal(const Value* other) const throw(Errors::TypeError);
 			};
 		}
 	}

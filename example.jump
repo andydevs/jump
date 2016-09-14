@@ -60,10 +60,10 @@ state fifth
 	print "Int8:             " + 23i8
 	print "UInt16:           " + 24u16
 	print "Float32:          " + 123e10f32
-	print "Sum of UInt8:     " + (255u8 + 8u8)  # 7
-	print "Sum of Int8:      " + (127i8 + 5i8)  # 124
-	print "Sum of Int16:     " + (127i16 + 5u8) # 132
-	print "Sum of Int16 (2): " + (127i8 + 5u16) # 132
+	print "Sum of UInt8:     " + (255u8  + 8u8)  # 7
+	print "Sum of Int8:      " + (127i8  + 5i8)  # 124
+	print "Sum of Int16:     " + (127i16 + 5u8)  # 132
+	print "Sum of Int16 (2): " + (127i8  + 5u16) # 132
 
 	# Transition
 	to sixth
@@ -87,15 +87,53 @@ state sixth
 
 state seventh_a
 	# Print state title
-	print "Seventh A"
+	print "Seventh A? This shouldn't happen!"
 
 state seventh_b
-	# Print state title
-	print "Seventh B"
-
 	# Prompt name
 	print "Enter your name:" -> prompt
 	read name
 
 	# Print output
 	print "Hello, " + name + "!"
+
+	# Transition based on input
+	to eigth_a if name == "Anshul"
+	to eigth_b if name == "John Cena"
+	to eigth_c otherwise
+
+state eigth_a
+	# Print welcome back message
+	print "Welcome back!"
+	to ninth
+
+state eigth_b
+	# Print funny John Cena reference
+	print "Sorry. I can't see you!"
+	to ninth
+
+state eigth_c
+	# Print default welcome message
+	print "Welcome!"
+	to ninth
+
+state ninth
+	# Print message for next state
+	print "The next state should run 5 times"
+
+	# Set variable to 0
+	variable = 0
+
+	# To tenth
+	to tenth
+
+state tenth
+	# Print running message
+	print "Running state ten"
+
+	# Increment
+	variable = variable + 1
+
+	# Loop if less than 5 times else to end
+	loop if variable < 5
+	end otherwise

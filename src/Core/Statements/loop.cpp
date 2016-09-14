@@ -10,7 +10,8 @@ Created: 7 - 15 - 2016
 */
 
 // Headers being used
-#include "Jump/Core/Statements/to.h"
+#include "Jump/Core/state.h"
+#include "Jump/Core/Statements/loop.h"
 #include "Jump/Core/Values/boolean.h"
 
 // Namespaces being used
@@ -43,45 +44,32 @@ namespace Jump
 		namespace Statements
 		{
 			/**
-			 * Creates a new To with the given stateRef
+			 * Creates a new Loop with the given stateRef and condition
 			 *
-			 * @param stateRef reference to another state (the state's name)
-			 */
-			To::To(string stateRef):
-			Statement(),
-			m_stateRef(stateRef),
-			m_condition(new Boolean(true))
-			{}
-
-			/**
-			 * Creates a new To with the given stateRef and condition
-			 *
-			 * @param stateRef  reference to another state (the state's name)
 			 * @param condition transition condition
 			 */
-			To::To(std::string stateRef, Value* condition):
+			Loop::Loop(Value* condition):
 			Statement(),
-			m_stateRef(stateRef),
 			m_condition(condition)
 			{}
 
 			/**
-			 * Destroys the To
+			 * Destroys the Loop
 			 */
-			To::~To() {}
+			Loop::~Loop() {}
 
 			/**
-			 * Returns an inspection of the To
+			 * Returns an inspection of the Loop
 			 *
-			 * @return an inspection of the To
+			 * @return an inspection of the Loop
 			 */ 
-			string To::inspect()
+			string Loop::inspect()
 			{
-				return "[TO " + m_stateRef + " if " + m_condition->toString() + "]";
+				return "[LOOP if " + m_condition->toString() + "]";
 			}
 
 			/**
-			 * Executes the To
+			 * Executes the Loop
 			 *
 			 * @param stateRef reference to containing state (pointer)
 			 *
@@ -89,9 +77,9 @@ namespace Jump
 			 *
 			 * @throw JumpError upon an error when executing a statement
 			 */
-			std::string To::execute(State* stateRef) throw(JumpError)
+			string Loop::execute(State* stateRef) throw(JumpError)
 			{
-				return m_condition->evaluate(stateRef, 0)->toBool() ? m_stateRef : "";
+				return m_condition->evaluate(stateRef, 0)->toBool() ? "end" : "";
 			}
 		}
 	}

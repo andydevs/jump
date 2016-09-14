@@ -10,6 +10,7 @@ Created: 7 - 15 - 2016
 */
 
 // Headers being used
+#include "Jump/Core/Values/boolean.h"
 #include "Jump/Core/Values/string.h"
 
 // Namespaces being used
@@ -93,6 +94,20 @@ namespace Jump
 			Value* String::plus(const Value* other) const throw(Jump::Core::Errors::TypeError)
 			{
 				return new String(toString() + other->toString());
+			}
+
+			/**
+			 * The equals operation for Jump values
+			 *
+			 * @param other the other Value in the operation
+			 *
+			 * @return the result of the equals operation
+			 *
+			 * @throw TypeError upon an error during the operation
+			 */
+			Value* String::equal(const Value* other) const throw(Errors::TypeError)
+			{
+				return new Boolean(other->type() == "String" && toString() == other->toString());
 			}
 		}
 	}

@@ -12,7 +12,7 @@ contexts:
       scope: comment.line.number-sign.jump
 
     - comment: Keywords
-      match: \b(var|const|print|read|to|loop|end|check|if|otherwise)\b
+      match: \b(var|const|print|read|to|loop|end|if|otherwise)\b
       scope: keyword.control.jump
 
     - comment: Boolean Operators
