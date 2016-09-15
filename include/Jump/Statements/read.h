@@ -28,86 +28,77 @@ Created: 7 - 15 - 2016
 namespace Jump
 {
 	/**
-	 * The core program
+	 * Contains all of the Jump statements
 	 *
 	 * @author  Anshul Kharbanda
-	 * @created 7 - 16 - 2016
+	 * @created 7 - 17 - 2016
 	 */
-	namespace Core
+	namespace Statements
 	{
 		/**
-		 * Contains all of the Jump statements
-		 *
+		 * Reads a value from the given input stream
+		 * 
 		 * @author  Anshul Kharbanda
-		 * @created 7 - 17 - 2016
+		 * @created 7 - 16 - 2016
 		 */
-		namespace Statements
+		class Read : public Statement
 		{
+		public:
 			/**
-			 * Reads a value from the given input stream
-			 * 
-			 * @author  Anshul Kharbanda
-			 * @created 7 - 16 - 2016
+			 * The identifier to store
 			 */
-			class Read : public Statement
-			{
-			public:
-				/**
-				 * The identifier to store
-				 */
-				Values::Identifier* m_toStore;
+			Values::Identifier* m_toStore;
 
-				/**
-				 * The stream to read from (referenced by name)
-				 */
-				std::string m_streamRef;
-		
-				/**
-				 * Creates a Read statement with the given value to Read
-				 *
-				 * @param toStore the value to store
-				 */
-				Read(Values::Identifier* toStore);
+			/**
+			 * The stream to read from (referenced by name)
+			 */
+			std::string m_streamRef;
+	
+			/**
+			 * Creates a Read statement with the given value to Read
+			 *
+			 * @param toStore the value to store
+			 */
+			Read(Values::Identifier* toStore);
 
-				/**
-				 * Creates a Read statement with the given identifier streamRef
-				 *
-				 * @param toStore   the value to store
-				 * @param streamRef the stream to read from (referenced by name)
-				 */
-				Read(Values::Identifier* toStore, std::string streamRef);
+			/**
+			 * Creates a Read statement with the given identifier streamRef
+			 *
+			 * @param toStore   the value to store
+			 * @param streamRef the stream to read from (referenced by name)
+			 */
+			Read(Values::Identifier* toStore, std::string streamRef);
 
-				/**
-				 * Copy constructor for Read statement
-				 *
-				 * @param other the Read to copy
-				 */
-				Read(const Read& other);
+			/**
+			 * Copy constructor for Read statement
+			 *
+			 * @param other the Read to copy
+			 */
+			Read(const Read& other);
 
-				/**
-				 * Destructor for Read statement
-				 */
-				~Read();
+			/**
+			 * Destructor for Read statement
+			 */
+			~Read();
 
-				/**
-				 * Returns an inspection of the Read
-				 *
-				 * @return an inspection of the Read
-				 */ 
-				std::string inspect();
+			/**
+			 * Returns an inspection of the Read
+			 *
+			 * @return an inspection of the Read
+			 */ 
+			std::string inspect();
 
-				/**
-				 * Executes the Read statement
-				 *
-				 * @param stateRef reference to the containing state (pointer)
-				 *
-				 * @return a reference to the next state (the state's name)
-				 *
-				 * @throw JumpError upon an error when executing a statement
-				 */
-				std::string execute(State* stateRef) throw(Errors::JumpError);
-			};
-		}
+			/**
+			 * Executes the Read statement
+			 *
+			 * @param stateRef reference to the containing state (pointer)
+			 *
+			 * @return a reference to the next state (the state's name)
+			 *
+			 * @throw JumpError upon an error when executing a statement
+			 */
+			std::string execute(State* stateRef) throw(Errors::JumpError);
+		};
 	}
 }
 

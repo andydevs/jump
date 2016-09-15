@@ -21,37 +21,28 @@ Created: 7 - 15 - 2016
 namespace Jump
 {
 	/**
-	 * The core program
+	 * Contains all of the Jump statements
 	 *
 	 * @author  Anshul Kharbanda
-	 * @created 7 - 16 - 2016
+	 * @created 7 - 17 - 2016
 	 */
-	namespace Core
+	namespace Statements
 	{
 		/**
-		 * Contains all of the Jump statements
-		 *
-		 * @author  Anshul Kharbanda
-		 * @created 7 - 17 - 2016
+		 * Creates an empty Statement
 		 */
-		namespace Statements
-		{
-			/**
-			 * Creates an empty Statement
-			 */
-			Statement::Statement() {}
+		Statement::Statement() {}
 
-			/**
-			 * Copy constructor
-			 *
-			 * @param other the Statement to copy
-			 */
-			Statement::Statement(const Statement& other) {}
+		/**
+		 * Copy constructor
+		 *
+		 * @param other the Statement to copy
+		 */
+		Statement::Statement(const Statement& other) {}
 
-			/**
-			 * Destroys the Statement
-			 */
-			Statement::~Statement() {}
-		}
+		/**
+		 * Destroys the Statement
+		 */
+		Statement::~Statement() {}
 	}
 }

@@ -24,46 +24,37 @@ Created: 7 - 15 - 2016
 namespace Jump
 {
 	/**
-	 * The core program
+	 * Contains core errors
 	 *
 	 * @author  Anshul Kharbanda
-	 * @created 7 - 16 - 2016
+	 * @created 7 - 27 - 2016
 	 */
-	namespace Core
+	namespace Errors
 	{
 		/**
-		 * Contains core errors
+		 * Thrown upon an error with invalid types
+		 * in an operation
 		 *
 		 * @author  Anshul Kharbanda
 		 * @created 7 - 27 - 2016
 		 */
-		namespace Errors
+		class TypeError: public ValueError
 		{
+		public:
 			/**
-			 * Thrown upon an error with invalid types
-			 * in an operation
-			 *
-			 * @author  Anshul Kharbanda
-			 * @created 7 - 27 - 2016
+			 * Creates a TypeError with the given message
+			 * 
+			 * @param message the message of the TypeError
 			 */
-			class TypeError: public ValueError
-			{
-			public:
-				/**
-				 * Creates a TypeError with the given message
-				 * 
-				 * @param message the message of the TypeError
-				 */
-				using ValueError::ValueError;
+			using ValueError::ValueError;
 
-				/**
-				 * Returns the message of the TypeError
-				 *
-				 * @return the message of the TypeError
-				 */
-				using ValueError::what;
-			};
-		}
+			/**
+			 * Returns the message of the TypeError
+			 *
+			 * @return the message of the TypeError
+			 */
+			using ValueError::what;
+		};
 	}
 }
 

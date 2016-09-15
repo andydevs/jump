@@ -34,70 +34,61 @@ Created: 7 - 15 - 2016
 namespace Jump
 {
 	/**
-	 * The core program
+	 * Contains the value types for Jump
 	 *
 	 * @author  Anshul Kharbanda
-	 * @created 7 - 16 - 2016
+	 * @created 7 - 27 - 2016
 	 */
-	namespace Core
+	namespace Values
 	{
 		/**
-		 * Contains the value types for Jump
-		 *
-		 * @author  Anshul Kharbanda
-		 * @created 7 - 27 - 2016
+		 * The number regex
 		 */
-		namespace Values
-		{
-			/**
-			 * The number regex
-			 */
-			const std::regex NUMBER_REGEX("[0-9]+((?:\\.[0-9]+)?(?:(?:e|E)(?:\\+|\\-)?[0-9]+)?)([uif][0-9]*)?");
+		const std::regex NUMBER_REGEX("[0-9]+((?:\\.[0-9]+)?(?:(?:e|E)(?:\\+|\\-)?[0-9]+)?)([uif][0-9]*)?");
 
-			/**
-			 * The boolean regex
-			 */
-			const std::regex BOOLEAN_REGEX("True|False");
+		/**
+		 * The boolean regex
+		 */
+		const std::regex BOOLEAN_REGEX("True|False");
 
-			/**
-			 * The string regex
-			 */
-			const std::regex STRING_REGEX("(\"|').*?\\1");
+		/**
+		 * The string regex
+		 */
+		const std::regex STRING_REGEX("(\"|').*?\\1");
 
-			/**
-			 * Basic text regex
-			 */
-			const std::regex TEXT_REGEX(".*?");
+		/**
+		 * Basic text regex
+		 */
+		const std::regex TEXT_REGEX(".*?");
 
-			/**
-			 * Default number type
-			 */
-			const char DEFAULT_NUMBER_TYPE = 'i';
+		/**
+		 * Default number type
+		 */
+		const char DEFAULT_NUMBER_TYPE = 'i';
 
-			/**
-			 * Default suffix for Integers
-			 */
-			const std::string DEFAULT_INTEGER_SUFFIX  = "i32";
+		/**
+		 * Default suffix for Integers
+		 */
+		const std::string DEFAULT_INTEGER_SUFFIX  = "i32";
 
-			/**
-			 * Default suffix for Unsigned Integers
-			 */
-			const std::string DEFAULT_UNSIGNED_SUFFIX = "u32";
+		/**
+		 * Default suffix for Unsigned Integers
+		 */
+		const std::string DEFAULT_UNSIGNED_SUFFIX = "u32";
 
-			/**
-			 * Default suffix for Floats
-			 */
-			const std::string DEFAULT_FLOAT_SUFFIX    = "f64";
+		/**
+		 * Default suffix for Floats
+		 */
+		const std::string DEFAULT_FLOAT_SUFFIX    = "f64";
 
-			/**
-			 * Evaluates the given input string as a value
-			 *
-			 * @param input the input string
-			 *
-			 * @return the input string evaluates as a value
-			 */
-			Value* evaluate(std::string input) throw(Errors::SyntaxError);
-		}
+		/**
+		 * Evaluates the given input string as a value
+		 *
+		 * @param input the input string
+		 *
+		 * @return the input string evaluates as a value
+		 */
+		Value* evaluate(std::string input) throw(Errors::SyntaxError);
 	}
 }
 

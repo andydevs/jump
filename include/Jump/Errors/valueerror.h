@@ -24,45 +24,36 @@ Created: 7 - 15 - 2016
 namespace Jump
 {
 	/**
-	 * The core program
+	 * Contains core errors
 	 *
 	 * @author  Anshul Kharbanda
-	 * @created 7 - 16 - 2016
+	 * @created 7 - 27 - 2016
 	 */
-	namespace Core
+	namespace Errors
 	{
 		/**
-		 * Contains core errors
+		 * Thrown upon an error with processing values
 		 *
 		 * @author  Anshul Kharbanda
 		 * @created 7 - 27 - 2016
 		 */
-		namespace Errors
+		class ValueError: public JumpError
 		{
+		public:
 			/**
-			 * Thrown upon an error with processing values
-			 *
-			 * @author  Anshul Kharbanda
-			 * @created 7 - 27 - 2016
+			 * Creates a ValueError with the given message
+			 * 
+			 * @param message the message of the ValueError
 			 */
-			class ValueError: public JumpError
-			{
-			public:
-				/**
-				 * Creates a ValueError with the given message
-				 * 
-				 * @param message the message of the ValueError
-				 */
-				using JumpError::JumpError;
+			using JumpError::JumpError;
 
-				/**
-				 * Returns the message of the ValueError
-				 *
-				 * @return the message of the ValueError
-				 */
-				using JumpError::what;
-			};
-		}
+			/**
+			 * Returns the message of the ValueError
+			 *
+			 * @return the message of the ValueError
+			 */
+			using JumpError::what;
+		};
 	}
 }
 

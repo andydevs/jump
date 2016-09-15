@@ -24,112 +24,103 @@ Created: 7 - 15 - 2016
 namespace Jump
 {
 	/**
-	 * The core program
+	 * Contains the value types for Jump
 	 *
 	 * @author  Anshul Kharbanda
-	 * @created 7 - 16 - 2016
+	 * @created 7 - 27 - 2016
 	 */
-	namespace Core
+	namespace Values
 	{
 		/**
-		 * Contains the value types for Jump
+		 * Contains the number types for Jump
 		 *
 		 * @author  Anshul Kharbanda
-		 * @created 7 - 27 - 2016
+		 * @created 7 - 30 - 2016
 		 */
-		namespace Values
+		namespace Numbers
 		{
 			/**
-			 * Contains the number types for Jump
+			 * Represents a float in Jump
 			 *
 			 * @author  Anshul Kharbanda
 			 * @created 7 - 30 - 2016
 			 */
-			namespace Numbers
+			template <class T>
+			class Float : public Number<T>
 			{
+			public:
 				/**
-				 * Represents a float in Jump
-				 *
-				 * @author  Anshul Kharbanda
-				 * @created 7 - 30 - 2016
+				 * The value to store
 				 */
-				template <class T>
-				class Float : public Number<T>
-				{
-				public:
-					/**
-					 * The value to store
-					 */
-					using Number<T>::m_store;
+				using Number<T>::m_store;
 
-					/**
-					 * Creates an Float with the given store
-					 *
-					 * @param store the float value to store
-					 */
-					Float(T store);
+				/**
+				 * Creates an Float with the given store
+				 *
+				 * @param store the float value to store
+				 */
+				Float(T store);
 
-					/**
-					 * Copy constructor for Float
-					 *
-					 * @param other the other Float to copy
-					 */ 
-					Float(const Float& other);
+				/**
+				 * Copy constructor for Float
+				 *
+				 * @param other the other Float to copy
+				 */ 
+				Float(const Float& other);
 
-					/**
-					 * Destroys the Float
-					 */
-					~Float();
+				/**
+				 * Destroys the Float
+				 */
+				~Float();
 
-					/**
-					 * The addition operation for Jump values
-					 *
-					 * @param other the other Value in the operation
-					 *
-					 * @return the result of the addition operation
-					 *
-					 * @throw TypeError upon an error during the operation
-					 */
-					Value* plus(const Value* other) const throw(Jump::Core::Errors::TypeError);
+				/**
+				 * The addition operation for Jump values
+				 *
+				 * @param other the other Value in the operation
+				 *
+				 * @return the result of the addition operation
+				 *
+				 * @throw TypeError upon an error during the operation
+				 */
+				Value* plus(const Value* other) const throw(Errors::TypeError);
 
-					/**
-					 * The subtraction operation for Jump values
-					 *
-					 * @param other the other Value in the operation
-					 *
-					 * @return the result of the subtraction operation
-					 *
-					 * @throw TypeError upon an error during the operation
-					 */
-					Value* minus(const Value* other) const throw(Jump::Core::Errors::TypeError);
+				/**
+				 * The subtraction operation for Jump values
+				 *
+				 * @param other the other Value in the operation
+				 *
+				 * @return the result of the subtraction operation
+				 *
+				 * @throw TypeError upon an error during the operation
+				 */
+				Value* minus(const Value* other) const throw(Errors::TypeError);
 
-					/**
-					 * The multiplication operation for Jump values
-					 *
-					 * @param other the other Value in the operation
-					 *
-					 * @return the result of the multiplication operation
-					 *
-					 * @throw TypeError upon an error during the operation
-					 */
-					Value* times(const Value* other) const throw(Jump::Core::Errors::TypeError);
+				/**
+				 * The multiplication operation for Jump values
+				 *
+				 * @param other the other Value in the operation
+				 *
+				 * @return the result of the multiplication operation
+				 *
+				 * @throw TypeError upon an error during the operation
+				 */
+				Value* times(const Value* other) const throw(Errors::TypeError);
 
-					/**
-					 * The division operation for Jump values
-					 *
-					 * @param other the other Value in the operation
-					 *
-					 * @return the result of the division operation
-					 *
-					 * @throw TypeError upon an error during the operation
-					 */
-					Value* divides(const Value* other) const throw(Jump::Core::Errors::TypeError);
-				};
+				/**
+				 * The division operation for Jump values
+				 *
+				 * @param other the other Value in the operation
+				 *
+				 * @return the result of the division operation
+				 *
+				 * @throw TypeError upon an error during the operation
+				 */
+				Value* divides(const Value* other) const throw(Errors::TypeError);
+			};
 
-				// Float types
-				typedef Float<float> Float32;
-				typedef Float<double> Float64;
-			}
+			// Float types
+			typedef Float<float> Float32;
+			typedef Float<double> Float64;
 		}
 	}
 }

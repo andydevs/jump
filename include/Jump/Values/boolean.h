@@ -27,121 +27,112 @@ Created: 7 - 15 - 2016
 namespace Jump
 {
 	/**
-	 * The core program
+	 * Contains the value types for Jump
 	 *
 	 * @author  Anshul Kharbanda
-	 * @created 7 - 16 - 2016
+	 * @created 7 - 27 - 2016
 	 */
-	namespace Core
+	namespace Values
 	{
 		/**
-		 * Contains the value types for Jump
+		 * Represents a Boolean in Jump
 		 *
 		 * @author  Anshul Kharbanda
-		 * @created 7 - 27 - 2016
+		 * @created 9 - 8 - 2016
 		 */
-		namespace Values
+		class Boolean: public Value
 		{
+		private:
 			/**
-			 * Represents a Boolean in Jump
-			 *
-			 * @author  Anshul Kharbanda
-			 * @created 9 - 8 - 2016
+			 * The boolean value to store
 			 */
-			class Boolean: public Value
-			{
-			private:
-				/**
-				 * The boolean value to store
-				 */
-				bool m_store;
-			public:
-				/**
-				 * Creates a boolean with the given store value
-				 *
-				 * @param store the value to store
-				 */
-				Boolean(bool store);
+			bool m_store;
+		public:
+			/**
+			 * Creates a boolean with the given store value
+			 *
+			 * @param store the value to store
+			 */
+			Boolean(bool store);
 
-				/**
-				 * Copy constructor for Boolean
-				 *
-				 * @param other the other value to copy
-				 */
-				Boolean(const Boolean& other);
+			/**
+			 * Copy constructor for Boolean
+			 *
+			 * @param other the other value to copy
+			 */
+			Boolean(const Boolean& other);
 
-				/**
-				 * Destroys the Boolean
-				 */
-				~Boolean();
+			/**
+			 * Destroys the Boolean
+			 */
+			~Boolean();
 
-				/**
-				 * Returns the string representation of the Value
-				 *
-				 * @return the string representation of the Value
-				 */
-				std::string toString() const;
+			/**
+			 * Returns the string representation of the Value
+			 *
+			 * @return the string representation of the Value
+			 */
+			std::string toString() const;
 
-				/**
-				 * Returns the value as an unsigned integer
-				 *
-				 * @return the value as an unsigned integer
-				 */
-				unsigned toUnsigned() const;
+			/**
+			 * Returns the value as an unsigned integer
+			 *
+			 * @return the value as an unsigned integer
+			 */
+			unsigned toUnsigned() const;
 
-				/**
-				 * Returns the value as an integer
-				 *
-				 * @return the value as an integer
-				 */
-				int toInt() const;
+			/**
+			 * Returns the value as an integer
+			 *
+			 * @return the value as an integer
+			 */
+			int toInt() const;
 
-				/**
-				 * Returns the value as a float
-				 *
-				 * @return the value as a float
-				 */
-				double toFloat() const;
+			/**
+			 * Returns the value as a float
+			 *
+			 * @return the value as a float
+			 */
+			double toFloat() const;
 
-				/**
-				 * Returns the value as a boolean
-				 *
-				 * @return the value as a boolean
-				 */
-				bool toBool() const;
+			/**
+			 * Returns the value as a boolean
+			 *
+			 * @return the value as a boolean
+			 */
+			bool toBool() const;
 
-				/**
-				 * The boolean and operation for Jump values
-				 *
-				 * @param other the other Value in the operation
-				 *
-				 * @return the result of the boolean and operation
-				 *
-				 * @throw TypeError upon an error during the operation
-				 */
-				Value* andd(const Value* other) const throw(Errors::TypeError);
+			/**
+			 * The boolean and operation for Jump values
+			 *
+			 * @param other the other Value in the operation
+			 *
+			 * @return the result of the boolean and operation
+			 *
+			 * @throw TypeError upon an error during the operation
+			 */
+			Value* andd(const Value* other) const throw(Errors::TypeError);
 
-				/**
-				 * The boolean or operation for Jump values
-				 *
-				 * @param other the other Value in the operation
-				 *
-				 * @return the result of the boolean or operation
-				 *
-				 * @throw TypeError upon an error during the operation
-				 */
-				Value* orr(const Value* other) const throw(Errors::TypeError);
+			/**
+			 * The boolean or operation for Jump values
+			 *
+			 * @param other the other Value in the operation
+			 *
+			 * @return the result of the boolean or operation
+			 *
+			 * @throw TypeError upon an error during the operation
+			 */
+			Value* orr(const Value* other) const throw(Errors::TypeError);
 
-				/**
-				 * The boolean not operation for Jump values
-				 *
-				 * @return the result of the boolean not operation
-				 *
-				 * @throw TypeError upon an error during the operation
-				 */
-				Value* nott() const throw(Errors::TypeError);
-			};
-		}
+			/**
+			 * The boolean not operation for Jump values
+			 *
+			 * @return the result of the boolean not operation
+			 *
+			 * @throw TypeError upon an error during the operation
+			 */
+			Value* nott() const throw(Errors::TypeError);
+		};
 	}
 }
 

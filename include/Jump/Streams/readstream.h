@@ -27,62 +27,53 @@ Created: 7 - 15 - 2016
 namespace Jump
 {
 	/**
-	 * The core program
+	 * Contains the streams
 	 *
 	 * @author  Anshul Kharbanda
-	 * @created 7 - 16 - 2016
+	 * @created 9 - 9 - 2016
 	 */
-	namespace Core
+	namespace Streams
 	{
 		/**
-		 * Contains the streams
+		 * Print stream object
 		 *
 		 * @author  Anshul Kharbanda
 		 * @created 9 - 9 - 2016
 		 */
-		namespace Streams
+		class ReadStream: public Stream
 		{
+		private:
 			/**
-			 * Print stream object
-			 *
-			 * @author  Anshul Kharbanda
-			 * @created 9 - 9 - 2016
+			 * The stream to read from
 			 */
-			class ReadStream: public Stream
-			{
-			private:
-				/**
-				 * The stream to read from
-				 */
-				std::istream& m_readstream;
-			public:
-				/**
-				 * Creates a stream
-				 */
-				ReadStream(std::istream& readstream);
+			std::istream& m_readstream;
+		public:
+			/**
+			 * Creates a stream
+			 */
+			ReadStream(std::istream& readstream);
 
-				/**
-				 * Copy constructor for Stream
-				 *
-				 * @param other the other Stream to copy
-				 */
-				ReadStream(const ReadStream& other);
+			/**
+			 * Copy constructor for Stream
+			 *
+			 * @param other the other Stream to copy
+			 */
+			ReadStream(const ReadStream& other);
 
-				/**
-				 * Destroys the ReadStream
-				 */
-				~ReadStream();
+			/**
+			 * Destroys the ReadStream
+			 */
+			~ReadStream();
 
-				/**
-				 * Reads a value from the Stream
-				 *
-				 * @return value read from the Stream
-				 *
-				 * @throw StreamError upon an error when reading from Stream
-				 */
-				virtual Values::Value* read() throw(Errors::StreamError);
-			};
-		}
+			/**
+			 * Reads a value from the Stream
+			 *
+			 * @return value read from the Stream
+			 *
+			 * @throw StreamError upon an error when reading from Stream
+			 */
+			virtual Values::Value* read() throw(Errors::StreamError);
+		};
 	}
 }
 

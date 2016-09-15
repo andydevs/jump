@@ -16,8 +16,8 @@ Created: 7 - 15 - 2016
 
 // Namespaces being used
 using namespace std;
-using namespace Jump::Core::Values;
-using namespace Jump::Core::Errors;
+using namespace Jump::Values;
+using namespace Jump::Errors;
 
 /**
  * Jump is a new programming language that uses the state machine paradigm
@@ -28,59 +28,50 @@ using namespace Jump::Core::Errors;
 namespace Jump
 {
 	/**
-	 * The core program
+	 * Contains all of the Jump statements
 	 *
 	 * @author  Anshul Kharbanda
-	 * @created 7 - 16 - 2016
+	 * @created 7 - 17 - 2016
 	 */
-	namespace Core
+	namespace Statements
 	{
 		/**
-		 * Contains all of the Jump statements
+		 * Creates a new Loop with the given stateRef and condition
 		 *
-		 * @author  Anshul Kharbanda
-		 * @created 7 - 17 - 2016
+		 * @param condition transition condition
 		 */
-		namespace Statements
+		Loop::Loop(Value* condition):
+		Statement(),
+		m_condition(condition)
+		{}
+
+		/**
+		 * Destroys the Loop
+		 */
+		Loop::~Loop() {}
+
+		/**
+		 * Returns an inspection of the Loop
+		 *
+		 * @return an inspection of the Loop
+		 */ 
+		string Loop::inspect()
 		{
-			/**
-			 * Creates a new Loop with the given stateRef and condition
-			 *
-			 * @param condition transition condition
-			 */
-			Loop::Loop(Value* condition):
-			Statement(),
-			m_condition(condition)
-			{}
+			return "[LOOP if " + m_condition->toString() + "]";
+		}
 
-			/**
-			 * Destroys the Loop
-			 */
-			Loop::~Loop() {}
-
-			/**
-			 * Returns an inspection of the Loop
-			 *
-			 * @return an inspection of the Loop
-			 */ 
-			string Loop::inspect()
-			{
-				return "[LOOP if " + m_condition->toString() + "]";
-			}
-
-			/**
-			 * Executes the Loop
-			 *
-			 * @param stateRef reference to containing state (pointer)
-			 *
-			 * @return reference to another state (the state's name)
-			 *
-			 * @throw JumpError upon an error when executing a statement
-			 */
-			string Loop::execute(State* stateRef) throw(JumpError)
-			{
-				return m_condition->evaluate(stateRef, 0)->toBool() ? stateRef->getName() : "";
-			}
+		/**
+		 * Executes the Loop
+		 *
+		 * @param stateRef reference to containing state (pointer)
+		 *
+		 * @return reference to another state (the state's name)
+		 *
+		 * @throw JumpError upon an error when executing a statement
+		 */
+		string Loop::execute(State* stateRef) throw(JumpError)
+		{
+			return m_condition->evaluate(stateRef, 0)->toBool() ? stateRef->getName() : "";
 		}
 	}
 }

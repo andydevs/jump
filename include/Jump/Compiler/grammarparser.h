@@ -50,7 +50,7 @@ namespace Jump
 			 *
 			 * @throw SyntaxError if an invalid token was detected
 			 */
-			Jump::Core::StateMachine parse(std::queue<TokenParser::Token>& tks) throw(Core::Errors::SyntaxError);
+			StateMachine parse(std::queue<TokenParser::Token>& tks) throw(Errors::SyntaxError);
 		}
 	}
 }

@@ -25,94 +25,85 @@ Created: 7 - 15 - 2016
 namespace Jump
 {
 	/**
-	 * The core program
+	 * Contains the value types for Jump
 	 *
 	 * @author  Anshul Kharbanda
-	 * @created 7 - 16 - 2016
+	 * @created 7 - 27 - 2016
 	 */
-	namespace Core
+	namespace Values
 	{
 		/**
-		 * Contains the value types for Jump
+		 * A jump string
 		 *
 		 * @author  Anshul Kharbanda
-		 * @created 7 - 27 - 2016
+	 	 * @created 7 - 27 - 2016
 		 */
-		namespace Values
+		class String : public Value
 		{
+		private:
 			/**
-			 * A jump string
-			 *
-			 * @author  Anshul Kharbanda
-		 	 * @created 7 - 27 - 2016
+			 * The stored data of the string value
 			 */
-			class String : public Value
-			{
-			private:
-				/**
-				 * The stored data of the string value
-				 */
-				std::string m_store;
-			public:
-				/**
-				 * Creates a String
-				 */
-				String();
+			std::string m_store;
+		public:
+			/**
+			 * Creates a String
+			 */
+			String();
 
-				/**
-				 * Creates a String type with the given string value
-				 *
-				 * @param store the stored data of the string value
-				 */
-				String(std::string store);
+			/**
+			 * Creates a String type with the given string value
+			 *
+			 * @param store the stored data of the string value
+			 */
+			String(std::string store);
 
-				/**
-				 * Copy constructor for value
-				 *
-				 * @param other the other Value to copy
-				 */ 
-				String(const String& other);
+			/**
+			 * Copy constructor for value
+			 *
+			 * @param other the other Value to copy
+			 */ 
+			String(const String& other);
 
-				/**
-				 * Destroys the string
-				 */
-				~String();
+			/**
+			 * Destroys the string
+			 */
+			~String();
 
-				/**
-				 * Returns the store of the String
-				 *
-				 * @return the store of the String
-				 */
-				std::string store() const;
+			/**
+			 * Returns the store of the String
+			 *
+			 * @return the store of the String
+			 */
+			std::string store() const;
 
-				/**
-				 * Returns the string representation of the String
-				 * 
-				 * @return the string representation of the String
-				 */
-				std::string toString() const override;
+			/**
+			 * Returns the string representation of the String
+			 * 
+			 * @return the string representation of the String
+			 */
+			std::string toString() const override;
 
-				/**
-				 * The concatenation operator
-				 *
-				 * @param other the other value to concatenate
-				 *
-				 * @return the result of the concatenation operator
-				 */
-				Value* plus(const Value* other) const throw(Jump::Core::Errors::TypeError);
+			/**
+			 * The concatenation operator
+			 *
+			 * @param other the other value to concatenate
+			 *
+			 * @return the result of the concatenation operator
+			 */
+			Value* plus(const Value* other) const throw(Errors::TypeError);
 
-				/**
-				 * The equals operation for Jump values
-				 *
-				 * @param other the other Value in the operation
-				 *
-				 * @return the result of the equals operation
-				 *
-				 * @throw TypeError upon an error during the operation
-				 */
-				virtual Value* equal(const Value* other) const throw(Errors::TypeError);
-			};
-		}
+			/**
+			 * The equals operation for Jump values
+			 *
+			 * @param other the other Value in the operation
+			 *
+			 * @return the result of the equals operation
+			 *
+			 * @throw TypeError upon an error during the operation
+			 */
+			virtual Value* equal(const Value* other) const throw(Errors::TypeError);
+		};
 	}
 }
 

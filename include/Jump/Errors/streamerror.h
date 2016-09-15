@@ -24,45 +24,36 @@ Created: 7 - 15 - 2016
 namespace Jump
 {
 	/**
-	 * The core program
+	 * Contains core errors
 	 *
 	 * @author  Anshul Kharbanda
-	 * @created 7 - 16 - 2016
+	 * @created 7 - 27 - 2016
 	 */
-	namespace Core
+	namespace Errors
 	{
 		/**
-		 * Contains core errors
+		 * Thrown upon an error when writing to or reading from streams.
 		 *
 		 * @author  Anshul Kharbanda
-		 * @created 7 - 27 - 2016
+		 * @created 9 - 9 - 2016
 		 */
-		namespace Errors
+		class StreamError: public JumpError
 		{
+		public:
 			/**
-			 * Thrown upon an error when writing to or reading from streams.
-			 *
-			 * @author  Anshul Kharbanda
-			 * @created 9 - 9 - 2016
+			 * Creates a StreamError with the given message
+			 * 
+			 * @param message the message of the StreamError
 			 */
-			class StreamError: public JumpError
-			{
-			public:
-				/**
-				 * Creates a StreamError with the given message
-				 * 
-				 * @param message the message of the StreamError
-				 */
-				using JumpError::JumpError;
+			using JumpError::JumpError;
 
-				/**
-				 * Returns the message of the StreamError
-				 *
-				 * @return the message of the StreamError
-				 */
-				using JumpError::what;
-			};
-		}
+			/**
+			 * Returns the message of the StreamError
+			 *
+			 * @return the message of the StreamError
+			 */
+			using JumpError::what;
+		};
 	}
 }
 

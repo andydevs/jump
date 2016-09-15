@@ -16,8 +16,8 @@ Created: 7 - 15 - 2016
 
 // Namespaces being used
 using namespace std;
-using namespace Jump::Core::Values;
-using namespace Jump::Core::Errors;
+using namespace Jump::Values;
+using namespace Jump::Errors;
 
 /**
  * Jump is a new programming language that uses the state machine paradigm
@@ -28,59 +28,50 @@ using namespace Jump::Core::Errors;
 namespace Jump
 {
 	/**
-	 * The core program
+	 * Contains all of the Jump statements
 	 *
 	 * @author  Anshul Kharbanda
-	 * @created 7 - 16 - 2016
+	 * @created 7 - 17 - 2016
 	 */
-	namespace Core
+	namespace Statements
 	{
 		/**
-		 * Contains all of the Jump statements
+		 * Creates a new End with the given stateRef and condition
 		 *
-		 * @author  Anshul Kharbanda
-		 * @created 7 - 17 - 2016
+		 * @param condition transition condition
 		 */
-		namespace Statements
+		End::End(Value* condition):
+		Statement(),
+		m_condition(condition)
+		{}
+
+		/**
+		 * Destroys the End
+		 */
+		End::~End() {}
+
+		/**
+		 * Returns an inspection of the End
+		 *
+		 * @return an inspection of the End
+		 */ 
+		string End::inspect()
 		{
-			/**
-			 * Creates a new End with the given stateRef and condition
-			 *
-			 * @param condition transition condition
-			 */
-			End::End(Value* condition):
-			Statement(),
-			m_condition(condition)
-			{}
+			return "[END if " + m_condition->toString() + "]";
+		}
 
-			/**
-			 * Destroys the End
-			 */
-			End::~End() {}
-
-			/**
-			 * Returns an inspection of the End
-			 *
-			 * @return an inspection of the End
-			 */ 
-			string End::inspect()
-			{
-				return "[END if " + m_condition->toString() + "]";
-			}
-
-			/**
-			 * Executes the End
-			 *
-			 * @param stateRef reference to containing state (pointer)
-			 *
-			 * @return reference to another state (the state's name)
-			 *
-			 * @throw JumpError upon an error when executing a statement
-			 */
-			string End::execute(State* stateRef) throw(JumpError)
-			{
-				return m_condition->evaluate(stateRef, 0)->toBool() ? "end" : "";
-			}
+		/**
+		 * Executes the End
+		 *
+		 * @param stateRef reference to containing state (pointer)
+		 *
+		 * @return reference to another state (the state's name)
+		 *
+		 * @throw JumpError upon an error when executing a statement
+		 */
+		string End::execute(State* stateRef) throw(JumpError)
+		{
+			return m_condition->evaluate(stateRef, 0)->toBool() ? "end" : "";
 		}
 	}
 }

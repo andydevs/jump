@@ -33,9 +33,9 @@ Created: 7 - 15 - 2016
 
 // Namespaces being used
 using namespace std;
-using namespace Jump::Core;
-using namespace Jump::Core::Streams;
-using namespace Jump::Core::Errors;
+using namespace Jump;
+using namespace Jump::Streams;
+using namespace Jump::Errors;
 using namespace Jump::Compiler::TokenParser;
 
 /**

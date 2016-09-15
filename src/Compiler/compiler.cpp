@@ -16,8 +16,8 @@ Created: 7 - 15 - 2016
 
 // Namespaces being used
 using namespace std;
-using namespace Jump::Core;
-using namespace Jump::Core::Errors;
+using namespace Jump;
+using namespace Jump::Errors;
 
 /**
  * Jump is a new programming language that uses the state machine paradigm

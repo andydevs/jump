@@ -25,56 +25,47 @@ Created: 7 - 15 - 2016
 namespace Jump
 {
 	/**
-	 * The core program
+	 * Contains core errors
 	 *
 	 * @author  Anshul Kharbanda
-	 * @created 7 - 16 - 2016
+	 * @created 7 - 27 - 2016
 	 */
-	namespace Core
+	namespace Errors
 	{
 		/**
-		 * Contains core errors
+		 * Thrown upon an error with invalid types
+		 * in an operation
 		 *
 		 * @author  Anshul Kharbanda
 		 * @created 7 - 27 - 2016
 		 */
-		namespace Errors
+		class JumpError: public std::exception
 		{
+		protected:
 			/**
-			 * Thrown upon an error with invalid types
-			 * in an operation
-			 *
-			 * @author  Anshul Kharbanda
-			 * @created 7 - 27 - 2016
+			 * The message of the JumpError
 			 */
-			class JumpError: public std::exception
-			{
-			protected:
-				/**
-				 * The message of the JumpError
-				 */
-				std::string m_message;
-			public:
-				/**
-				 * Creates a JumpError with the given message
-				 * 
-				 * @param message the message of the JumpError
-				 */
-				JumpError(std::string message);
+			std::string m_message;
+		public:
+			/**
+			 * Creates a JumpError with the given message
+			 * 
+			 * @param message the message of the JumpError
+			 */
+			JumpError(std::string message);
 
-				/**
-				 * Destroys the JumpError
-				 */
-				~JumpError();
+			/**
+			 * Destroys the JumpError
+			 */
+			~JumpError();
 
-				/**
-				 * Returns the message of the JumpError
-				 *
-				 * @return the message of the JumpError
-				 */
-				const char* what() const throw();
-			};
-		}
+			/**
+			 * Returns the message of the JumpError
+			 *
+			 * @return the message of the JumpError
+			 */
+			const char* what() const throw();
+		};
 	}
 }
 #endif

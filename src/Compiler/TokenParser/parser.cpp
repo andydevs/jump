@@ -18,8 +18,8 @@ Created: 7 - 15 - 2016
 
 // Namespaces being used
 using namespace std;
-using namespace Jump::Core::Values;
-using namespace Jump::Core::Errors;
+using namespace Jump::Values;
+using namespace Jump::Errors;
 using namespace Jump::Compiler;
 
 /**

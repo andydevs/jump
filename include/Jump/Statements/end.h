@@ -28,66 +28,57 @@ Created: 7 - 15 - 2016
 namespace Jump
 {
 	/**
-	 * The core program
+	 * Contains all of the Jump statements
 	 *
 	 * @author  Anshul Kharbanda
-	 * @created 7 - 16 - 2016
+	 * @created 7 - 17 - 2016
 	 */
-	namespace Core
+	namespace Statements
 	{
 		/**
-		 * Contains all of the Jump statements
+		 * Transitions to the end state
 		 *
 		 * @author  Anshul Kharbanda
 		 * @created 7 - 17 - 2016
 		 */
-		namespace Statements
+		class End : public Statement
 		{
+		private:
 			/**
-			 * Transitions to the end state
-			 *
-			 * @author  Anshul Kharbanda
-			 * @created 7 - 17 - 2016
+			 * Transition condition
 			 */
-			class End : public Statement
-			{
-			private:
-				/**
-				 * Transition condition
-				 */
-				Values::Value* m_condition;
-			public:
-				/**
-				 * Creates a new End with the given condition
-				 *
-				 * @param condition transition condition
-				 */
-				End(Values::Value* condition);
+			Values::Value* m_condition;
+		public:
+			/**
+			 * Creates a new End with the given condition
+			 *
+			 * @param condition transition condition
+			 */
+			End(Values::Value* condition);
 
-				/**
-				 * Destroys the End
-				 */
-				~End();
+			/**
+			 * Destroys the End
+			 */
+			~End();
 
-				/**
-				 * Returns an inspection of the End
-				 *
-				 * @return an inspection of the End
-				 */ 
-				std::string inspect();
+			/**
+			 * Returns an inspection of the End
+			 *
+			 * @return an inspection of the End
+			 */ 
+			std::string inspect();
 
-				/**
-				 * Executes the End
-				 *
-				 * @param stateRef reference to containing state (pointer)
-				 *
-				 * @return reference to another state (the state's name)
-				 *
-				 * @throw JumpError upon an error when executing a statement
-				 */
-				std::string execute(State* stateRef) throw(Errors::JumpError);
-			};
-		}
+			/**
+			 * Executes the End
+			 *
+			 * @param stateRef reference to containing state (pointer)
+			 *
+			 * @return reference to another state (the state's name)
+			 *
+			 * @throw JumpError upon an error when executing a statement
+			 */
+			std::string execute(State* stateRef) throw(Errors::JumpError);
+		};
 	}
 }
 

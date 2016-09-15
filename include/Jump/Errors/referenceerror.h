@@ -24,45 +24,36 @@ Created: 7 - 15 - 2016
 namespace Jump
 {
 	/**
-	 * The core program
+	 * Contains core errors
 	 *
 	 * @author  Anshul Kharbanda
-	 * @created 7 - 16 - 2016
+	 * @created 7 - 27 - 2016
 	 */
-	namespace Core
+	namespace Errors
 	{
 		/**
-		 * Contains core errors
+		 * Thrown upon an unavailable or invalid reference
 		 *
 		 * @author  Anshul Kharbanda
-		 * @created 7 - 27 - 2016
+		 * @created 9 - 13 - 2016
 		 */
-		namespace Errors
+		class ReferenceError: public ValueError
 		{
+		public:
 			/**
-			 * Thrown upon an unavailable or invalid reference
-			 *
-			 * @author  Anshul Kharbanda
-			 * @created 9 - 13 - 2016
+			 * Creates a ReferenceError with the given message
+			 * 
+			 * @param message the message of the ReferenceError
 			 */
-			class ReferenceError: public ValueError
-			{
-			public:
-				/**
-				 * Creates a ReferenceError with the given message
-				 * 
-				 * @param message the message of the ReferenceError
-				 */
-				using ValueError::ValueError;
+			using ValueError::ValueError;
 
-				/**
-				 * Returns the message of the ReferenceError
-				 *
-				 * @return the message of the ReferenceError
-				 */
-				using ValueError::what;
-			};
-		}
+			/**
+			 * Returns the message of the ReferenceError
+			 *
+			 * @return the message of the ReferenceError
+			 */
+			using ValueError::what;
+		};
 	}
 }
 

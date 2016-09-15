@@ -28,169 +28,160 @@ Created: 7 - 15 - 2016
 namespace Jump
 {
 	/**
-	 * The core program
+	 * Contains the value types for Jump
 	 *
 	 * @author  Anshul Kharbanda
-	 * @created 7 - 16 - 2016
+	 * @created 7 - 27 - 2016
 	 */
-	namespace Core
+	namespace Values
 	{
 		/**
-		 * Contains the value types for Jump
+		 * The operation order layer of the expression
 		 *
 		 * @author  Anshul Kharbanda
-		 * @created 7 - 27 - 2016
+		 * @created 9 - 1 - 2016
 		 */
-		namespace Values
+		 enum OperLayer
+		 {
+		 	ASSIGN,
+		 	OR,
+		 	AND,
+		 	NOT,
+		 	COMPARE,
+		 	ADDSUB,
+		 	MULDIVMOD
+		 };
+
+		/**
+		 * Represents an expression in Jump
+		 *
+		 * @author  Anshul Kharbanda
+		 * @created 9 - 1 - 2016
+		 */
+		class Expression : public Value
 		{
+		private:
 			/**
 			 * The operation order layer of the expression
-			 *
-			 * @author  Anshul Kharbanda
-			 * @created 9 - 1 - 2016
 			 */
-			 enum OperLayer
-			 {
-			 	ASSIGN,
-			 	OR,
-			 	AND,
-			 	NOT,
-			 	COMPARE,
-			 	ADDSUB,
-			 	MULDIVMOD
-			 };
+			OperLayer m_layer;
 
 			/**
-			 * Represents an expression in Jump
-			 *
-			 * @author  Anshul Kharbanda
-			 * @created 9 - 1 - 2016
+			 * The values to operate on
 			 */
-			class Expression : public Value
-			{
-			private:
-				/**
-				 * The operation order layer of the expression
-				 */
-				OperLayer m_layer;
+			std::vector<Value*> m_values;
 
-				/**
-				 * The values to operate on
-				 */
-				std::vector<Value*> m_values;
+			/**
+			 * The operation types
+			 */
+			std::vector<int> m_types;
 
-				/**
-				 * The operation types
-				 */
-				std::vector<int> m_types;
+			/**
+			 * Assigns the left hand side to the right hand side
+			 *
+			 * @param stateRef reference to the state that contains the Expression
+			 *
+			 * @return the value to be assigned
+			 */ 
+			Value* assign(State* stateRef, int flags) throw(Errors::ValueError);
 
-				/**
-				 * Assigns the left hand side to the right hand side
-				 *
-				 * @param stateRef reference to the state that contains the Expression
-				 *
-				 * @return the value to be assigned
-				 */ 
-				Value* assign(State* stateRef, int flags) throw(Errors::ValueError);
+			/**
+			 * Returns the orr operation of the values
+			 *
+			 * @param stateRef reference to the state that contains the Expression
+			 *
+			 * @return the orr operation of the values
+			 */
+			Value* orr(State* stateRef, int flags) throw(Errors::ValueError);
 
-				/**
-				 * Returns the orr operation of the values
-				 *
-				 * @param stateRef reference to the state that contains the Expression
-				 *
-				 * @return the orr operation of the values
-				 */
-				Value* orr(State* stateRef, int flags) throw(Errors::ValueError);
+			/**
+			 * Returns the andd operation of the values
+			 *
+			 * @param stateRef reference to the state that contains the Expression
+			 *
+			 * @return the andd operation of the values
+			 */
+			Value* andd(State* stateRef, int flags) throw(Errors::ValueError);
 
-				/**
-				 * Returns the andd operation of the values
-				 *
-				 * @param stateRef reference to the state that contains the Expression
-				 *
-				 * @return the andd operation of the values
-				 */
-				Value* andd(State* stateRef, int flags) throw(Errors::ValueError);
+			/**
+			 * Returns the nott operation of the values
+			 *
+			 * @param stateRef reference to the state that contains the Expression
+			 *
+			 * @return the nott operation of the values
+			 */
+			Value* nott(State* stateRef, int flags) throw(Errors::ValueError);
 
-				/**
-				 * Returns the nott operation of the values
-				 *
-				 * @param stateRef reference to the state that contains the Expression
-				 *
-				 * @return the nott operation of the values
-				 */
-				Value* nott(State* stateRef, int flags) throw(Errors::ValueError);
+			/**
+			 * Returns the compare operation of the values
+			 *
+			 * @param stateRef reference to the state that contains the Expression
+			 *
+			 * @return the compare operation of the values
+			 */
+			Value* compare(State* stateRef, int flags) throw(Errors::ValueError);
 
-				/**
-				 * Returns the compare operation of the values
-				 *
-				 * @param stateRef reference to the state that contains the Expression
-				 *
-				 * @return the compare operation of the values
-				 */
-				Value* compare(State* stateRef, int flags) throw(Errors::ValueError);
+			/**
+			 * Returns the addsub operation of the values
+			 *
+			 * @param stateRef reference to the state that contains the Expression
+			 *
+			 * @return the addsub operation of the values
+			 */
+			Value* addsub(State* stateRef, int flags) throw(Errors::ValueError);
 
-				/**
-				 * Returns the addsub operation of the values
-				 *
-				 * @param stateRef reference to the state that contains the Expression
-				 *
-				 * @return the addsub operation of the values
-				 */
-				Value* addsub(State* stateRef, int flags) throw(Errors::ValueError);
+			/**
+			 * Returns the muldivmod operation of the values
+			 *
+			 * @param stateRef reference to the state that contains the Expression 
+			 *
+			 * @return the muldivmod operation of the values
+			 */
+			Value* muldivmod(State* stateRef, int flags) throw(Errors::ValueError);
+		public:
+			/**
+			 * Creates an Expression with the given operation
+			 *
+			 * @param oper the operation order layer of the expression
+			 */
+			Expression(OperLayer oper);
 
-				/**
-				 * Returns the muldivmod operation of the values
-				 *
-				 * @param stateRef reference to the state that contains the Expression 
-				 *
-				 * @return the muldivmod operation of the values
-				 */
-				Value* muldivmod(State* stateRef, int flags) throw(Errors::ValueError);
-			public:
-				/**
-				 * Creates an Expression with the given operation
-				 *
-				 * @param oper the operation order layer of the expression
-				 */
-				Expression(OperLayer oper);
+			/**
+			 * Copy constructor for the Expression
+			 *
+			 * @param other the other Expression to copy
+			 */
+			Expression(const Expression& other);
 
-				/**
-				 * Copy constructor for the Expression
-				 *
-				 * @param other the other Expression to copy
-				 */
-				Expression(const Expression& other);
+			/**
+			 * Destroys the Expression
+			 */
+			~Expression();
 
-				/**
-				 * Destroys the Expression
-				 */
-				~Expression();
+			/**
+			 * Returns the string representation of the Expression
+			 *
+			 * @return the string representation of the Expression
+			 */
+			std::string toString() const;
 
-				/**
-				 * Returns the string representation of the Expression
-				 *
-				 * @return the string representation of the Expression
-				 */
-				std::string toString() const;
+			/**
+			 * Adds the value to the Expression
+			 *
+			 * @param value the value to add
+			 */
+			void add(Value* value, int type);
 
-				/**
-				 * Adds the value to the Expression
-				 *
-				 * @param value the value to add
-				 */
-				void add(Value* value, int type);
-
-				/**
-				 * Evaluates the value in the context of the given state
-				 *
-				 * @param stateRef a reference to the state being evaluated
-				 * @param flags    flags to evauate the state with
-				 *
-				 * @return the evaluated value
-				 */
-				Value* evaluate(State* stateRef, int flags) throw(Errors::ValueError);
-			};
-		}
+			/**
+			 * Evaluates the value in the context of the given state
+			 *
+			 * @param stateRef a reference to the state being evaluated
+			 * @param flags    flags to evauate the state with
+			 *
+			 * @return the evaluated value
+			 */
+			Value* evaluate(State* stateRef, int flags) throw(Errors::ValueError);
+		};
 	}
 }
 

@@ -27,125 +27,116 @@ Created: 7 - 15 - 2016
 namespace Jump
 {
 	/**
-	 * The core program
+	 * Contains the value types for Jump
 	 *
 	 * @author  Anshul Kharbanda
-	 * @created 7 - 16 - 2016
+	 * @created 7 - 27 - 2016
 	 */
-	namespace Core
+	namespace Values
 	{
 		/**
-		 * Contains the value types for Jump
+		 * Contains the number types for Jump
 		 *
 		 * @author  Anshul Kharbanda
-		 * @created 7 - 27 - 2016
+		 * @created 7 - 30 - 2016
 		 */
-		namespace Values
+		namespace Numbers
 		{
 			/**
-			 * Contains the number types for Jump
+			 * Represents an unsigned integer in Jump
 			 *
 			 * @author  Anshul Kharbanda
 			 * @created 7 - 30 - 2016
 			 */
-			namespace Numbers
+			template <class T>
+			class UnsignedInteger : public Number<T>
 			{
+			public:
 				/**
-				 * Represents an unsigned integer in Jump
-				 *
-				 * @author  Anshul Kharbanda
-				 * @created 7 - 30 - 2016
+				 * The value to store
 				 */
-				template <class T>
-				class UnsignedInteger : public Number<T>
-				{
-				public:
-					/**
-					 * The value to store
-					 */
-					using Number<T>::m_store;
+				using Number<T>::m_store;
 
-					/**
-					 * Creates an UnsignedInteger with the given store
-					 *
-					 * @param store the integer value to store
-					 */
-					UnsignedInteger(T store);
+				/**
+				 * Creates an UnsignedInteger with the given store
+				 *
+				 * @param store the integer value to store
+				 */
+				UnsignedInteger(T store);
 
-					/**
-					 * Copy constructor for UnsignedInteger
-					 *
-					 * @param other the other UnsignedInteger to copy
-					 */ 
-					UnsignedInteger(const UnsignedInteger& other);
+				/**
+				 * Copy constructor for UnsignedInteger
+				 *
+				 * @param other the other UnsignedInteger to copy
+				 */ 
+				UnsignedInteger(const UnsignedInteger& other);
 
-					/**
-					 * Destroys the UnsignedInteger
-					 */
-					~UnsignedInteger();
+				/**
+				 * Destroys the UnsignedInteger
+				 */
+				~UnsignedInteger();
 
-					/**
-					 * The addition operation for Jump values
-					 *
-					 * @param other the other Value in the operation
-					 *
-					 * @return the result of the addition operation
-					 *
-					 * @throw TypeError upon an error during the operation
-					 */
-					Value* plus(const Value* other) const throw(Jump::Core::Errors::TypeError);
+				/**
+				 * The addition operation for Jump values
+				 *
+				 * @param other the other Value in the operation
+				 *
+				 * @return the result of the addition operation
+				 *
+				 * @throw TypeError upon an error during the operation
+				 */
+				Value* plus(const Value* other) const throw(Errors::TypeError);
 
-					/**
-					 * The subtraction operation for Jump values
-					 *
-					 * @param other the other Value in the operation
-					 *
-					 * @return the result of the subtraction operation
-					 *
-					 * @throw TypeError upon an error during the operation
-					 */
-					Value* minus(const Value* other) const throw(Jump::Core::Errors::TypeError);
+				/**
+				 * The subtraction operation for Jump values
+				 *
+				 * @param other the other Value in the operation
+				 *
+				 * @return the result of the subtraction operation
+				 *
+				 * @throw TypeError upon an error during the operation
+				 */
+				Value* minus(const Value* other) const throw(Errors::TypeError);
 
-					/**
-					 * The multiplication operation for Jump values
-					 *
-					 * @param other the other Value in the operation
-					 *
-					 * @return the result of the multiplication operation
-					 *
-					 * @throw TypeError upon an error during the operation
-					 */
-					Value* times(const Value* other) const throw(Jump::Core::Errors::TypeError);
+				/**
+				 * The multiplication operation for Jump values
+				 *
+				 * @param other the other Value in the operation
+				 *
+				 * @return the result of the multiplication operation
+				 *
+				 * @throw TypeError upon an error during the operation
+				 */
+				Value* times(const Value* other) const throw(Errors::TypeError);
 
-					/**
-					 * The division operation for Jump values
-					 *
-					 * @param other the other Value in the operation
-					 *
-					 * @return the result of the division operation
-					 *
-					 * @throw TypeError upon an error during the operation
-					 */
-					Value* divides(const Value* other) const throw(Jump::Core::Errors::TypeError);
+				/**
+				 * The division operation for Jump values
+				 *
+				 * @param other the other Value in the operation
+				 *
+				 * @return the result of the division operation
+				 *
+				 * @throw TypeError upon an error during the operation
+				 */
+				Value* divides(const Value* other) const throw(Errors::TypeError);
 
-					/**
-					 * The modulus operation for Jump values
-					 *
-					 * @param other the other Value in the operation
-					 *
-					 * @return the result of the modulus operation
-					 *
-					 * @throw TypeError upon an error during the operation
-					 */
-					Value* modulus(const Value* other) const throw(Jump::Core::Errors::TypeError);
-				};
+				/**
+				 * The modulus operation for Jump values
+				 *
+				 * @param other the other Value in the operation
+				 *
+				 * @return the result of the modulus operation
+				 *
+				 * @throw TypeError upon an error during the operation
+				 */
+				Value* modulus(const Value* other) const throw(Errors::TypeError);
+			};
 
-				// UnsignedInteger types
-				typedef UnsignedInteger<unsigned char>  UInt8;
-				typedef UnsignedInteger<unsigned short> UInt16;
-				typedef UnsignedInteger<unsigned int>   UInt32;
-				typedef UnsignedInteger<unsigned long>  UInt64;
-			}
+			// UnsignedInteger types
+			typedef UnsignedInteger<unsigned char>  UInt8;
+			typedef UnsignedInteger<unsigned short> UInt16;
+			typedef UnsignedInteger<unsigned int>   UInt32;
+			typedef UnsignedInteger<unsigned long>  UInt64;
 		}
 	}
 }

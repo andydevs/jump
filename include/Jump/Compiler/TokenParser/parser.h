@@ -54,7 +54,7 @@ namespace Jump
 			 * 
 			 * @throw SyntaxError if parser could not parse a particular character
 			 */
-			std::queue<Token> parse(std::string input) throw(Core::Errors::SyntaxError);
+			std::queue<Token> parse(std::string input) throw(Errors::SyntaxError);
 		}
 	}
 }

@@ -27,74 +27,65 @@ Created: 7 - 15 - 2016
 namespace Jump
 {
 	/**
-	 * The core program
+	 * Represents a state in the Jump program that can be jumped to
 	 *
 	 * @author  Anshul Kharbanda
-	 * @created 7 - 16 - 2016
+ 	 * @created 7 - 17 - 2016
 	 */
-	namespace Core
+	class State;
+
+	/**
+	 * Contains all of the Jump statements
+	 *
+	 * @author  Anshul Kharbanda
+	 * @created 7 - 17 - 2016
+	 */
+	namespace Statements
 	{
 		/**
-		 * Represents a state in the Jump program that can be jumped to
+		 * A single statement in the Jump program
 		 *
 		 * @author  Anshul Kharbanda
-	 	 * @created 7 - 17 - 2016
+		 * @created 7 - 16 - 2016
 		 */
-		class State;
-
-		/**
-		 * Contains all of the Jump statements
-		 *
-		 * @author  Anshul Kharbanda
-		 * @created 7 - 17 - 2016
-		 */
-		namespace Statements
+		class Statement
 		{
+		public:
 			/**
-			 * A single statement in the Jump program
-			 *
-			 * @author  Anshul Kharbanda
-			 * @created 7 - 16 - 2016
+			 * Creates an empty Statement
 			 */
-			class Statement
-			{
-			public:
-				/**
-				 * Creates an empty Statement
-				 */
-				Statement();
+			Statement();
 
-				/**
-				 * Copy constructor
-				 *
-				 * @param other the Statement to copy
-				 */
-				Statement(const Statement& other);
+			/**
+			 * Copy constructor
+			 *
+			 * @param other the Statement to copy
+			 */
+			Statement(const Statement& other);
 
-				/**
-				 * Destroys the Statement
-				 */
-				virtual ~Statement();
+			/**
+			 * Destroys the Statement
+			 */
+			virtual ~Statement();
 
-				/**
-				 * Returns an inspection of the Statement
-				 *
-				 * @return an inspection of the Statement
-				 */ 
-				virtual std::string inspect() = 0;
+			/**
+			 * Returns an inspection of the Statement
+			 *
+			 * @return an inspection of the Statement
+			 */ 
+			virtual std::string inspect() = 0;
 
-				/**
-				 * Executes the statement
-				 *
-				 * @param stateRef reference to the containing state (pointer)
-				 * 
-				 * @return a reference to the next state (the state's name)
-				 *
-				 * @throw JumpError upon an error when executing a statement
-				 */
-				virtual std::string execute(State* stateRef) throw(Errors::JumpError) = 0;
-			};
-		}
+			/**
+			 * Executes the statement
+			 *
+			 * @param stateRef reference to the containing state (pointer)
+			 * 
+			 * @return a reference to the next state (the state's name)
+			 *
+			 * @throw JumpError upon an error when executing a statement
+			 */
+			virtual std::string execute(State* stateRef) throw(Errors::JumpError) = 0;
+		};
 	}
 }
 

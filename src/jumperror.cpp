@@ -24,42 +24,33 @@ using namespace std;
 namespace Jump
 {
 	/**
-	 * The core program
+	 * Contains core errors
 	 *
 	 * @author  Anshul Kharbanda
-	 * @created 7 - 16 - 2016
+	 * @created 7 - 27 - 2016
 	 */
-	namespace Core
+	namespace Errors
 	{
 		/**
-		 * Contains core errors
-		 *
-		 * @author  Anshul Kharbanda
-		 * @created 7 - 27 - 2016
+		 * Creates a JumpError with the given message
+		 * 
+		 * @param message the message of the JumpError
 		 */
-		namespace Errors
+		JumpError::JumpError(string message): m_message(message) {}
+
+		/**
+		 * Destroys the JumpError
+		 */
+		JumpError::~JumpError() {}
+
+		/**
+		 * Returns the message of the JumpError
+		 *
+		 * @return the message of the JumpError
+		 */
+		const char* JumpError::what() const throw()
 		{
-			/**
-			 * Creates a JumpError with the given message
-			 * 
-			 * @param message the message of the JumpError
-			 */
-			JumpError::JumpError(string message): m_message(message) {}
-
-			/**
-			 * Destroys the JumpError
-			 */
-			JumpError::~JumpError() {}
-
-			/**
-			 * Returns the message of the JumpError
-			 *
-			 * @return the message of the JumpError
-			 */
-			const char* JumpError::what() const throw()
-			{
-				return m_message.c_str();
-			}	
-		}
+			return m_message.c_str();
+		}	
 	}
 }

@@ -28,66 +28,57 @@ Created: 7 - 15 - 2016
 namespace Jump
 {
 	/**
-	 * The core program
+	 * Contains the streams
 	 *
 	 * @author  Anshul Kharbanda
-	 * @created 7 - 16 - 2016
+	 * @created 9 - 9 - 2016
 	 */
-	namespace Core
+	namespace Streams
 	{
 		/**
-		 * Contains the streams
+		 * Basic stream object
 		 *
 		 * @author  Anshul Kharbanda
 		 * @created 9 - 9 - 2016
 		 */
-		namespace Streams
+		class Stream
 		{
+		public:
 			/**
-			 * Basic stream object
-			 *
-			 * @author  Anshul Kharbanda
-			 * @created 9 - 9 - 2016
+			 * Creates a stream
 			 */
-			class Stream
-			{
-			public:
-				/**
-				 * Creates a stream
-				 */
-				Stream();
+			Stream();
 
-				/**
-				 * Copy constructor for Stream
-				 *
-				 * @param other the other Stream to copy
-				 */
-				Stream(const Stream& other);
+			/**
+			 * Copy constructor for Stream
+			 *
+			 * @param other the other Stream to copy
+			 */
+			Stream(const Stream& other);
 
-				/**
-				 * Destroys the Stream
-				 */
-				virtual ~Stream();
+			/**
+			 * Destroys the Stream
+			 */
+			virtual ~Stream();
 
-				/**
-				 * Writes the given Value to the Stream
-				 *
-				 * @param value the value to print to the Stream
-				 *
-				 * @throw StreamError upon an error when writing to Stream
-				 */
-				virtual void print(Values::Value* value) throw(Errors::StreamError);
+			/**
+			 * Writes the given Value to the Stream
+			 *
+			 * @param value the value to print to the Stream
+			 *
+			 * @throw StreamError upon an error when writing to Stream
+			 */
+			virtual void print(Values::Value* value) throw(Errors::StreamError);
 
-				/**
-				 * Reads a value from the Stream
-				 *
-				 * @return value read from the Stream
-				 *
-				 * @throw StreamError upon an error when reading from Stream
-				 */
-				virtual Values::Value* read() throw(Errors::StreamError);
-			};
-		}
+			/**
+			 * Reads a value from the Stream
+			 *
+			 * @return value read from the Stream
+			 *
+			 * @throw StreamError upon an error when reading from Stream
+			 */
+			virtual Values::Value* read() throw(Errors::StreamError);
+		};
 	}
 }
 

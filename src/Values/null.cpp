@@ -24,50 +24,41 @@ using namespace std;
 namespace Jump
 {
 	/**
-	 * The core program
+	 * Contains the value types for Jump
 	 *
 	 * @author  Anshul Kharbanda
-	 * @created 7 - 16 - 2016
+	 * @created 7 - 27 - 2016
 	 */
-	namespace Core
+	namespace Values
 	{
 		/**
-		 * Contains the value types for Jump
-		 *
-		 * @author  Anshul Kharbanda
-		 * @created 7 - 27 - 2016
+		 * Creates a null value
 		 */
-		namespace Values
+		Null::Null() : Value("NullType") {}
+
+		/**
+		 * Destroys the null value
+		 */
+		Null::~Null() {}
+
+		/**
+		 * Returns true if the value is Null
+		 *
+		 * @return true if the value is Null
+		 */
+		bool Null::isNull() const
 		{
-			/**
-			 * Creates a null value
-			 */
-			Null::Null() : Value("NullType") {}
+			return true;
+		}
 
-			/**
-			 * Destroys the null value
-			 */
-			Null::~Null() {}
-
-			/**
-			 * Returns true if the value is Null
-			 *
-			 * @return true if the value is Null
-			 */
-			bool Null::isNull() const
-			{
-				return true;
-			}
-
-			/**
-			 * Returns the string representaiton of the Null value
-			 *
-			 * @return the string representation of the Null value
-			 */
-			string Null::toString() const 
-			{
-				return "";
-			}
+		/**
+		 * Returns the string representaiton of the Null value
+		 *
+		 * @return the string representation of the Null value
+		 */
+		string Null::toString() const 
+		{
+			return "";
 		}
 	}
 }

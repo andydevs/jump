@@ -44,7 +44,7 @@ namespace Jump
 		 *
 		 * @throw SyntaxError if there is an error in the syntax of the input
 		 */
-		Jump::Core::StateMachine compile(std::string input) throw(Core::Errors::SyntaxError);
+		StateMachine compile(std::string input) throw(Errors::SyntaxError);
 	}
 }
 

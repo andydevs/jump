@@ -28,107 +28,98 @@ Created: 7 - 15 - 2016
 namespace Jump
 {
 	/**
-	 * The core program
+	 * Represents a Jump StateMachine
 	 *
 	 * @author  Anshul Kharbanda
-	 * @created 7 - 16 - 2016
+	 * @created 7 - 17 - 2016
 	 */
-	namespace Core
+	class StateMachine;
+
+	/**
+	 * Represents a state in the Jump program that can be jumped to
+	 *
+	 * @author  Anshul Kharbanda
+ 	 * @created 7 - 17 - 2016
+	 */
+	class State
 	{
+	private:
 		/**
-		 * Represents a Jump StateMachine
-		 *
-		 * @author  Anshul Kharbanda
-		 * @created 7 - 17 - 2016
+		 * The name of the state
 		 */
-		class StateMachine;
+		std::string m_name;
 
 		/**
-		 * Represents a state in the Jump program that can be jumped to
-		 *
-		 * @author  Anshul Kharbanda
-	 	 * @created 7 - 17 - 2016
+		 * The statemachine of the state
 		 */
-		class State
-		{
-		private:
-			/**
-			 * The name of the state
-			 */
-			std::string m_name;
+		StateMachine* m_machine;
 
-			/**
-			 * The statemachine of the state
-			 */
-			StateMachine* m_machine;
+		/**
+		 * Holds the statements to be executed
+		 */
+		std::vector<Statements::Statement*> m_statements;
+	public:
+		/**
+		 * Creates a new State with the given name
+		 *
+		 * @param name the name of the state
+		 */
+		State(std::string name);
 
-			/**
-			 * Holds the statements to be executed
-			 */
-			std::vector<Statements::Statement*> m_statements;
-		public:
-			/**
-			 * Creates a new State with the given name
-			 *
-			 * @param name the name of the state
-			 */
-			State(std::string name);
+		/**
+		 * Copy constructor for State
+		 *
+		 * @param other the State to copy
+		 */
+		State(const State& other);
 
-			/**
-			 * Copy constructor for State
-			 *
-			 * @param other the State to copy
-			 */
-			State(const State& other);
+		/**
+		 * Destroys the State
+		 */
+		~State();
 
-			/**
-			 * Destroys the State
-			 */
-			~State();
+		/**
+		 * Returns the name of the state
+		 *
+		 * @return the name of the state
+		 */
+		std::string getName();
 
-			/**
-			 * Returns the name of the state
-			 *
-			 * @return the name of the state
-			 */
-			std::string getName();
+		/**
+		 * Returns an inspection of the State
+		 *
+		 * @return an inspection of the State
+		 */
+		std::string inspect();
 
-			/**
-			 * Returns an inspection of the State
-			 *
-			 * @return an inspection of the State
-			 */
-			std::string inspect();
+		/**
+		 * Sets the StateMachine of the state
+		 *
+		 * @param machine the StateMachine to set
+		 */
+		void statemachineSet(StateMachine* machine);
 
-			/**
-			 * Sets the StateMachine of the state
-			 *
-			 * @param machine the StateMachine to set
-			 */
-			void statemachineSet(StateMachine* machine);
+		/**
+		 * Returns the StateMachine of the state
+		 *
+		 * @return the StateMachine of the state
+		 */
+		StateMachine* statemachine();
 
-			/**
-			 * Returns the StateMachine of the state
-			 *
-			 * @return the StateMachine of the state
-			 */
-			StateMachine* statemachine();
+		/**
+		 * Adds the given statement to the State
+		 *
+		 * @param statement the statement to add
+		 */
+		void add(Statements::Statement* statement);
 
-			/**
-			 * Adds the given statement to the State
-			 *
-			 * @param statement the statement to add
-			 */
-			void add(Statements::Statement* statement);
-
-			/**
-			 * Executes the State
-			 * 
-			 * @return reference to the next state (name of the state)
-			 */
-			std::string execute();
-		};
-	}
+		/**
+		 * Executes the State
+		 * 
+		 * @return reference to the next state (name of the state)
+		 */
+		std::string execute();
+	};
 }
 
 #endif

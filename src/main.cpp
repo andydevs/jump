@@ -59,12 +59,12 @@ int main(int argc, char const *argv[])
 	try
 	{
 		// Compile inout into StateMachine
-		Core::StateMachine machine = Compiler::compile(readfile(filename));
+		StateMachine machine = Compiler::compile(readfile(filename));
 
 		// Execute the machine and return status code
 		return machine.execute();
 	}
-	catch (Core::Errors::JumpError& e)
+	catch (Errors::JumpError& e)
 	{
 		// Print Error and exit
 		cout << "JumpError: " << e.what() << endl;

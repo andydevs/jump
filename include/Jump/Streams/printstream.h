@@ -28,78 +28,69 @@ Created: 7 - 15 - 2016
 namespace Jump
 {
 	/**
-	 * The core program
+	 * Contains the streams
 	 *
 	 * @author  Anshul Kharbanda
-	 * @created 7 - 16 - 2016
+	 * @created 9 - 9 - 2016
 	 */
-	namespace Core
+	namespace Streams
 	{
 		/**
-		 * Contains the streams
+		 * Print stream object
 		 *
 		 * @author  Anshul Kharbanda
 		 * @created 9 - 9 - 2016
 		 */
-		namespace Streams
+		class PrintStream: public Stream
 		{
+		private:
 			/**
-			 * Print stream object
-			 *
-			 * @author  Anshul Kharbanda
-			 * @created 9 - 9 - 2016
+			 * The stream to print to
 			 */
-			class PrintStream: public Stream
-			{
-			private:
-				/**
-				 * The stream to print to
-				 */
-				std::ostream& m_printstream;
+			std::ostream& m_printstream;
 
-				/**
-				 * The delimeter to print at the end
-				 */
-				std::string m_delimeter;
-			public:
-				/**
-				 * Creates a PrintStream with the given printstream
-				 *
-				 * @param printstream the print stream
-				 */
-				PrintStream(std::ostream& printstream);
+			/**
+			 * The delimeter to print at the end
+			 */
+			std::string m_delimeter;
+		public:
+			/**
+			 * Creates a PrintStream with the given printstream
+			 *
+			 * @param printstream the print stream
+			 */
+			PrintStream(std::ostream& printstream);
 
-				/**
-				 * Creates a PrintStream with the given printstream and
-				 * delimeter
-				 *
-				 * @param printstream the print stream
-				 * @param delimeter   the delimeter to print at the end
-				 */
-				PrintStream(std::ostream& printstream, std::string delimeter);
+			/**
+			 * Creates a PrintStream with the given printstream and
+			 * delimeter
+			 *
+			 * @param printstream the print stream
+			 * @param delimeter   the delimeter to print at the end
+			 */
+			PrintStream(std::ostream& printstream, std::string delimeter);
 
-				/**
-				 * Copy constructor for Stream
-				 *
-				 * @param other the other Stream to copy
-				 */
-				PrintStream(const PrintStream& other);
+			/**
+			 * Copy constructor for Stream
+			 *
+			 * @param other the other Stream to copy
+			 */
+			PrintStream(const PrintStream& other);
 
-				/**
-				 * Destroys the PrintStream
-				 */
-				~PrintStream();
+			/**
+			 * Destroys the PrintStream
+			 */
+			~PrintStream();
 
-				/**
-				 * Writes the given Value to the Stream
-				 *
-				 * @param value the value to print to the Stream
-				 *
-				 * @throw StreamError upon an error when writing to Stream
-				 */
-				void print(Values::Value* value) throw(Errors::StreamError);
-			};
-		}
+			/**
+			 * Writes the given Value to the Stream
+			 *
+			 * @param value the value to print to the Stream
+			 *
+			 * @throw StreamError upon an error when writing to Stream
+			 */
+			void print(Values::Value* value) throw(Errors::StreamError);
+		};
 	}
 }
 
