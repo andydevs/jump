@@ -13,8 +13,8 @@ Created: 7 - 15 - 2016
 #define _CORE_STATEMENTS_LOOP_H_
 
 // Headers being used
-#include "statement.h"
-#include "Jump/Values/value.h"
+#include "Jump/statement.h"
+#include "Jump/value.h"
 
 // Libraries being used
 #include <string>

@@ -13,7 +13,7 @@ Created: 7 - 15 - 2016
 #define _CORE_ERRORS_VALUEERROR_H_
 
 // Libraries being used
-#include "jumperror.h"
+#include "Jump/jumperror.h"
 
 /**
  * Jump is a new programming language that uses the state machine paradigm

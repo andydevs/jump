@@ -13,7 +13,7 @@ Created: 7 - 15 - 2016
 #define _CORE_STREAMS_STDOUT_H_
 
 // Headers being used
-#include "stream.h"
+#include "Jump/stream.h"
 
 // Libraries being used
 #include <string>

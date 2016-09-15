@@ -13,7 +13,7 @@ Created: 7 - 15 - 2016
 #define _CORE_STATEMENT_STATEMENT_H_
 
 // Headers being used
-#include "Jump/Errors/jumperror.h"
+#include "Jump/jumperror.h"
 
 // Libraries being used
 #include <string>

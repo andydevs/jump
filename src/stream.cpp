@@ -10,7 +10,7 @@ Created: 7 - 15 - 2016
 */
 
 // Headers being used
-#include "Jump/Streams/stream.h"
+#include "Jump/stream.h"
 
 // Namespaces being used
 using namespace std;

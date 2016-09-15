@@ -16,7 +16,7 @@ Created: 7 - 15 - 2016
 #include "Jump/Errors/valueerror.h"
 #include "Jump/statemachine.h"
 #include "Jump/state.h"
-#include "value.h"
+#include "Jump/value.h"
 
 // Libraries being used
 #include <string>

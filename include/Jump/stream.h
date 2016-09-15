@@ -13,7 +13,7 @@ Created: 7 - 15 - 2016
 #define _CORE_STREAMS_STREAM_H_
 
 // Headers being used
-#include "Jump/Values/value.h"
+#include "Jump/value.h"
 #include "Jump/Errors/streamerror.h"
 
 // Libraries

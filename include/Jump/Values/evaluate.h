@@ -13,7 +13,6 @@ Created: 7 - 15 - 2016
 #define _CORE_VALUES_EVALUATE_H_
 
 // Headers being used
-#include "value.h"
 #include "string.h"
 #include "boolean.h"
 #include "Numbers/unsignedinteger.h"

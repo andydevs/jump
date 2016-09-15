@@ -13,7 +13,7 @@ Created: 7 - 15 - 2016
 #define _CORE_STATE_H_
 
 // Headers being used
-#include "Statements/statement.h"
+#include "statement.h"
 
 // Libaries being used
 #include <string>

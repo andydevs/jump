@@ -14,7 +14,7 @@ Created: 7 - 15 - 2016
 
 // Headers being used
 #include "Jump/Errors/typeerror.h"
-#include "value.h"
+#include "Jump/value.h"
 
 /**
  * Jump is a new programming language that uses the state machine paradigm

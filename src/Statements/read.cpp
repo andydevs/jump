@@ -14,7 +14,7 @@ Created: 7 - 15 - 2016
 #include "Jump/state.h"
 #include "Jump/Statements/read.h"
 #include "Jump/Values/null.h"
-#include "Jump/Streams/stream.h"
+#include "Jump/stream.h"
 
 // Libraries being used
 #include <iostream>

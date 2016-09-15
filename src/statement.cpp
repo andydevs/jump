@@ -10,7 +10,7 @@ Created: 7 - 15 - 2016
 */
 
 // Headers being used
-#include "Jump/Statements/statement.h"
+#include "Jump/statement.h"
 
 /**
  * Jump is a new programming language that uses the state machine paradigm

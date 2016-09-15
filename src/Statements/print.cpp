@@ -14,7 +14,7 @@ Created: 7 - 15 - 2016
 #include "Jump/state.h"
 #include "Jump/Statements/print.h"
 #include "Jump/Values/null.h"
-#include "Jump/Streams/stream.h"
+#include "Jump/stream.h"
 
 // Namespace being used
 using namespace std;

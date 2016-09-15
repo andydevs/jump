@@ -13,7 +13,7 @@ Created: 7 - 15 - 2016
 #define _CORE_VALUES_NUMBERS_NUMBER_H_
 
 // Headers being used
-#include "Jump/Values/value.h"
+#include "Jump/value.h"
 
 // Libraries being used
 #include <string>

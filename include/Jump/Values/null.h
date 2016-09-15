@@ -13,7 +13,7 @@ Created: 7 - 15 - 2016
 #define _CORE_VALUES_NULL_H_
 
 // Headers being used
-#include "value.h"
+#include "Jump/value.h"
 
 /**
  * Jump is a new programming language that uses the state machine paradigm

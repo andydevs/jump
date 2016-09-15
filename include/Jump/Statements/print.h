@@ -13,8 +13,8 @@ Created: 7 - 15 - 2016
 #define _CORE_STATEMENT_PRINT_H_
 
 // Headers being used
-#include "statement.h"
-#include "Jump/Values/value.h"
+#include "Jump/statement.h"
+#include "Jump/value.h"
 
 // Libaries being used
 #include <string>

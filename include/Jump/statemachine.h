@@ -13,11 +13,11 @@ Created: 7 - 15 - 2016
 #define _CORE_STATEMACHINE_H_
 
 // Headers being used
-#include "Values/value.h"
 #include "Errors/valueerror.h"
 #include "Errors/referenceerror.h"
-#include "Streams/stream.h"
+#include "stream.h"
 #include "state.h"
+#include "value.h"
 
 // Libraries being used
 #include <string>

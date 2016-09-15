@@ -10,7 +10,7 @@ Created: 7 - 15 - 2016
 */
 
 // Headers being used
-#include "Jump/Errors/jumperror.h"
+#include "Jump/jumperror.h"
 
 // Namespaces being used
 using namespace std;

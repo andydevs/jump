@@ -13,7 +13,7 @@ Created: 7 - 15 - 2016
 #define _CORE_VALUES_VALUE_H_
 
 // Headers being used
-#include "Jump/Statements/statement.h"
+#include "Jump/statement.h"
 #include "Jump/Errors/valueerror.h"
 #include "Jump/Errors/typeerror.h"
 
