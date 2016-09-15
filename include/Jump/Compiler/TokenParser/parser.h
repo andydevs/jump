@@ -15,7 +15,7 @@ Created: 7 - 15 - 2016
 // Headers being used
 #include "token.h"
 #include "tokenclass.h"
-#include "Jump/Core/Errors/syntaxerror.h"
+#include "Jump/Errors/syntaxerror.h"
 
 // Libraries being used
 #include <queue>

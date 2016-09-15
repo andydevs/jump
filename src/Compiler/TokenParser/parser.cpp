@@ -11,7 +11,7 @@ Created: 7 - 15 - 2016
 
 // Headers being used
 #include "Jump/Compiler/TokenParser/parser.h"
-#include "Jump/Core/Values/evaluate.h"
+#include "Jump/Values/evaluate.h"
 
 // Libraries being used
 #include <iostream>

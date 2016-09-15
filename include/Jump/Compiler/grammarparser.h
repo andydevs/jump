@@ -14,8 +14,8 @@ Created: 7 - 15 - 2016
 
 // Headers being used
 #include "TokenParser/parser.h"
-#include "Jump/Core/Errors/syntaxerror.h"
-#include "Jump/Core/statemachine.h"
+#include "Jump/Errors/syntaxerror.h"
+#include "Jump/statemachine.h"
 
 /**
  * Jump is a new programming language that uses the state machine paradigm

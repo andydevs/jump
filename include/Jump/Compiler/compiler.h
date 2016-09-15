@@ -13,8 +13,8 @@ Created: 7 - 15 - 2016
 #define _COMPILER_COMPILER_H_
 
 // Headers being used
-#include "Jump/Core/statemachine.h"
-#include "Jump/Core/Errors/syntaxerror.h"
+#include "Jump/statemachine.h"
+#include "Jump/Errors/syntaxerror.h"
 
 // Libraries being used
 #include <iostream>
