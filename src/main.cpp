@@ -12,6 +12,8 @@ Created: 7 - 15 - 2016
 // Headers being used
 #include "Jump/Compiler/compiler.h"
 #include "Jump/Values/expression.h"
+#include "Jump/Streams/printstream.h"
+#include "Jump/Streams/readstream.h"
 #include "Jump/jumperror.h"
 
 // Libraries being used
@@ -60,6 +62,10 @@ int main(int argc, char const *argv[])
 	{
 		// Compile inout into StateMachine
 		StateMachine machine = Compiler::compile(readfile(filename));
+		machine.streamSet("stdout", new Streams::PrintStream(cout));
+		machine.streamSet("stdin",  new Streams::ReadStream(cin));
+		machine.streamSet("stderr", new Streams::PrintStream(cerr));
+		machine.streamSet("prompt", new Streams::PrintStream(cout, " "));
 
 		// Execute the machine and return status code
 		return machine.execute();

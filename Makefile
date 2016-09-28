@@ -36,10 +36,15 @@ SOURCES = $(shell ls $(SRCDIR)/**/*.cpp)
 OBJECTS = $(patsubst $(SRCDIR)/%.cpp, $(OBJDIR)/%.o, $(SOURCES))
 BINARY  = $(BINDIR)/$(TARGET)
 
-$(BINARY): $(OBJECTS)
+$(BINARY): $(LIBRARY) $(OBJECTS)
 	@echo building $@
 	@test -d $(@D) || mkdir -p $(@D)
 	@$(CC) $^ -o $@ $(FLAGS) -L $(LIBDIR)
+
+$(LIBDIR)/$(LIBRARY): $(LIBCOMPS)
+	@echo linking library
+	@test -d $(@D) || mkdir -p $(@D)
+	@$(CC) -shared $^ -o $@ $(FLAGS)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp $(INCLUDS)
 	@echo compiling $<

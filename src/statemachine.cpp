@@ -41,10 +41,6 @@ namespace Jump
 	m_streamtable()
 	{
 		stateSet(new State("end"));
-		streamSet("stdout", new PrintStream(cout));
-		streamSet("stdin",  new ReadStream(cin));
-		streamSet("stderr", new PrintStream(cerr));
-		streamSet("prompt", new PrintStream(cout, " "));
 	}
 
 	/**
