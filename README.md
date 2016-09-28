@@ -63,7 +63,7 @@ A simple state machine program can be written in pseudocode as follows:
 
 ### States
 
-	state <name>
+	state <name>
 
 A state is defined using the `state` keyword, followed by a name for the state. After which, each line until the next declaration or the end of file is a statement declaration. 
 
