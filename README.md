@@ -36,7 +36,7 @@ A simple state machine program can be written in pseudocode as follows:
 	global variable difference = 0
 	global variable input
 
-	global iostream stdin
+	global input stream stdin
 
 	state start
 		prompt "Input value"
