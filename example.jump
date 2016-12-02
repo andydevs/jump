@@ -19,6 +19,7 @@ state start
 	print "Good afternoon world"
 	print "I am Chef Gordon Ramsay"
 	print "And I like cat food"
+	print variable == Null
 
 	# Test transition
 	to first

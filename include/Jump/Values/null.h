@@ -63,6 +63,17 @@ namespace Jump
 			 * @return the string representation of the Null value
 			 */
 			std::string toString() const;
+
+			/**
+			 * The equals operation for Jump Null values
+			 *
+			 * @param other the other Value in the operation
+			 *
+			 * @return the result of the equals operation
+			 *
+			 * @throw TypeError upon an error during the operation
+			 */
+			Value* equal(const Value* other) const throw(Errors::TypeError);
 		};
 	}
 }

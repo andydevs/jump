@@ -11,6 +11,7 @@ Created: 7 - 15 - 2016
 
 // Headers being used
 #include "Jump/value.h"
+#include "Jump/Values/boolean.h"
 
 // Namespaces being used
 using namespace std;

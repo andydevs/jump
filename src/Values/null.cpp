@@ -11,9 +11,12 @@ Created: 7 - 15 - 2016
 
 // Headers being used
 #include "Jump/Values/null.h"
+#include "Jump/Values/boolean.h"
+#include "Jump/Errors/typeerror.h"
 
 // Namespaces being used
 using namespace std;
+using namespace Jump::Errors;
 
 /**
  * Jump is a new programming language that uses the state machine paradigm
@@ -59,6 +62,20 @@ namespace Jump
 		string Null::toString() const 
 		{
 			return "";
+		}
+
+		/**
+		 * The equals operation for Jump Null values
+		 *
+		 * @param other the other Value in the operation
+		 *
+		 * @return the result of the equals operation
+		 *
+		 * @throw TypeError upon an error during the operation
+		 */
+		Value* Null::equal(const Value* other) const throw(TypeError)
+		{
+			return new Boolean(other->isNull());
 		}
 	}
 }
