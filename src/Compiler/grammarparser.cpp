@@ -687,47 +687,37 @@ namespace Jump
 				tks.pop();
 
 				// Declare variables
-				Values::Identifier* identifier;
-				string streamRef;
+				string streamRef = "stdin";
+				string varRef;
 
-				// If next is identifier, add read statement with the value token
+				// Get first identifier
 				if (isIdentifier(tks))
 				{
-					identifier = new Values::Identifier(tks.front().attribute());
+					varRef = tks.front().attribute();
 					tks.pop();
 				}
-				// Else throw SyntaxError
-				else
-				{
-					throw SyntaxError("Unexpected token " + tks.front().toString() + ". expected Identifier");
-				}
+				else throw SyntaxError("Unexpected token " + tks.front().toString() + ". expected Identifier");
 
-				// If next is stream operator
+				// If operation is given
 				if (isOperation(tks, "->"))
 				{
 					// Next token
 					tks.pop();
 
-					// Get stdin
+					// First identifier is stream, not variables
+					streamRef = varRef;
+
+					// Get variable
 					if (isIdentifier(tks))
 					{
-						streamRef = tks.front().attribute();
+						varRef = tks.front().attribute();
 						tks.pop();
 					}
-					// Else throw SyntaxError
-					else
-					{
-						throw SyntaxError("Unexpected token " + tks.front().toString() + ". expected Identifier");
-					}
-				}
-				// Else streamRef is stdin
-				else
-				{
-					streamRef = "stdin";
+					else throw SyntaxError("Unexpected token " + tks.front().toString() + ". expected Identifier");
 				}
 
 				// Add statement
-				state->add(new Statements::Read(identifier, streamRef));
+				state->add(new Statements::Read(new Values::Identifier(varRef), streamRef));
 			}
 
 			/**

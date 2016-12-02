@@ -27,7 +27,7 @@ state start_read
 
 # Printing
 state read_buffer
-	read out -> buffer
+	read buffer -> out
 	print out
 	counter = counter + 1
 	loop if counter < 4
