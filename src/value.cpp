@@ -300,7 +300,7 @@ namespace Jump
 		 */
 		Value* Value::notEqual(const Value* other) const throw(TypeError)
 		{
-			throw TypeError("ValueType " + type() + " does not support operation !=");
+			return new Boolean(!equal(other));
 		}
 
 		/**

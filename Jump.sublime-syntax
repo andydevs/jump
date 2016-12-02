@@ -24,7 +24,7 @@ contexts:
       scope: constant.numeric.jump
     
     - comment: Boolean
-      match: \b(True|False)\b
+      match: \b(True|False|Null)\b
       scope: constant.language.jump
     
     - comment: The start of a double-quoted string
