@@ -11,8 +11,6 @@ Created: 7 - 15 - 2016
 
 // Headers being used
 #include "Jump/statemachine.h"
-#include "Jump/Streams/printstream.h"
-#include "Jump/Streams/readstream.h"
 
 // Libraries being used
 #include <iostream>

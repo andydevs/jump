@@ -25,6 +25,8 @@ Created: 7 - 15 - 2016
 #include "Jump/Values/Numbers/integer.h"
 #include "Jump/Values/Numbers/float.h"
 #include "Jump/Values/evaluate.h"
+#include "Jump/Streams/printstream.h"
+#include "Jump/Streams/readstream.h"
 
 // Libraries being used
 #include <cstdlib>
@@ -972,8 +974,14 @@ namespace Jump
 			 */
 			StateMachine parse(queue<Token>& tks) throw(SyntaxError)
 			{
-				// Parse machine
+				// Create machine (with standard streams)
 				StateMachine machine;
+				machine.streamSet("stdin",  new ReadStream(cin));
+				machine.streamSet("stdout", new PrintStream(cout));
+				machine.streamSet("stderr", new PrintStream(cerr));
+				machine.streamSet("prompt", new PrintStream(cout, " "));
+
+				// Parse Machine
 				statemachine(machine, tks);
 
 				// Return machine
