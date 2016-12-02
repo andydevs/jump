@@ -14,7 +14,8 @@ INSDIR = /usr/bin
 # ----------------------- TEST -----------------------
 
 # Program arguments
-TESTARGS = example.jump
+TESTARGS  = example.jump
+ARRAYTEST = arraystream.jump
 
 # ---------------------- CONFIG ----------------------
 
@@ -70,4 +71,10 @@ run: $(BINARY)
 	@echo Running...
 	@echo -----------------------------------------
 	@$(BINARY) $(TESTARGS)
+	@echo -----------------------------------------
+
+arraytest: $(BINARY)
+	@echo Running...
+	@echo -----------------------------------------
+	@$(BINARY) $(ARRAYTEST)
 	@echo -----------------------------------------

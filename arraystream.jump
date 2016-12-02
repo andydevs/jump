@@ -1,0 +1,33 @@
+# ArrayStream tester
+#
+# Tests ArrayStream functionality
+#
+# Author:  Anshul Kharbanda
+# Created: 12 - 2 - 2016
+
+# Pushing things to buffer
+stream buffer = ArrayStream
+var out # Holds the output from the buffer
+var counter # Counter variable
+
+# Fills buffer
+state start
+	print "Adding things"
+	print 2 -> buffer
+	print 4 -> buffer
+	print "bacon" -> buffer
+	print True -> buffer
+	to start_read
+
+# Start printing
+state start_read
+	print "Printing things"
+	counter = 0
+	to read_buffer
+
+# Printing
+state read_buffer
+	read out -> buffer
+	print out
+	counter = counter + 1
+	loop if counter < 4

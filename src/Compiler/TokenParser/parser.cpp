@@ -51,7 +51,7 @@ namespace Jump
 			 */
 			static TokenClass TOKEN_CLASSES[] = {
 				// Words
-				TokenClass("keyword", "\\b(const|var|state|print|read|to|loop|end|if|otherwise|and|or|not|True|False)\\b"),
+				TokenClass("keyword", "\\b(const|var|state|stream|print|read|to|loop|end|if|otherwise|and|or|not|True|False)\\b"),
 				TokenClass("identifier", "[a-zA-Z][a-zA-Z0-9_]*"),
 
 				// Values
