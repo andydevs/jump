@@ -27,6 +27,7 @@ Created: 7 - 15 - 2016
 #include "Jump/Values/evaluate.h"
 #include "Jump/Streams/printstream.h"
 #include "Jump/Streams/readstream.h"
+#include "Jump/Streams/arraystream.h"
 
 // Libraries being used
 #include <cstdlib>
@@ -140,16 +141,19 @@ namespace Jump
 
 			/**
 			 * Returns true if the next token in the given queue
-			 * is a statemachine declaration
+			 * is a state machine declaration
 			 *
-			 * @param tks  the queue of tokens to check
+			 * @param tks the queue of tokens to check
 			 *
 			 * @return true if the next token in the given queue
-			 *		   is a statemachine declaration
+			 *		   is a state machine declaration
 			 */
 			static bool isDeclaration(queue<Token> tks)
 			{
-				return isKeyword(tks, "state");
+				return isKeyword(tks, "state") 
+					|| isKeyword(tks, "var")
+					|| isKeyword(tks, "const")
+					|| isKeyword(tks, "stream");
 			}
 
 			/**
@@ -683,47 +687,37 @@ namespace Jump
 				tks.pop();
 
 				// Declare variables
-				Values::Identifier* identifier;
-				string streamRef;
+				string streamRef = "stdin";
+				string varRef;
 
-				// If next is identifier, add read statement with the value token
+				// Get first identifier
 				if (isIdentifier(tks))
 				{
-					identifier = new Values::Identifier(tks.front().attribute());
+					varRef = tks.front().attribute();
 					tks.pop();
 				}
-				// Else throw SyntaxError
-				else
-				{
-					throw SyntaxError("Unexpected token " + tks.front().toString() + ". expected Identifier");
-				}
+				else throw SyntaxError("Unexpected token " + tks.front().toString() + ". expected Identifier");
 
-				// If next is stream operator
+				// If operation is given
 				if (isOperation(tks, "->"))
 				{
 					// Next token
 					tks.pop();
 
-					// Get stdin
+					// First identifier is stream, not variables
+					streamRef = varRef;
+
+					// Get variable
 					if (isIdentifier(tks))
 					{
-						streamRef = tks.front().attribute();
+						varRef = tks.front().attribute();
 						tks.pop();
 					}
-					// Else throw SyntaxError
-					else
-					{
-						throw SyntaxError("Unexpected token " + tks.front().toString() + ". expected Identifier");
-					}
-				}
-				// Else streamRef is stdin
-				else
-				{
-					streamRef = "stdin";
+					else throw SyntaxError("Unexpected token " + tks.front().toString() + ". expected Identifier");
 				}
 
 				// Add statement
-				state->add(new Statements::Read(identifier, streamRef));
+				state->add(new Statements::Read(new Values::Identifier(varRef), streamRef));
 			}
 
 			/**
@@ -920,6 +914,32 @@ namespace Jump
 				endline(tks);
 			}
 
+			static void stream(StateMachine& machine, queue<Token>& tks) throw(SyntaxError)
+			{
+				// Next
+				tks.pop();
+
+				// Get variable name
+				string name = tks.front().attribute();
+				tks.pop();
+
+				// If assignment is given, set stream
+				if (isOperation(tks, "="))
+				{
+					tks.pop();
+					if (tks.front().attribute() == "ArrayStream")
+					{
+						machine.streamSet(name, new ArrayStream());
+						tks.pop();
+					}
+					else
+						throw SyntaxError("Undefined stream type: " + tks.front().attribute());
+				}
+
+				// Endline
+				endline(tks);
+			}
+
 			/**
 			 * Parses a StateMachine declaration
 			 *
@@ -937,6 +957,8 @@ namespace Jump
 					constant(machine, tks);
 				else if (isKeyword(tks, "var"))
 					variable(machine, tks);
+				else if (isKeyword(tks, "stream"))
+					stream(machine, tks);
 				else
 					throw SyntaxError("Undefined StateMachine declaration: " + tks.front().attribute());
 			}

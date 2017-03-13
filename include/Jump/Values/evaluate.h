@@ -13,11 +13,7 @@ Created: 7 - 15 - 2016
 #define _CORE_VALUES_EVALUATE_H_
 
 // Headers being used
-#include "string.h"
-#include "boolean.h"
-#include "Numbers/unsignedinteger.h"
-#include "Numbers/integer.h"
-#include "Numbers/float.h"
+#include "Jump/value.h"
 #include "Jump/Errors/syntaxerror.h"
 
 // Libraries being used
@@ -49,6 +45,11 @@ namespace Jump
 		 * The boolean regex
 		 */
 		const std::regex BOOLEAN_REGEX("True|False");
+
+		/**
+		 * Null regex
+		 */
+		const std::regex NULL_REGEX("Null");
 
 		/**
 		 * The string regex

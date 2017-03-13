@@ -1,0 +1,35 @@
+# ArrayStream tester
+#
+# Tests ArrayStream functionality
+#
+# Author:  Anshul Kharbanda
+# Created: 12 - 2 - 2016
+
+# Pushing things to buffer
+stream buffer = ArrayStream
+
+# Holds the output from the buffer
+var out
+
+# Fills buffer
+state start
+	print "Adding things..."
+	print 2 -> buffer
+	print 4 -> buffer
+	print "bacon" -> buffer
+	print True -> buffer
+	to start_read
+
+# Start printing
+state start_read
+	print "Printing things"
+	to read_buffer
+
+# Printing
+state read_buffer
+	read buffer -> out
+	to print_value if Null != out
+
+state print_value
+	print out
+	to read_buffer

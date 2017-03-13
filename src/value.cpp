@@ -11,6 +11,7 @@ Created: 7 - 15 - 2016
 
 // Headers being used
 #include "Jump/value.h"
+#include "Jump/Values/boolean.h"
 
 // Namespaces being used
 using namespace std;
@@ -47,7 +48,7 @@ namespace Jump
 		 * Copy constructor for value
 		 *
 		 * @param other the other Value to copy
-		 */ 
+		 */
 		Value::Value(const Value& other):
 		Statement(other),
 		m_type(other.m_type)
@@ -60,7 +61,7 @@ namespace Jump
 
 		/**
 		 * Return the type of the value
-		 * 
+		 *
 		 * @return the type of the value
 		 */
 		string Value::type() const
@@ -144,7 +145,7 @@ namespace Jump
 		 * Returns an inspection of the Statement
 		 *
 		 * @return an inspection of the Statement
-		 */ 
+		 */
 		string Value::inspect()
 		{
 			return toString();
@@ -169,7 +170,7 @@ namespace Jump
 		 * Executes the statement
 		 *
 		 * @param stateRef reference to the containing state (pointer)
-		 * 
+		 *
 		 * @return a reference to the next state (the state's name)
 		 *
 		 * @throw JumpError upon an error when executing a statement
@@ -300,7 +301,7 @@ namespace Jump
 		 */
 		Value* Value::notEqual(const Value* other) const throw(TypeError)
 		{
-			throw TypeError("ValueType " + type() + " does not support operation !=");
+			return equal(other)->nott();
 		}
 
 		/**

@@ -11,6 +11,12 @@ Created: 7 - 15 - 2016
 
 // Headers being used
 #include "Jump/Values/evaluate.h"
+#include "Jump/Values/null.h"
+#include "Jump/Values/string.h"
+#include "Jump/Values/boolean.h"
+#include "Jump/Values/Numbers/unsignedinteger.h"
+#include "Jump/Values/Numbers/integer.h"
+#include "Jump/Values/Numbers/float.h"
 
 // Namespaces being used
 using namespace std;
@@ -150,6 +156,8 @@ namespace Jump
 		{
 			if (regex_match(input, BOOLEAN_REGEX))
 				return new Boolean(input == "True");
+			else if (regex_match(input, NULL_REGEX))
+				return new Null();
 			else if (regex_match(input, NUMBER_REGEX))
 				return number(input);
 			else if (regex_match(input, STRING_REGEX))
