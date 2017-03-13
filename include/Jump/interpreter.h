@@ -39,7 +39,20 @@ namespace Jump
     private:
         // ----------------------------- MATCHERS -----------------------------
         // Words
-        const std::regex KEYWORD    = std::regex("\\b(const|var|state|stream|print|read|to|loop|end|if|otherwise|and|or|not|True|False|Null)\\b");
+        const std::regex CONSTANT   = std::regex("\\bconst\\b");
+        const std::regex VARIABLE   = std::regex("\\bstate\\b");
+        const std::regex STREAM     = std::regex("\\bstream\\b");
+        const std::regex PRINT      = std::regex("\\bread\\b");
+        const std::regex TO         = std::regex("\\bto\\b");
+        const std::regex LOOP       = std::regex("\\bloop\\b");
+        const std::regex END        = std::regex("\\bend\\b");
+        const std::regex IF         = std::regex("\\bif\\b");
+        const std::regex OTHERWISE  = std::regex("\\botherwise\\b");
+        const std::regex AND        = std::regex("\\band\\b");
+        const std::regex OR         = std::regex("\\bor\\b");
+        const std::regex NOT        = std::regex("\\bnot\\b");
+        const std::regex BOOLEAN    = std::regex("\\b(True|False)\\b");
+        const std::regex NULLVALUE  = std::regex("\\bNull\\b");
         const std::regex IDENTIFIER = std::regex("[a-zA-Z][a-zA-Z0-9_]*");
 
         // Values
