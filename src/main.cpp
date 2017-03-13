@@ -62,10 +62,12 @@ int main(int argc, char const *argv[])
 	try
 	{
 		// Compile inout into StateMachine
-		StateMachine machine = interpret(readfile(filename));
+		//StateMachine machine = interpret(readfile(filename));
 
 		// Execute the machine and return status code
-		return machine.execute();
+		//return machine.execute();
+
+		return 0;
 	}
 	catch (Errors::JumpError& e)
 	{
