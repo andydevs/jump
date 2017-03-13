@@ -63,11 +63,17 @@ namespace Jump
     const regex WSPACE("[ \t]+");
 
     // Match results buffer
-    static smatch lastMatch;
+    static smatch matchResults;
+    static string recievedString;
 
     // ----------------------- MATCHERS -----------------------
 
-    static bool isEnd(string input) {
+    /**
+     * Returns true if string is at end of interpretation
+     *
+     * @return true if string is at end of interpretation
+     */
+    static bool isEnd(string& input) {
         return input.length() == 0;
     }
 
@@ -76,25 +82,10 @@ namespace Jump
      *
      * @param input the input string to modify
      */
-    static void whitespace(string input)
+    static void whitespace(string& input)
     {
-        bool search = regex_search(input, lastMatch, WSPACE, REGEX_MATCH_CONSTANTS);
-        if (search) input.erase(0, lastMatch.length());
-    }
-
-    /**
-     * Matches front of the string with the given regex
-     *
-     * @param input the input string to match
-     * @param reg   the regex to match with
-     *
-     * @return true if string matches given regex
-     */
-    static bool recieve(string input, regex reg) {
-        whitespace(input);
-        bool search = regex_search(input, lastMatch, reg, REGEX_MATCH_CONSTANTS);
-        if (search) input.erase(0, lastMatch.length());
-        return search;
+        bool search = regex_search(input, matchResults, WSPACE, REGEX_MATCH_CONSTANTS);
+        if (search) input.erase(0, matchResults.length());
     }
 
     /**
@@ -103,7 +94,7 @@ namespace Jump
      * @return the last matched string
      */
     static string recieved() {
-        return lastMatch[0];
+        return recievedString;
     }
 
     /**
@@ -114,7 +105,28 @@ namespace Jump
      * @return true if the last match equals the given value
      */
     static bool recievedWas(string value) {
-        return lastMatch[0] == value;
+        return recieved() == value;
+    }
+
+    /**
+     * Matches front of the string with the given regex
+     *
+     * @param input the input string to match
+     * @param reg   the regex to match with
+     *
+     * @return true if string matches given regex
+     */
+    static bool recieve(string& input, regex reg) {
+        whitespace(input);
+        bool search = regex_search(input, matchResults, reg, REGEX_MATCH_CONSTANTS);
+        cout << "s: " << search;
+        if (search) {
+            recievedString = matchResults.str();
+            input.erase(0, matchResults.length());
+            cout << " l: " << recieved();
+        }
+        cout << endl;
+        return search;
     }
 
     /**
@@ -127,8 +139,9 @@ namespace Jump
      * @return true if the next token in the given queue
      *		   is an operation and equals the given operation
      */
-    static bool isOperation(string input, string oper)
+    static bool isOperation(string& input, string oper)
     {
+        cout << "m: operation ";
         return recieve(input, OPERATION) && recievedWas(oper);
     }
 
@@ -141,8 +154,9 @@ namespace Jump
      * @return true if the next token in the given queue
      *		   is a lparen
      */
-    static bool isLparen(string input)
+    static bool isLparen(string& input)
     {
+        cout << "m: lparen ";
         return recieve(input, LPAREN);
     }
 
@@ -155,8 +169,9 @@ namespace Jump
      * @return true if the next token in the given queue
      *		   is a rparen
      */
-    static bool isRparen(string input)
+    static bool isRparen(string& input)
     {
+        cout << "m: rparen ";
         return recieve(input, RPAREN);
     }
 
@@ -169,8 +184,9 @@ namespace Jump
      * @return true if the next token in the given queue
      *		   is a keyword
      */
-    static bool isKeyword(string input)
+    static bool isKeyword(string& input)
     {
+        cout << "m: keyword ";
         return recieve(input, KEYWORD);
     }
 
@@ -184,7 +200,7 @@ namespace Jump
      * @return true if the next token in the given queue
      *		   is a keyword and equals the given word
      */
-    static bool isKeyword(string input, string word)
+    static bool isKeyword(string& input, string word)
     {
         return isKeyword(input) && recievedWas(word);
     }
@@ -198,7 +214,7 @@ namespace Jump
      * @return true if the next token in the given queue
      *		   is a state machine declaration
      */
-    static bool isDeclaration(string input)
+    static bool isDeclaration(string& input)
     {
         return isKeyword(input, "state")
             || isKeyword(input, "var")
@@ -215,8 +231,9 @@ namespace Jump
      * @return true if the next token in the given queue
      *		   is an identifier
      */
-    static bool isIdentifier(string input)
+    static bool isIdentifier(string& input)
     {
+        cout << "m: identifier ";
         return recieve(input, IDENTIFIER);
     }
 
@@ -229,8 +246,9 @@ namespace Jump
      * @return true if the next token in the given queue
      *		   is a string
      */
-    static bool isString(string input)
+    static bool isString(string& input)
     {
+        cout << "m: string ";
         return recieve(input, STRING);
     }
 
@@ -243,8 +261,9 @@ namespace Jump
      * @return true if the next token in the given queue
      *		   is a number
      */
-    static bool isNumber(string input)
+    static bool isNumber(string& input)
     {
+        cout << "m: number ";
         return recieve(input, NUMBER);
     }
 
@@ -257,8 +276,9 @@ namespace Jump
      * @return true if the next token in the given queue
      *		   is a value
      */
-    static bool isValue(string input)
+    static bool isValue(string& input)
     {
+        cout << "m: value ";
         return isString(input) || isNumber(input)
             || isIdentifier(input) || isLparen(input);
     }
@@ -272,8 +292,9 @@ namespace Jump
      * @return true if the next token in the given queue
      *		   is an endline
      */
-    static bool isEndline(string input)
+    static bool isEndline(string& input)
     {
+        cout << "m: endline ";
         return recieve(input, ENDLINE) || isEnd(input);
     }
 
@@ -286,7 +307,7 @@ namespace Jump
      * @return true if the given token queue is at the end
      *		   (and there are remaining tokens)
      */
-    static bool continuing(string input)
+    static bool continuing(string& input)
     {
         return !isEnd(input);
     }
@@ -298,7 +319,7 @@ namespace Jump
      *
      * @param input the token queue to parse
      */
-    static void endline(string input)
+    static void endline(string& input)
     {
         recieve(input, ENDLINE);
     }
@@ -314,7 +335,7 @@ namespace Jump
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static Values::Expression* expression(string input) throw(SyntaxError);
+    static Values::Expression* expression(string& input) throw(SyntaxError);
 
     /**
      * Parses a value
@@ -325,8 +346,10 @@ namespace Jump
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static Values::Value* value(string input) throw(SyntaxError)
+    static Values::Value* value(string& input) throw(SyntaxError)
     {
+        cout << "value" << endl;
+
         string literal = recieved();
         Values::Value* val;
         if (isLparen(input))
@@ -355,8 +378,10 @@ namespace Jump
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void muldivmodOp(Values::Expression* expr, string input) throw(SyntaxError)
+    static void muldivmodOp(Values::Expression* expr, string& input) throw(SyntaxError)
     {
+        cout << "muldivmodOp" << endl;
+
         if (isOperation(input, "*"))
         {
 
@@ -386,8 +411,10 @@ namespace Jump
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static Values::Expression* muldivmod(string input) throw(SyntaxError)
+    static Values::Expression* muldivmod(string& input) throw(SyntaxError)
     {
+        cout << "muldivmod" << endl;
+
         Values::Expression* expr = new Values::Expression(Values::OperLayer::MULDIVMOD);
         expr->add(value(input), 0);
         muldivmodOp(expr, input);
@@ -402,8 +429,10 @@ namespace Jump
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void addsubOp(Values::Expression* expr, string input) throw(SyntaxError)
+    static void addsubOp(Values::Expression* expr, string& input) throw(SyntaxError)
     {
+        cout << "addsubop" << endl;
+
         if (isOperation(input, "+"))
         {
 
@@ -427,8 +456,10 @@ namespace Jump
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static Values::Expression* addsub(string input) throw(SyntaxError)
+    static Values::Expression* addsub(string& input) throw(SyntaxError)
     {
+        cout << "addsub" << endl;
+
         Values::Expression* expr = new Values::Expression(Values::OperLayer::ADDSUB);
         expr->add(muldivmod(input), 0);
         addsubOp(expr, input);
@@ -444,8 +475,10 @@ namespace Jump
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static Values::Expression* compare(string input) throw(SyntaxError)
+    static Values::Expression* compare(string& input) throw(SyntaxError)
     {
+        cout << "compare" << endl;
+
         Values::Expression* expr = new Values::Expression(Values::OperLayer::COMPARE);
         expr->add(addsub(input), 0);
         if (isOperation(input, ">"))
@@ -490,8 +523,10 @@ namespace Jump
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static Values::Expression* nott(string input) throw(SyntaxError)
+    static Values::Expression* nott(string& input) throw(SyntaxError)
     {
+        cout << "nott" << endl;
+
         if (isKeyword(input, "not"))
         {
 
@@ -513,8 +548,10 @@ namespace Jump
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void andOp(Values::Expression* expr, string input) throw(SyntaxError)
+    static void andOp(Values::Expression* expr, string& input) throw(SyntaxError)
     {
+        cout << "andop" << endl;
+
         if (isKeyword(input, "and"))
         {
 
@@ -532,8 +569,10 @@ namespace Jump
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static Values::Expression* andd(string input) throw(SyntaxError)
+    static Values::Expression* andd(string& input) throw(SyntaxError)
     {
+        cout << "andd" << endl;
+
         Values::Expression* expr = new Values::Expression(Values::OperLayer::AND);
         expr->add(nott(input), 0);
         andOp(expr, input);
@@ -548,11 +587,12 @@ namespace Jump
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void orOp(Values::Expression* expr, string input) throw(SyntaxError)
+    static void orOp(Values::Expression* expr, string& input) throw(SyntaxError)
     {
+        cout << "orop" << endl;
+
         if (isKeyword(input, "or"))
         {
-
             expr->add(andd(input), 0);
             orOp(expr, input);
         }
@@ -567,8 +607,10 @@ namespace Jump
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static Values::Expression* orr(string input) throw(SyntaxError)
+    static Values::Expression* orr(string& input) throw(SyntaxError)
     {
+        cout << "orr" << endl;
+
         Values::Expression* expr = new Values::Expression(Values::OperLayer::OR);
         expr->add(andd(input), 0);
         orOp(expr, input);
@@ -584,8 +626,10 @@ namespace Jump
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static Values::Expression* expression(string input) throw(SyntaxError)
+    static Values::Expression* expression(string& input) throw(SyntaxError)
     {
+        cout << "expression" << endl;
+
         return orr(input);
     }
 
@@ -598,8 +642,10 @@ namespace Jump
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void assign(State* state, string input) throw(SyntaxError)
+    static void assign(State* state, string& input) throw(SyntaxError)
     {
+        cout << "assign" << endl;
+
         Values::Expression* expr = new Values::Expression(Values::OperLayer::ASSIGN);
         expr->add(expression(input), 0);
         if (isOperation(input, "="))
@@ -618,9 +664,9 @@ namespace Jump
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void end(State* state, string input) throw(SyntaxError)
+    static void end(State* state, string& input) throw(SyntaxError)
     {
-        // Next token
+        cout << "end" << endl;
 
 
         // Declare variable
@@ -651,9 +697,9 @@ namespace Jump
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void loop(State* state, string input) throw(SyntaxError)
+    static void loop(State* state, string& input) throw(SyntaxError)
     {
-        // Next token
+        cout << "loop" << endl;
 
 
         // Declare variable
@@ -684,9 +730,9 @@ namespace Jump
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void to(State* state, string input) throw(SyntaxError)
+    static void to(State* state, string& input) throw(SyntaxError)
     {
-        // Next token
+        cout << "to" << endl;
 
 
         // If next is identifier
@@ -730,9 +776,9 @@ namespace Jump
      * @param state the state to add the statement to
      * @param input   the token queue to parse
      */
-    static void read(State* state, string input)
+    static void read(State* state, string& input)
     {
-        // Next token
+        cout << "read" << endl;
 
 
         // Declare variables
@@ -775,9 +821,9 @@ namespace Jump
      * @param state the state to add the statement to
      * @param input   the token queue to parse
      */
-    static void print(State* state, string input)
+    static void print(State* state, string& input)
     {
-        // Next token
+        cout << "print" << endl;
 
 
         // Declare variables
@@ -836,8 +882,10 @@ namespace Jump
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void statement(State* state, string input) throw(SyntaxError)
+    static void statement(State* state, string& input) throw(SyntaxError)
     {
+        cout << "statement" << endl;
+
         // Parse Statements
         if (isKeyword(input, "read"))
             read(state, input);
@@ -863,9 +911,9 @@ namespace Jump
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void state(StateMachine& machine, string input) throw(SyntaxError)
+    static void state(StateMachine& machine, string& input) throw(SyntaxError)
     {
-        // Next token
+        cout << "state" << endl;
 
 
         // If identifier is given
@@ -909,10 +957,9 @@ namespace Jump
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void constant(StateMachine& machine, string input) throw(SyntaxError)
+    static void constant(StateMachine& machine, string& input) throw(SyntaxError)
     {
-        // Next
-
+        cout << "constant" << endl;
 
         // Get constant name
         string name = recieved();
@@ -921,7 +968,6 @@ namespace Jump
         // If assignment is given, set value, else throw error
         if (isOperation(input, "="))
         {
-
             machine.constSet(name, expression(input));
         }
         else throw SyntaxError("Expected \"=\" after constant declaration.");
@@ -938,9 +984,9 @@ namespace Jump
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void variable(StateMachine& machine, string input) throw(SyntaxError)
+    static void variable(StateMachine& machine, string& input) throw(SyntaxError)
     {
-        // Next
+        cout << "variable" << endl;
 
 
         // Get variable name
@@ -963,10 +1009,9 @@ namespace Jump
         endline(input);
     }
 
-    static void stream(StateMachine& machine, string input) throw(SyntaxError)
+    static void stream(StateMachine& machine, string& input) throw(SyntaxError)
     {
-        // Next
-
+        cout << "stream" << endl;
 
         // Get variable name
         string name = recieved();
@@ -990,29 +1035,6 @@ namespace Jump
     }
 
     /**
-     * Parses a StateMachine declaration
-     *
-     * @param machine the StateMachine to parse
-     * @param input     the token queue to parse
-     *
-     * @throw SyntaxError if invalid token sequence
-     */
-    static void declaration(StateMachine& machine, string input) throw(SyntaxError)
-    {
-        // Parse declaration
-        if (isKeyword(input, "state"))
-            state(machine, input);
-        else if (isKeyword(input, "const"))
-            constant(machine, input);
-        else if (isKeyword(input, "var"))
-            variable(machine, input);
-        else if (isKeyword(input, "stream"))
-            stream(machine, input);
-        else
-            throw SyntaxError("Undefined StateMachine declaration: " + recieved());
-    }
-
-    /**
      * Parses a StateMachine
      *
      * @param machine the StateMachine to parse
@@ -1020,16 +1042,22 @@ namespace Jump
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void statemachine(StateMachine& machine, string input) throw(SyntaxError)
+    static void statemachine(StateMachine& machine, string& input) throw(SyntaxError)
     {
+        cout << "statemachine " << input.substr(0,5) << endl;
+
         // Parse state machine declarations
-        while (continuing(input))
+        while (!isEnd(input))
+        {
             if (isKeyword(input))
-                declaration(machine, input);
-            else if (isEndline(input))
-                endline(input);
-            else
-                throw SyntaxError("Unexpected token \"" + recieved() + "\". Expected KEYWORD or ENDLINE");
+                if (recievedWas("state"))  state(machine, input);
+                else if (recievedWas("const")) constant(machine, input);
+                else if (recievedWas("var")) variable(machine, input);
+                else if (recievedWas("stream")) stream(machine, input);
+                else throw SyntaxError("Undefined StateMachine declaration: " + recieved());
+            else if (isEndline(input)) cout << "endline" << endl;
+            else throw SyntaxError("Unexpected character \"" + input.substr(0,10) + "\". Expected KEYWORD or ENDLINE");
+        }
     }
 
     /**
