@@ -36,7 +36,7 @@ namespace Jump
      *
      * @throws SyntaxError if input is invalid jump code
      */
-    StateMachine interpret(std::string input) throws Errors::SyntaxError;
+    StateMachine interpret(std::string input) throw(Errors::SyntaxError);
 }
 
 #endif

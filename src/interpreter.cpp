@@ -40,13 +40,18 @@ using namespace std;
 using namespace Jump;
 using namespace Jump::Streams;
 using namespace Jump::Errors;
-using namespace Jump::Compiler::TokenParser;
+using namespace Jump::Values;
 
 // Code
 namespace Jump
 {
     // ------------------------ REGEX -------------------------
 
+    // Regex match constants
+    const std::regex_constants::match_flag_type REGEX_MATCH_CONSTANTS
+        = std::regex_constants::match_continuous;
+
+    // Regexes
     const regex KEYWORD("\\b(const|var|state|stream|print|read|to|loop|end|if|otherwise|and|or|not|True|False|Null)\\b");
     const regex IDENTIFIER("[a-zA-Z][a-zA-Z0-9_]*");
     const regex STRING(STRING_REGEX);
@@ -57,7 +62,60 @@ namespace Jump
     const regex ENDLINE("(#.*?)?\r?\n");
     const regex WSPACE("[ \t]+");
 
+    // Match results buffer
+    static smatch lastMatch;
+
     // ----------------------- MATCHERS -----------------------
+
+    static bool isEnd(string input) {
+        return input.length() == 0;
+    }
+
+    /**
+     * Eliminates whitespaces
+     *
+     * @param input the input string to modify
+     */
+    static void whitespace(string input)
+    {
+        bool search = regex_search(input, lastMatch, WSPACE, REGEX_MATCH_CONSTANTS);
+        if (search) input.erase(0, lastMatch.length());
+    }
+
+    /**
+     * Matches front of the string with the given regex
+     *
+     * @param input the input string to match
+     * @param reg   the regex to match with
+     *
+     * @return true if string matches given regex
+     */
+    static bool recieve(string input, regex reg) {
+        whitespace(input);
+        bool search = regex_search(input, lastMatch, reg, REGEX_MATCH_CONSTANTS);
+        if (search) input.erase(0, lastMatch.length());
+        return search;
+    }
+
+    /**
+     * Return the last matched string
+     *
+     * @return the last matched string
+     */
+    static string recieved() {
+        return lastMatch[0];
+    }
+
+    /**
+     * Returns true if the last match equals the given value
+     *
+     * @param value the value to check
+     *
+     * @return true if the last match equals the given value
+     */
+    static bool recievedWas(string value) {
+        return lastMatch[0] == value;
+    }
 
     /**
      * Returns true if the next token in the given queue
@@ -71,7 +129,7 @@ namespace Jump
      */
     static bool isOperation(string input, string oper)
     {
-        return tks.front() == Token("operation", oper);
+        return recieve(input, OPERATION) && recievedWas(oper);
     }
 
     /**
@@ -85,7 +143,7 @@ namespace Jump
      */
     static bool isLparen(string input)
     {
-        return tks.front().klass() == "lparen";
+        return recieve(input, LPAREN);
     }
 
     /**
@@ -99,7 +157,7 @@ namespace Jump
      */
     static bool isRparen(string input)
     {
-        return tks.front().klass() == "rparen";
+        return recieve(input, RPAREN);
     }
 
     /**
@@ -113,7 +171,7 @@ namespace Jump
      */
     static bool isKeyword(string input)
     {
-        return tks.front().klass() == "keyword";
+        return recieve(input, KEYWORD);
     }
 
     /**
@@ -128,7 +186,7 @@ namespace Jump
      */
     static bool isKeyword(string input, string word)
     {
-        return tks.front() == Token("keyword", word);
+        return isKeyword(input) && recievedWas(word);
     }
 
     /**
@@ -142,10 +200,10 @@ namespace Jump
      */
     static bool isDeclaration(string input)
     {
-        return isKeyword(tks, "state")
-            || isKeyword(tks, "var")
-            || isKeyword(tks, "const")
-            || isKeyword(tks, "stream");
+        return isKeyword(input, "state")
+            || isKeyword(input, "var")
+            || isKeyword(input, "const")
+            || isKeyword(input, "stream");
     }
 
     /**
@@ -159,7 +217,7 @@ namespace Jump
      */
     static bool isIdentifier(string input)
     {
-        return tks.front().klass() == "identifier";
+        return recieve(input, IDENTIFIER);
     }
 
     /**
@@ -173,7 +231,7 @@ namespace Jump
      */
     static bool isString(string input)
     {
-        return tks.front().klass() == "string";
+        return recieve(input, STRING);
     }
 
     /**
@@ -187,7 +245,7 @@ namespace Jump
      */
     static bool isNumber(string input)
     {
-        return tks.front().klass() == "number";
+        return recieve(input, NUMBER);
     }
 
     /**
@@ -201,8 +259,8 @@ namespace Jump
      */
     static bool isValue(string input)
     {
-        return isString(tks) || isNumber(tks)
-            || isIdentifier(tks) || isLparen(tks);
+        return isString(input) || isNumber(input)
+            || isIdentifier(input) || isLparen(input);
     }
 
     /**
@@ -216,7 +274,7 @@ namespace Jump
      */
     static bool isEndline(string input)
     {
-        return tks.front().klass() == "endline" || tks.front().klass() == "EOF";
+        return recieve(input, ENDLINE) || isEnd(input);
     }
 
     /**
@@ -230,7 +288,7 @@ namespace Jump
      */
     static bool continuing(string input)
     {
-        return !tks.empty();
+        return !isEnd(input);
     }
 
     // ----------------------- STATES --------------------------
@@ -238,12 +296,11 @@ namespace Jump
     /**
      * Parses an endline
      *
-     * @param tks the token queue to parse
+     * @param input the token queue to parse
      */
-    static void endline(queue<Token>& tks)
+    static void endline(string input)
     {
-        // Pop next token
-        if (isEndline(tks)) tks.pop();
+        recieve(input, ENDLINE);
     }
 
     // -------------- STATEMENTS --------------
@@ -251,34 +308,34 @@ namespace Jump
     /**
      * Parses an expression
      *
-     * @param tks the token queue to parse
+     * @param input the token queue to parse
      *
      * @return the expression parsed
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static Values::Expression* expression(queue<Token>& tks) throw(SyntaxError);
+    static Values::Expression* expression(string input) throw(SyntaxError);
 
     /**
      * Parses a value
      *
-     * @param tks the token queue to parse
+     * @param input the token queue to parse
      *
      * @return the value parsed
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static Values::Value* value(queue<Token>& tks) throw(SyntaxError)
+    static Values::Value* value(string input) throw(SyntaxError)
     {
-        string literal = tks.front().attribute();
+        string literal = recieved();
         Values::Value* val;
-        if (isLparen(tks))
+        if (isLparen(input))
         {
-            tks.pop();
-            val = expression(tks);
-            if (!isRparen(tks)) throw SyntaxError("Expected RPAREN");
+
+            val = expression(input);
+            if (!isRparen(input)) throw SyntaxError("Expected RPAREN");
         }
-        else if (isIdentifier(tks))
+        else if (isIdentifier(input))
         {
             val = new Values::Identifier(literal);
         }
@@ -286,7 +343,7 @@ namespace Jump
         {
             val = Values::evaluate(literal);
         }
-        tks.pop();
+
         return val;
     }
 
@@ -294,46 +351,46 @@ namespace Jump
      * Parses a muldivmodOp
      *
      * @param expr the muldivmod expression being parsed
-     * @param tks  the token queue to parse
+     * @param input  the token queue to parse
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void muldivmodOp(Values::Expression* expr, queue<Token>& tks) throw(SyntaxError)
+    static void muldivmodOp(Values::Expression* expr, string input) throw(SyntaxError)
     {
-        if (isOperation(tks, "*"))
+        if (isOperation(input, "*"))
         {
-            tks.pop();
-            expr->add(value(tks), 0);
-            muldivmodOp(expr, tks);
+
+            expr->add(value(input), 0);
+            muldivmodOp(expr, input);
         }
-        else if (isOperation(tks, "/"))
+        else if (isOperation(input, "/"))
         {
-            tks.pop();
-            expr->add(value(tks), 1);
-            muldivmodOp(expr, tks);
+
+            expr->add(value(input), 1);
+            muldivmodOp(expr, input);
         }
-        else if (isOperation(tks, "%"))
+        else if (isOperation(input, "%"))
         {
-            tks.pop();
-            expr->add(value(tks), 2);
-            muldivmodOp(expr, tks);
+
+            expr->add(value(input), 2);
+            muldivmodOp(expr, input);
         }
     }
 
     /**
      * Parses a muldivmod
      *
-     * @param tks the token queue to parse
+     * @param input the token queue to parse
      *
      * @return the muldivmod parsed
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static Values::Expression* muldivmod(queue<Token>& tks) throw(SyntaxError)
+    static Values::Expression* muldivmod(string input) throw(SyntaxError)
     {
         Values::Expression* expr = new Values::Expression(Values::OperLayer::MULDIVMOD);
-        expr->add(value(tks), 0);
-        muldivmodOp(expr, tks);
+        expr->add(value(input), 0);
+        muldivmodOp(expr, input);
         return expr;
     }
 
@@ -341,85 +398,85 @@ namespace Jump
      * Parses a addsubOp
      *
      * @param expr the addsub expression being parsed
-     * @param tks  the token queue to parse
+     * @param input  the token queue to parse
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void addsubOp(Values::Expression* expr, queue<Token>& tks) throw(SyntaxError)
+    static void addsubOp(Values::Expression* expr, string input) throw(SyntaxError)
     {
-        if (isOperation(tks, "+"))
+        if (isOperation(input, "+"))
         {
-            tks.pop();
-            expr->add(muldivmod(tks), 0);
-            addsubOp(expr, tks);
+
+            expr->add(muldivmod(input), 0);
+            addsubOp(expr, input);
         }
-        else if (isOperation(tks, "-"))
+        else if (isOperation(input, "-"))
         {
-            tks.pop();
-            expr->add(muldivmod(tks), 1);
-            addsubOp(expr, tks);
+
+            expr->add(muldivmod(input), 1);
+            addsubOp(expr, input);
         }
     }
 
     /**
      * Parses an addsub
      *
-     * @param tks the token queue to parse
+     * @param input the token queue to parse
      *
      * @return the addsub parsed
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static Values::Expression* addsub(queue<Token>& tks) throw(SyntaxError)
+    static Values::Expression* addsub(string input) throw(SyntaxError)
     {
         Values::Expression* expr = new Values::Expression(Values::OperLayer::ADDSUB);
-        expr->add(muldivmod(tks), 0);
-        addsubOp(expr, tks);
+        expr->add(muldivmod(input), 0);
+        addsubOp(expr, input);
         return expr;
     }
 
     /**
      * Parses an compare
      *
-     * @param tks the token queue to parse
+     * @param input the token queue to parse
      *
      * @return the compare parsed
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static Values::Expression* compare(queue<Token>& tks) throw(SyntaxError)
+    static Values::Expression* compare(string input) throw(SyntaxError)
     {
         Values::Expression* expr = new Values::Expression(Values::OperLayer::COMPARE);
-        expr->add(addsub(tks), 0);
-        if (isOperation(tks, ">"))
+        expr->add(addsub(input), 0);
+        if (isOperation(input, ">"))
         {
-            tks.pop();
-            expr->add(addsub(tks), 0);
+
+            expr->add(addsub(input), 0);
         }
-        else if (isOperation(tks, ">="))
+        else if (isOperation(input, ">="))
         {
-            tks.pop();
-            expr->add(addsub(tks), 1);
+
+            expr->add(addsub(input), 1);
         }
-        else if (isOperation(tks, "=="))
+        else if (isOperation(input, "=="))
         {
-            tks.pop();
-            expr->add(addsub(tks), 2);
+
+            expr->add(addsub(input), 2);
         }
-        else if (isOperation(tks, "!="))
+        else if (isOperation(input, "!="))
         {
-            tks.pop();
-            expr->add(addsub(tks), 3);
+
+            expr->add(addsub(input), 3);
         }
-        else if (isOperation(tks, "<="))
+        else if (isOperation(input, "<="))
         {
-            tks.pop();
-            expr->add(addsub(tks), 4);
+
+            expr->add(addsub(input), 4);
         }
-        else if (isOperation(tks, "<"))
+        else if (isOperation(input, "<"))
         {
-            tks.pop();
-            expr->add(addsub(tks), 5);
+
+            expr->add(addsub(input), 5);
         }
         return expr;
     }
@@ -427,24 +484,24 @@ namespace Jump
     /**
      * Parses an nott
      *
-     * @param tks the token queue to parse
+     * @param input the token queue to parse
      *
      * @return the nott parsed
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static Values::Expression* nott(queue<Token>& tks) throw(SyntaxError)
+    static Values::Expression* nott(string input) throw(SyntaxError)
     {
-        if (isKeyword(tks, "not"))
+        if (isKeyword(input, "not"))
         {
-            tks.pop();
+
             Values::Expression* expr = new Values::Expression(Values::OperLayer::NOT);
-            expr->add(compare(tks), 0);
+            expr->add(compare(input), 0);
             return expr;
         }
         else
         {
-            return compare(tks);
+            return compare(input);
         }
     }
 
@@ -452,34 +509,34 @@ namespace Jump
      * Parses a andOp
      *
      * @param expr the addsub expression being parsed
-     * @param tks  the token queue to parse
+     * @param input  the token queue to parse
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void andOp(Values::Expression* expr, queue<Token>& tks) throw(SyntaxError)
+    static void andOp(Values::Expression* expr, string input) throw(SyntaxError)
     {
-        if (isKeyword(tks, "and"))
+        if (isKeyword(input, "and"))
         {
-            tks.pop();
-            expr->add(nott(tks), 0);
-            andOp(expr, tks);
+
+            expr->add(nott(input), 0);
+            andOp(expr, input);
         }
     }
 
     /**
      * Parses an and
      *
-     * @param tks the token queue to parse
+     * @param input the token queue to parse
      *
      * @return the and parsed
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static Values::Expression* andd(queue<Token>& tks) throw(SyntaxError)
+    static Values::Expression* andd(string input) throw(SyntaxError)
     {
         Values::Expression* expr = new Values::Expression(Values::OperLayer::AND);
-        expr->add(nott(tks), 0);
-        andOp(expr, tks);
+        expr->add(nott(input), 0);
+        andOp(expr, input);
         return expr;
     }
 
@@ -487,68 +544,68 @@ namespace Jump
      * Parses a orOp
      *
      * @param expr the addsub expression being parsed
-     * @param tks  the token queue to parse
+     * @param input  the token queue to parse
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void orOp(Values::Expression* expr, queue<Token>& tks) throw(SyntaxError)
+    static void orOp(Values::Expression* expr, string input) throw(SyntaxError)
     {
-        if (isKeyword(tks, "or"))
+        if (isKeyword(input, "or"))
         {
-            tks.pop();
-            expr->add(andd(tks), 0);
-            orOp(expr, tks);
+
+            expr->add(andd(input), 0);
+            orOp(expr, input);
         }
     }
 
     /**
      * Parses an orr
      *
-     * @param tks the token queue to parse
+     * @param input the token queue to parse
      *
      * @return the orr parsed
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static Values::Expression* orr(queue<Token>& tks) throw(SyntaxError)
+    static Values::Expression* orr(string input) throw(SyntaxError)
     {
         Values::Expression* expr = new Values::Expression(Values::OperLayer::OR);
-        expr->add(andd(tks), 0);
-        orOp(expr, tks);
+        expr->add(andd(input), 0);
+        orOp(expr, input);
         return expr;
     }
 
     /**
      * Parses an expression
      *
-     * @param tks the token queue to parse
+     * @param input the token queue to parse
      *
      * @return the expression parsed
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static Values::Expression* expression(queue<Token>& tks) throw(SyntaxError)
+    static Values::Expression* expression(string input) throw(SyntaxError)
     {
-        return orr(tks);
+        return orr(input);
     }
 
     /**
      * Parses an assign
      *
-     * @param tks the token queue to parse
+     * @param input the token queue to parse
      *
      * @return the assign parsed
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void assign(State* state, queue<Token>& tks) throw(SyntaxError)
+    static void assign(State* state, string input) throw(SyntaxError)
     {
         Values::Expression* expr = new Values::Expression(Values::OperLayer::ASSIGN);
-        expr->add(expression(tks), 0);
-        if (isOperation(tks, "="))
+        expr->add(expression(input), 0);
+        if (isOperation(input, "="))
         {
-            tks.pop();
-            expr->add(expression(tks), 0);
+
+            expr->add(expression(input), 0);
         }
         state->add(expr);
     }
@@ -557,23 +614,23 @@ namespace Jump
      * Parses a end statement
      *
      * @param state the state to add the statement to
-     * @param tks   the token queue to parse
+     * @param input   the token queue to parse
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void end(State* state, queue<Token>& tks) throw(SyntaxError)
+    static void end(State* state, string input) throw(SyntaxError)
     {
         // Next token
-        tks.pop();
+
 
         // Declare variable
         Values::Value* condition;
 
         // If condition is given (given by if), set condition
-        if (isKeyword(tks, "if"))
+        if (isKeyword(input, "if"))
         {
-            tks.pop();
-            condition = expression(tks);
+
+            condition = expression(input);
         }
         // Else set condition to true
         // This is unwise, though
@@ -590,23 +647,23 @@ namespace Jump
      * Parses a loop statement
      *
      * @param state the state to add the statement to
-     * @param tks   the token queue to parse
+     * @param input   the token queue to parse
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void loop(State* state, queue<Token>& tks) throw(SyntaxError)
+    static void loop(State* state, string input) throw(SyntaxError)
     {
         // Next token
-        tks.pop();
+
 
         // Declare variable
         Values::Value* condition;
 
         // If condition is given (given by if), set condition
-        if (isKeyword(tks, "if"))
+        if (isKeyword(input, "if"))
         {
-            tks.pop();
-            condition = expression(tks);
+
+            condition = expression(input);
         }
         // Else set condition to true
         // This is unwise, though
@@ -623,35 +680,35 @@ namespace Jump
      * Parses a to statement
      *
      * @param state the state to add the statement to
-     * @param tks   the token queue to parse
+     * @param input   the token queue to parse
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void to(State* state, queue<Token>& tks) throw(SyntaxError)
+    static void to(State* state, string input) throw(SyntaxError)
     {
         // Next token
-        tks.pop();
+
 
         // If next is identifier
-        if (isIdentifier(tks))
+        if (isIdentifier(input))
         {
             // Get identifier
-            string id = tks.front().attribute();
-            tks.pop();
+            string id = recieved();
+
 
             // Get condition
             Values::Value* condition;
 
             // If condition is given, set to condition
-            if (isKeyword(tks, "if"))
+            if (isKeyword(input, "if"))
             {
-                tks.pop();
-                condition = expression(tks);
+
+                condition = expression(input);
             }
             // If condition is otherwise, set to true
-            else if (isKeyword(tks, "otherwise"))
+            else if (isKeyword(input, "otherwise"))
             {
-                tks.pop();
+
                 condition = new Values::Boolean(true);
             }
             // Else set to true
@@ -664,48 +721,48 @@ namespace Jump
             state->add(new Statements::To(id, condition));
         }
         // Else throw SyntaxError
-        else throw SyntaxError("Expected identifier after \"to\" keyword. Got: " + tks.front().toString());
+        else throw SyntaxError("Expected identifier after \"to\" keyword. Got: " + recieved());
     }
 
     /**
      * Parses a read statement
      *
      * @param state the state to add the statement to
-     * @param tks   the token queue to parse
+     * @param input   the token queue to parse
      */
-    static void read(State* state, queue<Token>& tks)
+    static void read(State* state, string input)
     {
         // Next token
-        tks.pop();
+
 
         // Declare variables
         string streamRef = "stdin";
         string varRef;
 
         // Get first identifier
-        if (isIdentifier(tks))
+        if (isIdentifier(input))
         {
-            varRef = tks.front().attribute();
-            tks.pop();
+            varRef = recieved();
+
         }
-        else throw SyntaxError("Unexpected token " + tks.front().toString() + ". expected Identifier");
+        else throw SyntaxError("Unexpected token \"" + recieved() + "\". expected Identifier");
 
         // If operation is given
-        if (isOperation(tks, "->"))
+        if (isOperation(input, "->"))
         {
             // Next token
-            tks.pop();
+
 
             // First identifier is stream, not variables
             streamRef = varRef;
 
             // Get variable
-            if (isIdentifier(tks))
+            if (isIdentifier(input))
             {
-                varRef = tks.front().attribute();
-                tks.pop();
+                varRef = recieved();
+
             }
-            else throw SyntaxError("Unexpected token " + tks.front().toString() + ". expected Identifier");
+            else throw SyntaxError("Unexpected token \"" + recieved() + "\". expected Identifier");
         }
 
         // Add statement
@@ -716,49 +773,49 @@ namespace Jump
      * Parses a print statement
      *
      * @param state the state to add the statement to
-     * @param tks   the token queue to parse
+     * @param input   the token queue to parse
      */
-    static void print(State* state, queue<Token>& tks)
+    static void print(State* state, string input)
     {
         // Next token
-        tks.pop();
+
 
         // Declare variables
         Values::Value* toPrint;
         string streamRef;
 
         // If next is value, add print statement with the value token
-        if (isValue(tks) || isKeyword(tks))
+        if (isValue(input) || isKeyword(input))
         {
-            toPrint = expression(tks);
+            toPrint = expression(input);
         }
         // Else if endline add blank print statement
-        else if (isEndline(tks))
+        else if (isEndline(input))
         {
             toPrint = new Values::Null();
         }
         // Else throw SyntaxError
         else
         {
-            throw SyntaxError("Unexpected token " + tks.front().toString() + ". expected ValueType, Keyword or Endline");
+            throw SyntaxError("Unexpected token \"" + recieved() + "\". expected ValueType, Keyword or Endline");
         }
 
         // If next is stream operator
-        if (isOperation(tks, "->"))
+        if (isOperation(input, "->"))
         {
             // Next token
-            tks.pop();
+
 
             // Get streamref if identifier is given
-            if (isIdentifier(tks))
+            if (isIdentifier(input))
             {
-                streamRef = tks.front().attribute();
-                tks.pop();
+                streamRef = recieved();
+
             }
             // Else throw error
             else
             {
-                throw SyntaxError("Unexpected token " + tks.front().toString() + ". expected Identifier");
+                throw SyntaxError("Unexpected token \"" + recieved() + "\". expected Identifier");
             }
         }
         // Else streamref is stdout
@@ -775,25 +832,25 @@ namespace Jump
      * Parses a statement
      *
      * @param state the state to add the statement to
-     * @param tks   the token queue to parse
+     * @param input   the token queue to parse
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void statement(State* state, queue<Token>& tks) throw(SyntaxError)
+    static void statement(State* state, string input) throw(SyntaxError)
     {
         // Parse Statements
-        if (isKeyword(tks, "read"))
-            read(state, tks);
-        else if (isKeyword(tks, "print"))
-            print(state, tks);
-        else if (isKeyword(tks, "to"))
-            to(state, tks);
-        else if (isKeyword(tks, "loop"))
-            loop(state, tks);
-        else if (isKeyword(tks, "end"))
-            end(state, tks);
+        if (isKeyword(input, "read"))
+            read(state, input);
+        else if (isKeyword(input, "print"))
+            print(state, input);
+        else if (isKeyword(input, "to"))
+            to(state, input);
+        else if (isKeyword(input, "loop"))
+            loop(state, input);
+        else if (isKeyword(input, "end"))
+            end(state, input);
         else
-            assign(state, tks);
+            assign(state, input);
     }
 
     // -------------- STATEMACHINE --------------
@@ -802,33 +859,33 @@ namespace Jump
      * Parses a state
      *
      * @param machine the StateMachine to add the state to
-     * @param tks     the token queue to parse
+     * @param input     the token queue to parse
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void state(StateMachine& machine, queue<Token>& tks) throw(SyntaxError)
+    static void state(StateMachine& machine, string input) throw(SyntaxError)
     {
         // Next token
-        tks.pop();
+
 
         // If identifier is given
-        if (isIdentifier(tks))
+        if (isIdentifier(input))
         {
             // Generate state from identifier token
-            State* state = new State(tks.front().attribute());
-            tks.pop();
-            endline(tks);
+            State* state = new State(recieved());
+
+            endline(input);
 
             try
             {
                 // Parse statements until next state declaration (or end of program)
-                while (continuing(tks) && !isDeclaration(tks))
-                    if (isKeyword(tks) || isValue(tks))
-                        statement(state, tks);
-                    else if (isEndline(tks))
-                        endline(tks);
+                while (continuing(input) && !isDeclaration(input))
+                    if (isKeyword(input) || isValue(input))
+                        statement(state, input);
+                    else if (isEndline(input))
+                        endline(input);
                     else
-                        throw SyntaxError("Unexpected token " + tks.front().toString() + ". Expected KEYWORD or ENDLINE");
+                        throw SyntaxError("Unexpected token \"" + recieved() + "\". Expected KEYWORD or ENDLINE");
 
                 // Set state in machine
                 machine.stateSet(state);
@@ -848,54 +905,54 @@ namespace Jump
      * Parses a constant
      *
      * @param machine the StateMachine to add the constant to
-     * @param tks     the token queue to parse
+     * @param input     the token queue to parse
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void constant(StateMachine& machine, queue<Token>& tks) throw(SyntaxError)
+    static void constant(StateMachine& machine, string input) throw(SyntaxError)
     {
         // Next
-        tks.pop();
+
 
         // Get constant name
-        string name = tks.front().attribute();
-        tks.pop();
+        string name = recieved();
+
 
         // If assignment is given, set value, else throw error
-        if (isOperation(tks, "="))
+        if (isOperation(input, "="))
         {
-            tks.pop();
-            machine.constSet(name, expression(tks));
+
+            machine.constSet(name, expression(input));
         }
         else throw SyntaxError("Expected \"=\" after constant declaration.");
 
         // Endline
-        endline(tks);
+        endline(input);
     }
 
     /**
      * Parses a variable
      *
      * @param machine the StateMachine to add the variable to
-     * @param tks     the token queue to parse
+     * @param input     the token queue to parse
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void variable(StateMachine& machine, queue<Token>& tks) throw(SyntaxError)
+    static void variable(StateMachine& machine, string input) throw(SyntaxError)
     {
         // Next
-        tks.pop();
+
 
         // Get variable name
-        string name = tks.front().attribute();
-        tks.pop();
+        string name = recieved();
+
 
         // If assignment is given, set value
         // Else set to null
-        if (isOperation(tks, "="))
+        if (isOperation(input, "="))
         {
-            tks.pop();
-            machine.varSet(name, expression(tks));
+
+            machine.varSet(name, expression(input));
         }
         else
         {
@@ -903,76 +960,76 @@ namespace Jump
         }
 
         // Endline
-        endline(tks);
+        endline(input);
     }
 
-    static void stream(StateMachine& machine, queue<Token>& tks) throw(SyntaxError)
+    static void stream(StateMachine& machine, string input) throw(SyntaxError)
     {
         // Next
-        tks.pop();
+
 
         // Get variable name
-        string name = tks.front().attribute();
-        tks.pop();
+        string name = recieved();
+
 
         // If assignment is given, set stream
-        if (isOperation(tks, "="))
+        if (isOperation(input, "="))
         {
-            tks.pop();
-            if (tks.front().attribute() == "ArrayStream")
+
+            if (recieved() == "ArrayStream")
             {
                 machine.streamSet(name, new ArrayStream());
-                tks.pop();
+
             }
             else
-                throw SyntaxError("Undefined stream type: " + tks.front().attribute());
+                throw SyntaxError("Undefined stream type: " + recieved());
         }
 
         // Endline
-        endline(tks);
+        endline(input);
     }
 
     /**
      * Parses a StateMachine declaration
      *
      * @param machine the StateMachine to parse
-     * @param tks     the token queue to parse
+     * @param input     the token queue to parse
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void declaration(StateMachine& machine, queue<Token>& tks) throw(SyntaxError)
+    static void declaration(StateMachine& machine, string input) throw(SyntaxError)
     {
         // Parse declaration
-        if (isKeyword(tks, "state"))
-            state(machine, tks);
-        else if (isKeyword(tks, "const"))
-            constant(machine, tks);
-        else if (isKeyword(tks, "var"))
-            variable(machine, tks);
-        else if (isKeyword(tks, "stream"))
-            stream(machine, tks);
+        if (isKeyword(input, "state"))
+            state(machine, input);
+        else if (isKeyword(input, "const"))
+            constant(machine, input);
+        else if (isKeyword(input, "var"))
+            variable(machine, input);
+        else if (isKeyword(input, "stream"))
+            stream(machine, input);
         else
-            throw SyntaxError("Undefined StateMachine declaration: " + tks.front().attribute());
+            throw SyntaxError("Undefined StateMachine declaration: " + recieved());
     }
 
     /**
      * Parses a StateMachine
      *
      * @param machine the StateMachine to parse
-     * @param tks     the token queue to parse
+     * @param input     the token queue to parse
      *
      * @throw SyntaxError if invalid token sequence
      */
-    static void statemachine(StateMachine& machine, queue<Token>& tks) throw(SyntaxError)
+    static void statemachine(StateMachine& machine, string input) throw(SyntaxError)
     {
         // Parse state machine declarations
-        while (continuing(tks))
-            if (isKeyword(tks))
-                declaration(machine, tks);
-            else if (isEndline(tks))
-                endline(tks);
+        while (continuing(input))
+            if (isKeyword(input))
+                declaration(machine, input);
+            else if (isEndline(input))
+                endline(input);
             else
-                throw SyntaxError("Unexpected token " + tks.front().toString() + ". Expected KEYWORD or ENDLINE");
+                throw SyntaxError("Unexpected token \"" + recieved() + "\". Expected KEYWORD or ENDLINE");
     }
 
     /**
@@ -984,8 +1041,19 @@ namespace Jump
      *
      * @throws SyntaxError if input is invalid jump code
      */
-    StateMachine interpret(string input) throws SyntaxError
+    StateMachine interpret(string input) throw(SyntaxError)
     {
+        // Create machine (with standard streams)
+        StateMachine machine;
+        machine.streamSet("stdin",  new ReadStream(cin));
+        machine.streamSet("stdout", new PrintStream(cout));
+        machine.streamSet("stderr", new PrintStream(cerr));
+        machine.streamSet("prompt", new PrintStream(cout, " "));
 
+        // Parse Machine
+        statemachine(machine, input);
+
+        // Return machine
+        return machine;
     }
 }
