@@ -93,6 +93,22 @@ namespace Jump {
     }
 
     /**
+     * Returns true if the front can supply the given token (without supplying it)
+     *
+     * @param reg represents the token being recieved
+     *
+     * @return true if the front can supply the given token
+     */
+    bool percieve(std::regex reg) {
+        // Eliminate whitespaces
+        bool search = regex_search(m_input, m_matched, WSPACE, REGEX_MATCH_CONSTANTS);
+        if (search) input.erase(0, m_matched.length());
+
+        // Search
+        return regex_search(m_input, reg, REGEX_MATCH_CONSTANTS);
+    }
+
+    /**
      * Returns true if the front supplies the given token
      *
      * @param reg represents the token being recieved
@@ -111,6 +127,18 @@ namespace Jump {
             m_input.erase(0, m_matched.length());
         }
         return search;
+    }
+
+    /**
+     * Asserts that the given token appears next in the input
+     *
+     * @param reg represents the token being recieved
+     * @param exp the string to print in SyntaxError, identifying what was expected
+     *
+     * @throw SyntaxError if token is not found
+     */
+    void require(std::regex reg, std::string exp) throw(SyntaxError) {
+        if (!require(reg)) throw SyntaxError("Unexpected token " + feed() + " expected " + exp);
     }
 
     /**
@@ -153,102 +181,80 @@ namespace Jump {
     }
 
     void Interpreter::constant() throw(JumpError) {
-        string id;
-        if (recieve(IDENTIFIER)) {
-            id = recieved();
-            if (recieved(ASSIGN)) m_machine->constSet(id, feed());
-            else throw SyntaxError("Unexpected token " + peek() + " Expected = after IDENTIFIER");
-        }
-        else throw SyntaxError("Unexpected token " + peek() + " Expected IDENTIFIER after const");
+        require(IDENTIFIER, "IDENTIFIER after const");
+        string id = recieved();
+        require(ASSIGN, "= after IDENTIFIER (constants need to be set on declaration)");
+        m_machine->constSet(id, feed());
         recieve(ENDLINE);
     }
 
     void Interpreter::variable() throw(JumpError) {
-        string id;
-        if (recieve(IDENTIFIER)) {
-            id = recieved();
-            if (recieved(ASSIGN)) m_machine->varSet(id, feed());
-            else throw SyntaxError("Unexpected token " + peek() + " Expected = after IDENTIFIER");
-        }
-        else throw SyntaxError("Unexpected token " + peek() + " Expected IDENTIFIER after var");
+        require(IDENTIFIER, "IDENTIFIER after var");
+        string id = recieved();
+        if (recieved(ASSIGN)) m_machine->varSet(id, feed());
         recieve(ENDLINE);
     }
 
     void Interpreter::stream() throw(JumpError) {
-        string id, stype;
-        if (recieve(IDENTIFIER)) {
-            id = recieved();
-            if (recieve(ASSIGN)) {
-                if (recieve(ARRAYSTREAM)) m_machine->streamSet(id, new ArrayStream());
-                else throw SyntaxError("Unexpected token " + peek() + " Expected STREAMTYPE after =");
-            }
-            else throw SyntaxError("Unexpected token " + peek() + " Expected = after IDENTIFIER");
-        }
-        else throw SyntaxError("Unexpected token " + peek() + " Expected IDENTIFIER after stream");
+        require(IDENTIFIER, "IDENTIFIER after stream");
+        string id = recieved();
+        require(ASSIGN, "= after IDENTIFIER");
+        if (recieve(ARRAYSTREAM)) m_machine->streamSet(id, new ArrayStream());
+        else throw SyntaxError("Unexpected token " + peek() + " Expected STREAMTYPE after =");
     }
 
     void Interpreter::state() throw(JumpError) {
-        string id;
-        if (recieve(IDENTIFIER)) {
-            id = recieved();
-            if (recieve(ENDLINE)) {
-                m_state = new State(id);
-                while(!end()) {
-                    if (recieve(READ)) read();
-                    else if (recieve(PRINT)) print();
-                    else if (recieve(TO)) to();
-                    else if (recieve(LOOP)) loop();
-                    else if (recieve(END)) end();
-                    else if (recieve(STATE)
-                          || recieve(CONSTANT)
-                          || recieve(VARIABLE)
-                          || recieve(STREAM)) break;
-                    else feed();
-                }
-                m_machine.stateSet(m_state);
-            }
-            else throw SyntaxError("Unexpected token " + peek() + " expected ENDLINE after state definition");
+        require(IDENTIFIER, "IDENTIFIER after state");
+        string id = recieved();
+        require(ENDLINE, "ENDLINE after state definition");
+        m_state = new State(id);
+        while(!end()) {
+            if (recieve(READ)) read();
+            else if (recieve(PRINT)) print();
+            else if (recieve(TO)) to();
+            else if (recieve(LOOP)) loop();
+            else if (recieve(END)) end();
+            else if (percieve(STATE)
+                  || percieve(CONSTANT)
+                  || percieve(VARIABLE)
+                  || percieve(STREAM)) break;
+            else feed();
         }
-        else throw SyntaxError("Unexpected token " + peek() + " expected IDENTIFIER after state");
+        m_machine.stateSet(m_state);
     }
 
     void Interpreter::print() throw(JumpError) {
         feed();
         string id = "stdout";
         if (recieve(PIPE)) {
-            if (recieve(IDENTIFIER)) {
-                id = recieved();
-            } else throw SyntaxError("Unexpected token " + peek() + " expected IDENTIFIER after ->");
+            require(IDENTIFIER, "IDENTIFIER after ->");
+            id = recieved();
         }
         m_state->add(new Print(m_value, id));
     }
 
     void Interpreter::read() throw(JumpError) {
-        string id1, id2;
-        if (recieve(IDENTIFIER)) {
-            id1 = recieved();
-        } else throw SyntaxError("Unexpected token " + peek() + " expected IDENTIFIER after read");
+        require(IDENTIFIER, "IDENTIFIER after read");
+        string id1 = recieved(), id2;
 
         if (recieve(PIPE)) {
-            if (recieve(IDENTIFIER)) {
-                id2 = recieved();
-                m_state->add(new Read(new Identifier(id2), id1));
-            }
+            require(IDENTIFIER, "IDENTIFIER after read");
+            id2 = recieved();
+            m_state->add(new Read(new Identifier(id2), id1));
         } else m_state->add(new Read(new Identifier(id1)));
     }
 
     void Interpreter::to() throw(JumpError) {
-        string id;
-        if (recieve(IDENTIFIER)) {
-            id = recieved();
-            if (recieve(IF)) {
-                feed();
-                m_state->add(new To(id, m_value));
-            } else {
-                recieve(OTHERWISE);
-                m_state->add(new To(id));
-            }
-        } else throw SyntaxError("Unexpected token " + peek() + " expected IDENTIFIER after to");
+        require(IDENTIFIER, "IDENTIFIER after to");
+        string id = recieved();
+
+        if (recieve(IF)) {
+            feed();
+            m_state->add(new To(id, m_value));
+        } else {
+            recieve(OTHERWISE);
+            m_state->add(new To(id));
+        }
     }
 
     void Interpreter::end() throw(JumpError) {

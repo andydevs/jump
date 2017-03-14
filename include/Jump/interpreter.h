@@ -126,6 +126,15 @@ namespace Jump
         Values::Value* m_value;
 
         /**
+         * Returns true if the front can supply the given token (without supplying it)
+         *
+         * @param reg represents the token being recieved
+         *
+         * @return true if the front can supply the given token
+         */
+        bool percieve(std::regex reg);
+
+        /**
          * Returns true if the front supplies the given token
          *
          * @param reg represents the token being recieved
@@ -133,6 +142,16 @@ namespace Jump
          * @return true if the front supplies the given token
          */
         bool recieve(std::regex reg);
+
+        /**
+         * Asserts that the given token appears next in the input
+         *
+         * @param reg represents the token being recieved
+         * @param exp the string to print in SyntaxError, identifying what was expected
+         *
+         * @throw SyntaxError if token is not found
+         */
+        void require(std::regex reg, std::string exp) throw(Errors::SyntaxError);
 
         /**
          * Returns the last recieved token
