@@ -134,6 +134,7 @@ namespace Jump {
         // Search
         bool search = regex_search(m_input, m_matched, reg, REGEX_MATCH_CONSTANTS);
         if (search) {
+            // Supply token
             m_recieved = m_matched.str();
             m_input.erase(0, m_matched.length());
         }
@@ -141,7 +142,7 @@ namespace Jump {
     }
 
     /**
-     * Asserts that the given token appears next in the input
+     * Asserts that the given token is supplied next in the input
      *
      * @param reg represents the token being recieved
      * @param exp the string to print in SyntaxError, identifying what was expected
@@ -149,24 +150,7 @@ namespace Jump {
      * @throw SyntaxError if token is not found
      */
     void require(std::regex reg, std::string exp) throw(SyntaxError) {
-        if (!require(reg)) throw unexpected(exp);
-    }
-
-    /**
-     * Reutrns the value stored in the statemachine at the given id
-     *
-     * @param id the id to store
-     *
-     * @return the value stored in the statemachine at the given id
-     *
-     * @throw ReferenceError if value is not found in either const or var
-     */
-    Value* Interpreter::get(std::string id) throw(ReferenceError) {
-        try {
-            m_machine.constGet(id);
-        } catch (ReferenceError e) {
-            m_machine.varGet(id);
-        }
+        if (!recieve(reg)) throw unexpected(exp);
     }
 
     /**
@@ -180,6 +164,10 @@ namespace Jump {
     }
 
     // ----------------------------- NODES -----------------------------
+
+    /**
+     * Statemachine node
+     */
     void Interpreter::statemachine() throw(JumpError) {
         while(!end()) {
             if (recieve(CONSTANT)) constant();
@@ -191,6 +179,9 @@ namespace Jump {
         }
     }
 
+    /**
+     * Constant node
+     */
     void Interpreter::constant() throw(JumpError) {
         require(IDENTIFIER, "IDENTIFIER after const");
         string id = recieved();
@@ -199,6 +190,9 @@ namespace Jump {
         recieve(ENDLINE);
     }
 
+    /**
+     * Variable node
+     */
     void Interpreter::variable() throw(JumpError) {
         require(IDENTIFIER, "IDENTIFIER after var");
         string id = recieved();
@@ -206,6 +200,9 @@ namespace Jump {
         recieve(ENDLINE);
     }
 
+    /**
+     * Stream node
+     */
     void Interpreter::stream() throw(JumpError) {
         require(IDENTIFIER, "IDENTIFIER after stream");
         string id = recieved();
@@ -214,6 +211,9 @@ namespace Jump {
         else throw Unexpected("STREAMTYPE after =");
     }
 
+    /**
+     * State node
+     */
     void Interpreter::state() throw(JumpError) {
         require(IDENTIFIER, "IDENTIFIER after state");
         string id = recieved();
@@ -234,6 +234,9 @@ namespace Jump {
         m_machine.stateSet(m_state);
     }
 
+    /**
+     * Print node
+     */
     void Interpreter::print() throw(JumpError) {
         Value* val = feed();
         string id = "stdout";
@@ -244,6 +247,9 @@ namespace Jump {
         m_state->add(new Print(val, id));
     }
 
+    /**
+     * Read node
+     */
     void Interpreter::read() throw(JumpError) {
         require(IDENTIFIER, "IDENTIFIER after read");
         string id1 = recieved(), id2;
@@ -255,6 +261,9 @@ namespace Jump {
         } else m_state->add(new Read(new Identifier(id1)));
     }
 
+    /**
+     * To node
+     */
     void Interpreter::to() throw(JumpError) {
         require(IDENTIFIER, "IDENTIFIER after to");
         string id = recieved();
@@ -267,6 +276,9 @@ namespace Jump {
         }
     }
 
+    /**
+     * End node
+     */
     void Interpreter::end() throw(JumpError) {
         if (recieve(IF)) {
             m_state->add(new End(feed()));
@@ -276,6 +288,9 @@ namespace Jump {
         }
     }
 
+    /**
+     * Loop node
+     */
     void Interpreter::loop() throw(JumpError) {
         if (recieve(IF)) {
             m_state->add(new Loop(feed()));
@@ -287,6 +302,11 @@ namespace Jump {
 
     // ------------------------------ EXPRESSION ------------------------------
 
+    /**
+     * Feed node
+     *
+     * @return Feed expression
+     */
     Value* Interpreter::feed() throw(JumpError) {
         Value* val = new Expression(ASSIGN);
         val->add(orr(), 0);
@@ -294,6 +314,11 @@ namespace Jump {
         return val;
     }
 
+    /**
+     * Or node
+     *
+     * @return Or expression
+     */
     Value* Interpreter::orr() throw(JumpError) {
         Value* val = new Expression(OR);
         val->add(andd(), 0);
@@ -301,6 +326,11 @@ namespace Jump {
         return val;
     }
 
+    /**
+     * And node
+     *
+     * @return And expression
+     */
     Value* Interpreter::andd() throw(JumpError) {
         Value* val = new Expression(AND);
         val->add(nott(), 0);
@@ -308,6 +338,11 @@ namespace Jump {
         return val;
     }
 
+    /**
+     * Not node
+     *
+     * @return Not expression
+     */
     Value* Interpreter::nott() throw(JumpError) {
         Value* val;
         if (recieve(NOTT)) {
@@ -319,6 +354,11 @@ namespace Jump {
         }
     }
 
+    /**
+     * Compare node
+     *
+     * @return Compare expression
+     */
     Value* Interpreter::compare() throw(JumpError) {
         Value* val = new Expression(COMPARE);
         val->add(addsub(), 0);
@@ -331,6 +371,11 @@ namespace Jump {
         return val;
     }
 
+    /**
+     * AddSub node
+     *
+     * @return AddSub expression
+     */
     Value* Interpreter::addsub() throw(JumpError) {
         Value* val = new Expression(ADDSUB);
         val->add(muldivmod(), 0);
@@ -340,6 +385,11 @@ namespace Jump {
         return val;
     }
 
+    /**
+     * MulDivMod node
+     *
+     * @return MulDivMod expression
+     */
     Value* Interpreter::muldivmod() throw(JumpError) {
         Value* val = new Expression(MULDIVMOD);
         val->add(value(), 0);
@@ -350,6 +400,11 @@ namespace Jump {
         return val;
     }
 
+    /**
+     * Value node
+     *
+     * @return Value expression
+     */
     Value* Interpreter::value() throw(JumpError) {
         if (recieve(STRING)) return new String(recieved().substr(1,recieved.length()-2));
         else if (recieve(NUMBER)) return number(recieved());
