@@ -75,6 +75,17 @@ namespace Jump {
     }
 
     /**
+     * Returns a SyntaxError which descries unexpected token
+     *
+     * @param exp the expected value
+     *
+     * @return SyntaxError which describes unexpected
+     */
+    SyntaxError Interpreter::unexpected(std::string exp) {
+        return SyntaxError("unexpected token " + peek() + ". Expected " + exp);
+    }
+
+    /**
      * Returns the last recieved token
      *
      * @return the last recieved token
@@ -99,7 +110,7 @@ namespace Jump {
      *
      * @return true if the front can supply the given token
      */
-    bool percieve(std::regex reg) {
+    bool Interpreter::percieve(std::regex reg) {
         // Eliminate whitespaces
         bool search = regex_search(m_input, m_matched, WSPACE, REGEX_MATCH_CONSTANTS);
         if (search) input.erase(0, m_matched.length());
@@ -138,7 +149,7 @@ namespace Jump {
      * @throw SyntaxError if token is not found
      */
     void require(std::regex reg, std::string exp) throw(SyntaxError) {
-        if (!require(reg)) throw SyntaxError("Unexpected token " + feed() + " expected " + exp);
+        if (!require(reg)) throw unexpected(exp);
     }
 
     /**
@@ -176,7 +187,7 @@ namespace Jump {
             else if (recieve(STREAM)) stream();
             else if (recieve(STATE)) state();
             else if (recieve(ENDLINE)) continue;
-            else throw SyntaxError("Unexpected token " + peek() + " Expected const, var, stream, state, or ENDLINE");
+            else throw unexpected("const, var, stream, state, or ENDLINE");
         }
     }
 
@@ -200,7 +211,7 @@ namespace Jump {
         string id = recieved();
         require(ASSIGN, "= after IDENTIFIER");
         if (recieve(ARRAYSTREAM)) m_machine->streamSet(id, new ArrayStream());
-        else throw SyntaxError("Unexpected token " + peek() + " Expected STREAMTYPE after =");
+        else throw Unexpected("STREAMTYPE after =");
     }
 
     void Interpreter::state() throw(JumpError) {

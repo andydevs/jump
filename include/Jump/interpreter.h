@@ -126,6 +126,29 @@ namespace Jump
         Values::Value* m_value;
 
         /**
+         * Returns a SyntaxError which descries unexpected token
+         *
+         * @param exp the expected value
+         *
+         * @return SyntaxError which describes unexpected
+         */
+        Errors::SyntaxError unexpected(std::string exp);
+
+        /**
+         * Returns the last recieved token
+         *
+         * @return the last recieved token
+         */
+        std::string recieved();
+
+        /**
+         * Returns true if the string is at end
+         *
+         * @return true if the string is at end
+         */
+        bool end();
+
+        /**
          * Returns true if the front can supply the given token (without supplying it)
          *
          * @param reg represents the token being recieved
@@ -152,20 +175,6 @@ namespace Jump
          * @throw SyntaxError if token is not found
          */
         void require(std::regex reg, std::string exp) throw(Errors::SyntaxError);
-
-        /**
-         * Returns the last recieved token
-         *
-         * @return the last recieved token
-         */
-        std::string recieved();
-
-        /**
-         * Returns true if the string is at end
-         *
-         * @return true if the string is at end
-         */
-        bool end();
 
         /**
          * Reutrns the value stored in the statemachine at the given id
