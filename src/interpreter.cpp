@@ -235,13 +235,13 @@ namespace Jump {
     }
 
     void Interpreter::print() throw(JumpError) {
-        feed();
+        Value* val = feed();
         string id = "stdout";
         if (recieve(PIPE)) {
             require(IDENTIFIER, "IDENTIFIER after ->");
             id = recieved();
         }
-        m_state->add(new Print(m_value, id));
+        m_state->add(new Print(val, id));
     }
 
     void Interpreter::read() throw(JumpError) {
