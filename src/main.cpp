@@ -10,7 +10,6 @@ Created: 7 - 15 - 2016
 */
 
 // Headers being used
-#include "Jump/Compiler/compiler.h"
 #include "Jump/Values/expression.h"
 #include "Jump/Streams/printstream.h"
 #include "Jump/Streams/readstream.h"
