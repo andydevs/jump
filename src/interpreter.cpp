@@ -229,7 +229,7 @@ namespace Jump {
                   || percieve(CONSTANT)
                   || percieve(VARIABLE)
                   || percieve(STREAM)) break;
-            else feed();
+            else m_state->add(feed());
         }
         m_machine.stateSet(m_state);
     }
@@ -260,8 +260,7 @@ namespace Jump {
         string id = recieved();
 
         if (recieve(IF)) {
-            feed();
-            m_state->add(new To(id, m_value));
+            m_state->add(new To(id, feed()));
         } else {
             recieve(OTHERWISE);
             m_state->add(new To(id));
@@ -270,8 +269,7 @@ namespace Jump {
 
     void Interpreter::end() throw(JumpError) {
         if (recieve(IF)) {
-            feed();
-            m_state->add(new End(m_value));
+            m_state->add(new End(feed()));
         } else {
             recieve(OTHERWISE);
             m_state->add(new End(new Boolean(true)));
@@ -280,8 +278,7 @@ namespace Jump {
 
     void Interpreter::loop() throw(JumpError) {
         if (recieve(IF)) {
-            feed();
-            m_state->add(new Loop(m_value));
+            m_state->add(new Loop(feed()));
         } else {
             recieve(OTHERWISE);
             m_state->add(new Loop(new Boolean(true)));
@@ -290,55 +287,55 @@ namespace Jump {
 
     // ------------------------------ EXPRESSION ------------------------------
 
-    void Interpreter::feed() throw(JumpError) {
+    Value* Interpreter::feed() throw(JumpError) {
+        
+    }
+
+    Value* Interpreter::feedop() throw(JumpError) {
 
     }
 
-    void Interpreter::feedop() throw(JumpError) {
+    Value* Interpreter::orr() throw(JumpError) {
 
     }
 
-    void Interpreter::orr() throw(JumpError) {
+    Value* Interpreter::orop() throw(JumpError) {
 
     }
 
-    void Interpreter::orop() throw(JumpError) {
+    Value* Interpreter::andd() throw(JumpError) {
 
     }
 
-    void Interpreter::andd() throw(JumpError) {
+    Value* Interpreter::andop() throw(JumpError) {
 
     }
 
-    void Interpreter::andop() throw(JumpError) {
+    Value* Interpreter::nott() throw(JumpError) {
 
     }
 
-    void Interpreter::nott() throw(JumpError) {
+    Value* Interpreter::compare() throw(JumpError) {
 
     }
 
-    void Interpreter::compare() throw(JumpError) {
+    Value* Interpreter::addsub() throw(JumpError) {
 
     }
 
-    void Interpreter::addsub() throw(JumpError) {
+    Value* Interpreter::addsubOp() throw(JumpError) {
 
     }
 
-    void Interpreter::addsubOp() throw(JumpError) {
+    Value* Interpreter::muldivmod() throw(JumpError) {
 
     }
 
-    void Interpreter::muldivmod() throw(JumpError) {
+    Value* Interpreter::muldivmodOp() throw(JumpError) {
 
     }
 
-    void Interpreter::muldivmodOp() throw(JumpError) {
-
-    }
-
-    void Interpreter::value() throw(JumpError) {
+    Value* Interpreter::value() throw(JumpError) {
 
     }
 }

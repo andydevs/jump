@@ -203,19 +203,20 @@ namespace Jump
         void to() throw(Errors::JumpError);
         void end() throw(Errors::JumpError);
         void loop() throw(Errors::JumpError);
-        void feed() throw(Errors::JumpError);
-        void feedop() throw(Errors::JumpError);
-        void orr() throw(Errors::JumpError);
-        void orop() throw(Errors::JumpError);
-        void andd() throw(Errors::JumpError);
-        void andop() throw(Errors::JumpError);
-        void nott() throw(Errors::JumpError);
-        void compare() throw(Errors::JumpError);
-        void addsub() throw(Errors::JumpError);
-        void addsubOp() throw(Errors::JumpError);
-        void muldivmod() throw(Errors::JumpError);
-        void muldivmodOp() throw(Errors::JumpError);
-        void value() throw(Errors::JumpError);
+        // --------------------------- EXPRESSION --------------------------
+        Values::Value* feed() throw(Errors::JumpError);
+        Values::Value* feedop() throw(Errors::JumpError);
+        Values::Value* orr() throw(Errors::JumpError);
+        Values::Value* orop() throw(Errors::JumpError);
+        Values::Value* andd() throw(Errors::JumpError);
+        Values::Value* andop() throw(Errors::JumpError);
+        Values::Value* nott() throw(Errors::JumpError);
+        Values::Value* compare() throw(Errors::JumpError);
+        Values::Value* addsub() throw(Errors::JumpError);
+        Values::Value* addsubOp() throw(Errors::JumpError);
+        Values::Value* muldivmod() throw(Errors::JumpError);
+        Values::Value* muldivmodOp() throw(Errors::JumpError);
+        Values::Value* value() throw(Errors::JumpError);
     public:
         /**
          * Constructor for Interpreter
