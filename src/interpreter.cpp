@@ -36,8 +36,9 @@ Created: 7 - 15 - 2016
 
 // Namespaces being used
 using namespace std;
-using namespace Jump::Streams;
+using namespace Jump::Statements;
 using namespace Jump::Values;
+using namespace Jump::Streams;
 using namespace Jump::Errors;
 
 /**
@@ -48,6 +49,14 @@ using namespace Jump::Errors;
  */
 namespace Jump {
     /**
+     * Constructor for Interpreter
+     */
+    Interpreter::Interpreter():
+    m_input(""),
+    m_recieved(""),
+    m_machine() {}
+
+    /**
      * Interprets the string input as jump code and returns a StateMachine
      *
      * @param input the jump code to interpret
@@ -56,16 +65,16 @@ namespace Jump {
      *
      * @throws JumpError if input is invalid jump code
      */
-    StateMachine Interpreter::interpret(string input) throw(JumpError) {
+    StateMachine Interpreter::interpret(string input) throw(SyntaxError) {
         // Recieve input
         m_input = input;
 
         // Create state machine
         m_machine = StateMachine();
-        m_machine.setStream("stdin",  new ReadStream(cin));
-        m_machine.setStream("stdout", new PrintStream(cout));
-        m_machine.setStream("stderr", new PrintStream(cerr));
-        m_machine.setStream("prompt", new PrintStream(cout, " "));
+        m_machine.streamSet("stdin",  new ReadStream(cin));
+        m_machine.streamSet("stdout", new PrintStream(cout));
+        m_machine.streamSet("stderr", new PrintStream(cerr));
+        m_machine.streamSet("prompt", new PrintStream(cout, " "));
 
         // Start parser
         statemachine();
@@ -81,8 +90,8 @@ namespace Jump {
      *
      * @return SyntaxError which describes unexpected
      */
-    SyntaxError Interpreter::unexpected(std::string exp) {
-        return SyntaxError("unexpected token " + peek() + ". Expected " + exp);
+    SyntaxError Interpreter::unexpected(std::string ex) {
+        return SyntaxError("unexpected token " + peek() + ". Expected " + ex);
     }
 
     /**
@@ -99,7 +108,7 @@ namespace Jump {
      *
      * @return true if the string is at end
      */
-    bool Interpreter::end() {
+    bool Interpreter::atEnd() {
         return m_input.length() == 0;
     }
 
@@ -111,9 +120,12 @@ namespace Jump {
      * @return true if the front can supply the given token
      */
     bool Interpreter::percieve(std::regex reg) {
+        // Match object
+        smatch matched;
+
         // Eliminate whitespaces
-        bool search = regex_search(m_input, m_matched, WSPACE, REGEX_MATCH_CONSTANTS);
-        if (search) input.erase(0, m_matched.length());
+        bool found = regex_search(m_input, matched, WSPACE, REGEX_MATCH_CONSTANTS);
+        if (found) m_input.erase(0, matched.length());
 
         // Search
         return regex_search(m_input, reg, REGEX_MATCH_CONSTANTS);
@@ -127,18 +139,21 @@ namespace Jump {
      * @return true if the front supplies the given token
      */
     bool Interpreter::recieve(regex reg) {
+        // Match object
+        smatch matched;
+
         // Eliminate whitespaces
-        bool search = regex_search(m_input, m_matched, WSPACE, REGEX_MATCH_CONSTANTS);
-        if (search) input.erase(0, m_matched.length());
+        bool found = regex_search(m_input, matched, WSPACE, REGEX_MATCH_CONSTANTS);
+        if (found) m_input.erase(0, matched.length());
 
         // Search
-        bool search = regex_search(m_input, m_matched, reg, REGEX_MATCH_CONSTANTS);
-        if (search) {
+        found = regex_search(m_input, matched, reg, REGEX_MATCH_CONSTANTS);
+        if (found) {
             // Supply token
-            m_recieved = m_matched.str();
-            m_input.erase(0, m_matched.length());
+            m_recieved = matched.str();
+            m_input.erase(0, matched.length());
         }
-        return search;
+        return found;
     }
 
     /**
@@ -149,8 +164,8 @@ namespace Jump {
      *
      * @throw SyntaxError if token is not found
      */
-    void require(std::regex reg, std::string exp) throw(SyntaxError) {
-        if (!recieve(reg)) throw unexpected(exp);
+    void Interpreter::require(std::regex reg, std::string ex) throw(SyntaxError) {
+        if (!recieve(reg)) throw unexpected(ex);
     }
 
     /**
@@ -158,7 +173,7 @@ namespace Jump {
      *
      * @return a peek at the first 5 characters of the input
      */
-    string peek() {
+    string Interpreter::peek() {
         if (m_input.length() > 5) return m_input.substr(0,5) + "...";
         else return m_input;
     }
@@ -168,8 +183,8 @@ namespace Jump {
     /**
      * Statemachine node
      */
-    void Interpreter::statemachine() throw(JumpError) {
-        while(!end()) {
+    void Interpreter::statemachine() throw(SyntaxError) {
+        while(!atEnd()) {
             if (recieve(CONSTANT)) constant();
             else if (recieve(VARIABLE)) variable();
             else if (recieve(STREAM)) stream();
@@ -182,44 +197,44 @@ namespace Jump {
     /**
      * Constant node
      */
-    void Interpreter::constant() throw(JumpError) {
+    void Interpreter::constant() throw(SyntaxError) {
         require(IDENTIFIER, "IDENTIFIER after const");
         string id = recieved();
         require(ASSIGN, "= after IDENTIFIER (constants need to be set on declaration)");
-        m_machine->constSet(id, feed());
+        m_machine.constSet(id, feed());
         recieve(ENDLINE);
     }
 
     /**
      * Variable node
      */
-    void Interpreter::variable() throw(JumpError) {
+    void Interpreter::variable() throw(SyntaxError) {
         require(IDENTIFIER, "IDENTIFIER after var");
         string id = recieved();
-        if (recieved(ASSIGN)) m_machine->varSet(id, feed());
+        if (recieve(ASSIGN)) m_machine.varSet(id, feed());
         recieve(ENDLINE);
     }
 
     /**
      * Stream node
      */
-    void Interpreter::stream() throw(JumpError) {
+    void Interpreter::stream() throw(SyntaxError) {
         require(IDENTIFIER, "IDENTIFIER after stream");
         string id = recieved();
         require(ASSIGN, "= after IDENTIFIER");
-        if (recieve(ARRAYSTREAM)) m_machine->streamSet(id, new ArrayStream());
-        else throw Unexpected("STREAMTYPE after =");
+        if (recieve(ARRAYSTREAM)) m_machine.streamSet(id, new ArrayStream());
+        else throw unexpected("STREAMTYPE after =");
     }
 
     /**
      * State node
      */
-    void Interpreter::state() throw(JumpError) {
+    void Interpreter::state() throw(SyntaxError) {
         require(IDENTIFIER, "IDENTIFIER after state");
         string id = recieved();
         require(ENDLINE, "ENDLINE after state definition");
         m_state = new State(id);
-        while(!end()) {
+        while(!atEnd()) {
             if (recieve(READ)) read();
             else if (recieve(PRINT)) print();
             else if (recieve(TO)) to();
@@ -237,7 +252,7 @@ namespace Jump {
     /**
      * Print node
      */
-    void Interpreter::print() throw(JumpError) {
+    void Interpreter::print() throw(SyntaxError) {
         Value* val = feed();
         string id = "stdout";
         if (recieve(PIPE)) {
@@ -250,7 +265,7 @@ namespace Jump {
     /**
      * Read node
      */
-    void Interpreter::read() throw(JumpError) {
+    void Interpreter::read() throw(SyntaxError) {
         require(IDENTIFIER, "IDENTIFIER after read");
         string id1 = recieved(), id2;
 
@@ -264,7 +279,7 @@ namespace Jump {
     /**
      * To node
      */
-    void Interpreter::to() throw(JumpError) {
+    void Interpreter::to() throw(SyntaxError) {
         require(IDENTIFIER, "IDENTIFIER after to");
         string id = recieved();
 
@@ -279,7 +294,7 @@ namespace Jump {
     /**
      * End node
      */
-    void Interpreter::end() throw(JumpError) {
+    void Interpreter::end() throw(SyntaxError) {
         if (recieve(IF)) {
             m_state->add(new End(feed()));
         } else {
@@ -291,7 +306,7 @@ namespace Jump {
     /**
      * Loop node
      */
-    void Interpreter::loop() throw(JumpError) {
+    void Interpreter::loop() throw(SyntaxError) {
         if (recieve(IF)) {
             m_state->add(new Loop(feed()));
         } else {
@@ -307,8 +322,8 @@ namespace Jump {
      *
      * @return Feed expression
      */
-    Value* Interpreter::feed() throw(JumpError) {
-        Value* val = new Expression(ASSIGN);
+    Value* Interpreter::feed() throw(SyntaxError) {
+        Expression* val = new Expression(OperLayer::ASSIGN);
         val->add(orr(), 0);
         if (recieve(ASSIGN)) val->add(orr(), 0);
         return val;
@@ -319,8 +334,8 @@ namespace Jump {
      *
      * @return Or expression
      */
-    Value* Interpreter::orr() throw(JumpError) {
-        Value* val = new Expression(OR);
+    Value* Interpreter::orr() throw(SyntaxError) {
+        Expression* val = new Expression(OperLayer::OR);
         val->add(andd(), 0);
         while (recieve(OR)) val->add(andd(), 0);
         return val;
@@ -331,8 +346,8 @@ namespace Jump {
      *
      * @return And expression
      */
-    Value* Interpreter::andd() throw(JumpError) {
-        Value* val = new Expression(AND);
+    Value* Interpreter::andd() throw(SyntaxError) {
+        Expression* val = new Expression(OperLayer::AND);
         val->add(nott(), 0);
         while (recieve(AND)) val->add(nott(), 0);
         return val;
@@ -343,11 +358,11 @@ namespace Jump {
      *
      * @return Not expression
      */
-    Value* Interpreter::nott() throw(JumpError) {
+    Value* Interpreter::nott() throw(SyntaxError) {
         Value* val;
-        if (recieve(NOTT)) {
-            val = new Expression(NOT);
-            val->add(compare(), 0);
+        if (recieve(NOT)) {
+            val = new Expression(OperLayer::NOT);
+            ((Expression*)val)->add(compare(), 0);
             return val;
         } else {
             return compare();
@@ -359,13 +374,13 @@ namespace Jump {
      *
      * @return Compare expression
      */
-    Value* Interpreter::compare() throw(JumpError) {
-        Value* val = new Expression(COMPARE);
+    Value* Interpreter::compare() throw(SyntaxError) {
+        Expression* val = new Expression(COMPARE);
         val->add(addsub(), 0);
         if (recieve(GREATER)) val->add(addsub(), 0);
         else if (recieve(GREATEQ)) val->add(addsub(), 1);
         else if (recieve(EQUAL)) val->add(addsub(), 2);
-        else if (recieve(NOTEQUAL)) val->add(addsub(), 3);
+        else if (recieve(NEQUAL)) val->add(addsub(), 3);
         else if (recieve(LESSEQ)) val->add(addsub(), 4);
         else if (recieve(LESS)) val->add(addsub(), 5);
         return val;
@@ -376,8 +391,8 @@ namespace Jump {
      *
      * @return AddSub expression
      */
-    Value* Interpreter::addsub() throw(JumpError) {
-        Value* val = new Expression(ADDSUB);
+    Value* Interpreter::addsub() throw(SyntaxError) {
+        Expression* val = new Expression(ADDSUB);
         val->add(muldivmod(), 0);
         while(percieve(ADD) || percieve(SUB))
             if (recieve(ADD)) val->add(muldivmod(),      0);
@@ -390,8 +405,8 @@ namespace Jump {
      *
      * @return MulDivMod expression
      */
-    Value* Interpreter::muldivmod() throw(JumpError) {
-        Value* val = new Expression(MULDIVMOD);
+    Value* Interpreter::muldivmod() throw(SyntaxError) {
+        Expression* val = new Expression(MULDIVMOD);
         val->add(value(), 0);
         while(percieve(MUL) || percieve(DIV) || percieve(MOD))
             if (recieve(MUL)) val->add(value(),      0);
@@ -405,8 +420,8 @@ namespace Jump {
      *
      * @return Value expression
      */
-    Value* Interpreter::value() throw(JumpError) {
-        if (recieve(STRING)) return new String(recieved().substr(1,recieved.length()-2));
+    Value* Interpreter::value() throw(SyntaxError) {
+        if (recieve(STRING)) return new String(recieved().substr(1,recieved().length()-2));
         else if (recieve(NUMBER)) return number(recieved());
         else if (recieve(BOOLEAN)) return new Boolean(recieved() == "True");
         else if (recieve(NULLVALUE)) return new Null();

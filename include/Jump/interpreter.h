@@ -96,22 +96,17 @@ namespace Jump
         /**
          * The last input passed to the interpreter
          */
-        std::string& m_input;
+        std::string m_input;
 
         /**
          * The last token recieved
          */
-        std::string& m_recieved;
-
-        /**
-         * Last match results
-         */
-        std::smatch& m_matched;
+        std::string m_recieved;
 
         /**
          * The statemachine being built
          */
-        StateMachine& m_machine;
+        StateMachine m_machine;
 
         /**
          * The state being built
@@ -139,7 +134,7 @@ namespace Jump
          *
          * @return true if the string is at end
          */
-        bool end();
+        bool atEnd();
 
         /**
          * Returns true if the front can supply the given token (without supplying it)
@@ -170,15 +165,6 @@ namespace Jump
         void require(std::regex reg, std::string exp) throw(Errors::SyntaxError);
 
         /**
-         * Reutrns the value stored in the statemachine at the given id
-         *
-         * @param id the id to store
-         *
-         * @return the value stored in the statemachine at the given id
-         */
-        Values::Value* get(std::string id) throw(Errors::ReferenceError);
-
-        /**
          * Returns a peek at the first 5 characters of the input
          *
          * @return a peek at the first 5 characters of the input
@@ -186,30 +172,30 @@ namespace Jump
         std::string peek();
 
         // ------------------------------- NODES -------------------------------
-        void statemachine() throw(Errors::JumpError);
-        void constant() throw(Errors::JumpError);
-        void variable() throw(Errors::JumpError);
-        void stream() throw(Errors::JumpError);
-        void state() throw(Errors::JumpError);
-        void print() throw(Errors::JumpError);
-        void read() throw(Errors::JumpError);
-        void to() throw(Errors::JumpError);
-        void end() throw(Errors::JumpError);
-        void loop() throw(Errors::JumpError);
+        void statemachine() throw(Errors::SyntaxError);
+        void constant() throw(Errors::SyntaxError);
+        void variable() throw(Errors::SyntaxError);
+        void stream() throw(Errors::SyntaxError);
+        void state() throw(Errors::SyntaxError);
+        void print() throw(Errors::SyntaxError);
+        void read() throw(Errors::SyntaxError);
+        void to() throw(Errors::SyntaxError);
+        void end() throw(Errors::SyntaxError);
+        void loop() throw(Errors::SyntaxError);
         // ---------------------------- EXPRESSION -----------------------------
-        Values::Value* feed() throw(Errors::JumpError);
-        Values::Value* orr() throw(Errors::JumpError);
-        Values::Value* andd() throw(Errors::JumpError);
-        Values::Value* nott() throw(Errors::JumpError);
-        Values::Value* compare() throw(Errors::JumpError);
-        Values::Value* addsub() throw(Errors::JumpError);
-        Values::Value* muldivmod() throw(Errors::JumpError);
-        Values::Value* value() throw(Errors::JumpError);
+        Values::Value* feed() throw(Errors::SyntaxError);
+        Values::Value* orr() throw(Errors::SyntaxError);
+        Values::Value* andd() throw(Errors::SyntaxError);
+        Values::Value* nott() throw(Errors::SyntaxError);
+        Values::Value* compare() throw(Errors::SyntaxError);
+        Values::Value* addsub() throw(Errors::SyntaxError);
+        Values::Value* muldivmod() throw(Errors::SyntaxError);
+        Values::Value* value() throw(Errors::SyntaxError);
     public:
         /**
          * Constructor for Interpreter
          */
-        Interpreter() {}
+        Interpreter();
 
         /**
          * Destructor for interpreter

@@ -82,6 +82,15 @@ namespace Jump
 		const std::string DEFAULT_FLOAT_SUFFIX    = "f64";
 
 		/**
+		 * Parses the given text into a number
+		 *
+		 * @param text the text to parse
+		 *
+		 * @return the number parsed from the text
+		 */
+		Value* number(std::string text) throw(Errors::SyntaxError);
+
+		/**
 		 * Evaluates the given input string as a value
 		 *
 		 * @param input the input string
