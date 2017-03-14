@@ -46,13 +46,11 @@ string readfile(string filename);
  */
 int main(int argc, char const *argv[])
 {
-	// Get filename
-	// Return error if filename not given
+	Interpreter interpreter;
+
+	// Get filename (Return error if filename not given)
 	string filename;
-	if (argc > 1)
-	{
-		filename = argv[1];
-	}
+	if (argc > 1) filename = argv[1];
 	else
 	{
 		cout << "ERROR! Script name not specified!" << endl;
@@ -62,12 +60,10 @@ int main(int argc, char const *argv[])
 	try
 	{
 		// Compile inout into StateMachine
-		//StateMachine machine = interpret(readfile(filename));
+		StateMachine machine = interpreter.interpret(readfile(filename));
 
 		// Execute the machine and return status code
-		//return machine.execute();
-
-		return 0;
+		return machine.execute();
 	}
 	catch (Errors::JumpError& e)
 	{
