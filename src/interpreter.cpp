@@ -163,7 +163,7 @@ namespace Jump {
      */
     Value* Interpreter::get(std::string id) throw(ReferenceError) {
         try {
-            m_machine.constGet(id)
+            m_machine.constGet(id);
         } catch (ReferenceError e) {
             m_machine.varGet(id);
         }
@@ -334,28 +334,28 @@ namespace Jump {
     Value* Interpreter::addsub() throw(JumpError) {
         Value* val = new Expression(ADDSUB);
         val->add(muldivmod(), 0);
-        if (recieve(ADD)) val->add(muldivmod(),      0);
-        else if (recieve(SUB)) val->add(muldivmod(), 1);
+        while(percieve(ADD) || percieve(SUB))
+            if (recieve(ADD)) val->add(muldivmod(),      0);
+            else if (recieve(SUB)) val->add(muldivmod(), 1);
         return val;
     }
 
     Value* Interpreter::muldivmod() throw(JumpError) {
         Value* val = new Expression(MULDIVMOD);
         val->add(value(), 0);
-        if (recieve(MUL)) val->add(value(),      0);
-        else if (recieve(DIV)) val->add(value(), 1);
-        else if (recieve(MOD)) val->add(value(), 2);
+        while(percieve(MUL) || percieve(DIV) || percieve(MOD))
+            if (recieve(MUL)) val->add(value(),      0);
+            else if (recieve(DIV)) val->add(value(), 1);
+            else if (recieve(MOD)) val->add(value(), 2);
         return val;
     }
 
     Value* Interpreter::value() throw(JumpError) {
-        if (recieve(STRING)  || recieve(NUMBER)
-         || recieve(BOOLEAN) || recieve(NULLVALUE)) {
-             return evaluate(recieved());
-        }
-        else if (recieve(IDENTIFIER)) {
-            return new Identifier(recieved());
-        }
+        if (recieve(STRING)) return new String(recieved().substr(1,recieved.length()-2));
+        else if (recieve(NUMBER)) return number(recieved());
+        else if (recieve(BOOLEAN)) return new Boolean(recieved() == "True");
+        else if (recieve(NULLVALUE)) return new Null();
+        else if (recieve(IDENTIFIER)) return new Identifier(recieved());
         else if (recieve(LPAREN)) {
             Value* val = feed();
             require(RPAREN, "RPAREN after expression");
