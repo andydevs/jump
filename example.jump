@@ -28,7 +28,7 @@ state first
 	# Test Number print
 	print 32 # Integer
 	print 64.332 # Float
-	print #test null print
+	print # Test null print
 	to second
 
 state second
