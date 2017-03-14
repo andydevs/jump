@@ -71,18 +71,21 @@ namespace Jump
         const std::regex ARRAYSTREAM = std::regex("ArrayStream");
 
         // Operations
-        const std::regex ASSIGN    = std::regex("=");
-        const std::regex PIPE      = std::regex("->");
-        const std::regex GREATER   = std::regex(">");
-        const std::regex GREATEQ   = std::regex(">=");
-        const std::regex EQUAL     = std::regex("==");
-        const std::regex NOTEQUAL  = std::regex("!=");
-        const std::regex LESSEQ    = std::regex("<=");
-        const std::regex LESS      = std::regex("<");
-        const std::regex ADDSUB    = std::regex("+|-");
-        const std::regex MULDIVMOD = std::regex("*|/|%");
-        const std::regex LPAREN    = std::regex("\\(");
-        const std::regex RPAREN    = std::regex("\\)");
+        const std::regex ASSIGN  = std::regex("=");
+        const std::regex PIPE    = std::regex("->");
+        const std::regex GREATER = std::regex(">");
+        const std::regex GREATEQ = std::regex(">=");
+        const std::regex EQUAL   = std::regex("==");
+        const std::regex NEQUAL  = std::regex("!=");
+        const std::regex LESSEQ  = std::regex("<=");
+        const std::regex LESS    = std::regex("<");
+        const std::regex ADD     = std::regex("+");
+        const std::regex SUB     = std::regex("-");
+        const std::regex MUL     = std::regex("*");
+        const std::regex DIV     = std::regex("/");
+        const std::regex MOD     = std::regex("%");
+        const std::regex LPAREN  = std::regex("\\(");
+        const std::regex RPAREN  = std::regex("\\)");
 
         // Space
         const std::regex ENDLINE = std::regex("(#.*?)?\r?\n");
@@ -114,16 +117,6 @@ namespace Jump
          * The state being built
          */
         State* m_state;
-
-        /**
-         * The statement being built
-         */
-        Statements::Statement* m_statement;
-
-        /**
-         * The value being adjusted
-         */
-        Values::Value* m_value;
 
         /**
          * Returns a SyntaxError which descries unexpected token
@@ -192,7 +185,7 @@ namespace Jump
          */
         std::string peek();
 
-        // ----------------------------- NODES -----------------------------
+        // ------------------------------- NODES -------------------------------
         void statemachine() throw(Errors::JumpError);
         void constant() throw(Errors::JumpError);
         void variable() throw(Errors::JumpError);
@@ -203,19 +196,14 @@ namespace Jump
         void to() throw(Errors::JumpError);
         void end() throw(Errors::JumpError);
         void loop() throw(Errors::JumpError);
-        // --------------------------- EXPRESSION --------------------------
+        // ---------------------------- EXPRESSION -----------------------------
         Values::Value* feed() throw(Errors::JumpError);
-        Values::Value* feedop() throw(Errors::JumpError);
         Values::Value* orr() throw(Errors::JumpError);
-        Values::Value* orop() throw(Errors::JumpError);
         Values::Value* andd() throw(Errors::JumpError);
-        Values::Value* andop() throw(Errors::JumpError);
         Values::Value* nott() throw(Errors::JumpError);
         Values::Value* compare() throw(Errors::JumpError);
         Values::Value* addsub() throw(Errors::JumpError);
-        Values::Value* addsubOp() throw(Errors::JumpError);
         Values::Value* muldivmod() throw(Errors::JumpError);
-        Values::Value* muldivmodOp() throw(Errors::JumpError);
         Values::Value* value() throw(Errors::JumpError);
     public:
         /**

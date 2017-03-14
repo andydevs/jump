@@ -288,54 +288,79 @@ namespace Jump {
     // ------------------------------ EXPRESSION ------------------------------
 
     Value* Interpreter::feed() throw(JumpError) {
-        
-    }
-
-    Value* Interpreter::feedop() throw(JumpError) {
-
+        Value* val = new Expression(ASSIGN);
+        val->add(orr(), 0);
+        if (recieve(ASSIGN)) val->add(orr(), 0);
+        return val;
     }
 
     Value* Interpreter::orr() throw(JumpError) {
-
-    }
-
-    Value* Interpreter::orop() throw(JumpError) {
-
+        Value* val = new Expression(OR);
+        val->add(andd(), 0);
+        while (recieve(OR)) val->add(andd(), 0);
+        return val;
     }
 
     Value* Interpreter::andd() throw(JumpError) {
-
-    }
-
-    Value* Interpreter::andop() throw(JumpError) {
-
+        Value* val = new Expression(AND);
+        val->add(nott(), 0);
+        while (recieve(AND)) val->add(nott(), 0);
+        return val;
     }
 
     Value* Interpreter::nott() throw(JumpError) {
-
+        Value* val;
+        if (recieve(NOTT)) {
+            val = new Expression(NOT);
+            val->add(compare(), 0);
+            return val;
+        } else {
+            return compare();
+        }
     }
 
     Value* Interpreter::compare() throw(JumpError) {
-
+        Value* val = new Expression(COMPARE);
+        val->add(addsub(), 0);
+        if (recieve(GREATER)) val->add(addsub(), 0);
+        else if (recieve(GREATEQ)) val->add(addsub(), 1);
+        else if (recieve(EQUAL)) val->add(addsub(), 2);
+        else if (recieve(NOTEQUAL)) val->add(addsub(), 3);
+        else if (recieve(LESSEQ)) val->add(addsub(), 4);
+        else if (recieve(LESS)) val->add(addsub(), 5);
+        return val;
     }
 
     Value* Interpreter::addsub() throw(JumpError) {
-
-    }
-
-    Value* Interpreter::addsubOp() throw(JumpError) {
-
+        Value* val = new Expression(ADDSUB);
+        val->add(muldivmod(), 0);
+        if (recieve(ADD)) val->add(muldivmod(),      0);
+        else if (recieve(SUB)) val->add(muldivmod(), 1);
+        return val;
     }
 
     Value* Interpreter::muldivmod() throw(JumpError) {
-
-    }
-
-    Value* Interpreter::muldivmodOp() throw(JumpError) {
-
+        Value* val = new Expression(MULDIVMOD);
+        val->add(value(), 0);
+        if (recieve(MUL)) val->add(value(),      0);
+        else if (recieve(DIV)) val->add(value(), 1);
+        else if (recieve(MOD)) val->add(value(), 2);
+        return val;
     }
 
     Value* Interpreter::value() throw(JumpError) {
-
+        if (recieve(STRING)  || recieve(NUMBER)
+         || recieve(BOOLEAN) || recieve(NULLVALUE)) {
+             return evaluate(recieved());
+        }
+        else if (recieve(IDENTIFIER)) {
+            return new Identifier(recieved());
+        }
+        else if (recieve(LPAREN)) {
+            Value* val = feed();
+            require(RPAREN, "RPAREN after expression");
+            return val;
+        }
+        else return new Null();
     }
 }
