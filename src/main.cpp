@@ -55,15 +55,22 @@ int main(int argc, char const *argv[])
 	}
 
 	// Compile input into StateMachine
+	int status;
+	StateMachine* machine;
 	try {
-		StateMachine machine = Interpreter::interpret(readfile(filename), 0);
+		machine = Interpreter::interpret(readfile(filename), 0);
+		cout << machine->inspect() << endl;
 
 		// Execute the machine and get status code
-		return machine.execute();
+		status = machine->execute();
 	} catch (Errors::JumpError e) {
-		cout << e.what() << endl;
-		return 1;
+		cout << "JumpError: " << e.what() << endl;
+		status = 1;
 	}
+
+	// Do afterwards
+	delete machine;
+	return status;
 }
 
 /**

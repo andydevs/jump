@@ -125,7 +125,7 @@ namespace Jump {
         /**
          * The statemachine being built
          */
-        static StateMachine s_machine;
+        static StateMachine* s_machine;
 
         /**
          * The state being built
@@ -243,7 +243,7 @@ namespace Jump {
          *
          * @throws JumpError if input is invalid jump code
          */
-        StateMachine interpret(string input, int flags) throw(SyntaxError) {
+        StateMachine* interpret(string input, int flags) throw(SyntaxError) {
             debug(flags, "Interpreting...");
             debug(flags, "--------------------------------------------------");
 
@@ -251,11 +251,11 @@ namespace Jump {
             s_input = input;
 
             // Create state machine
-            s_machine = StateMachine();
-            s_machine.streamSet("stdin",  new ReadStream(cin));
-            s_machine.streamSet("stdout", new PrintStream(cout));
-            s_machine.streamSet("stderr", new PrintStream(cerr));
-            s_machine.streamSet("prompt", new PrintStream(cout, " "));
+            s_machine = new StateMachine();
+            s_machine->streamSet("stdin",  new ReadStream(cin));
+            s_machine->streamSet("stdout", new PrintStream(cout));
+            s_machine->streamSet("stderr", new PrintStream(cerr));
+            s_machine->streamSet("prompt", new PrintStream(cout, " "));
 
             // Start parser
             statemachine(flags);
@@ -414,7 +414,7 @@ namespace Jump {
             require(IDENTIFIER, "IDENTIFIER after const");
             string id = recieved(); debug(flags, "      id = " + id);
             require(ASSIGN, "= after IDENTIFIER (constants need to be set on declaration)");
-            s_machine.constSet(id, feed(flags));
+            s_machine->constSet(id, feed(flags));
             recieve(ENDLINE);
         }
 
@@ -426,7 +426,8 @@ namespace Jump {
 
             require(IDENTIFIER, "IDENTIFIER after var");
             string id = recieved(); debug(flags, "      id = " + id);
-            if (recieve(ASSIGN)) s_machine.varSet(id, feed(flags));
+            if (recieve(ASSIGN)) s_machine->varSet(id, feed(flags));
+            else s_machine->varSet(id, new Null());
             recieve(ENDLINE);
         }
 
@@ -439,7 +440,7 @@ namespace Jump {
             require(IDENTIFIER, "IDENTIFIER after stream");
             string id = recieved(); debug(flags, "      id = " + id);
             require(ASSIGN, "= after IDENTIFIER");
-            if (recieve(ARRAYSTREAM)) s_machine.streamSet(id, new ArrayStream());
+            if (recieve(ARRAYSTREAM)) s_machine->streamSet(id, new ArrayStream());
             else throw unexpected("STREAMTYPE after =");
         }
 
@@ -466,7 +467,7 @@ namespace Jump {
                 else if (recieve(ENDLINE)) continue;
                 else s_state->add(feed(flags));
             }
-            s_machine.stateSet(s_state);
+            s_machine->stateSet(s_state);
         }
 
         /**
@@ -474,7 +475,7 @@ namespace Jump {
          */
         static void print(int flags) throw(SyntaxError) {
             debug(flags, "      print");
-            string id;
+            string id = "stdout";
             if (recieve(ENDLINE)) {
                 debug(flags, "          nullprint");
                 s_state->add(new Print(new Null(), id));
@@ -483,8 +484,6 @@ namespace Jump {
                 if (recieve(PIPE)) {
                     require(IDENTIFIER, "IDENTIFIER after ->");
                     id = recieved();
-                } else {
-                    id = "stdout";
                 }
                 debug(flags, "          value = " + val->toString());
                 debug(flags, "          outto = " + id);
