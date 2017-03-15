@@ -54,14 +54,10 @@ int main(int argc, char const *argv[])
 		return 1;
 	}
 
-	// Compile input into StateMachine
-	int status;
-	StateMachine* machine;
+	// Interpret and run state machine
+	int status; StateMachine* machine;
 	try {
 		machine = Interpreter::interpret(readfile(filename), 0);
-		cout << machine->inspect() << endl;
-
-		// Execute the machine and get status code
 		status = machine->execute();
 	} catch (Errors::JumpError e) {
 		cout << "JumpError: " << e.what() << endl;
