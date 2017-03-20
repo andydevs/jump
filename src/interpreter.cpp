@@ -59,68 +59,69 @@ namespace Jump {
         /**
          * Regex match constants
          */
-        const std::regex_constants::match_flag_type REGEX_MATCH_CONSTANTS
-            = std::regex_constants::match_continuous;
+        const regex_constants::match_flag_type REGEX_MATCH_CONSTANTS
+            = regex_constants::match_continuous;
 
         // ----------------------------- MATCHERS -----------------------------
         // Keywords
-        static const std::regex OTHERWISE = std::regex("\\botherwise\\b");
-        static const std::regex CONSTANT  = std::regex("\\bconst\\b");
-        static const std::regex VARIABLE  = std::regex("\\bvar\\b");
-        static const std::regex STREAM    = std::regex("\\bstream\\b");
-        static const std::regex STATE     = std::regex("\\bstate\\b");
-        static const std::regex READ      = std::regex("\\bread\\b");
-        static const std::regex PRINT     = std::regex("\\bprint\\b");
-        static const std::regex TO        = std::regex("\\bto\\b");
-        static const std::regex LOOP      = std::regex("\\bloop\\b");
-        static const std::regex END       = std::regex("\\bend\\b");
-        static const std::regex IF        = std::regex("\\bif\\b");
-        static const std::regex AND       = std::regex("\\band\\b");
-        static const std::regex OR        = std::regex("\\bor\\b");
-        static const std::regex NOT       = std::regex("\\bnot\\b");
+        static const regex OTHERWISE = regex("\\botherwise\\b");
+        static const regex CONSTANT  = regex("\\bconst\\b");
+        static const regex VARIABLE  = regex("\\bvar\\b");
+        static const regex STREAM    = regex("\\bstream\\b");
+        static const regex STATE     = regex("\\bstate\\b");
+        static const regex READ      = regex("\\bread\\b");
+        static const regex PRINT     = regex("\\bprint\\b");
+        static const regex TO        = regex("\\bto\\b");
+        static const regex FROM      = regex("\\bfrom\\b");
+        static const regex LOOP      = regex("\\bloop\\b");
+        static const regex END       = regex("\\bend\\b");
+        static const regex IF        = regex("\\bif\\b");
+        static const regex AND       = regex("\\band\\b");
+        static const regex OR        = regex("\\bor\\b");
+        static const regex NOT       = regex("\\bnot\\b");
 
         // Values
-        static const std::regex STRING     = std::regex(Values::STRING_REGEX);
-        static const std::regex NUMBER     = std::regex(Values::NUMBER_REGEX);
-        static const std::regex BOOLEAN    = std::regex("\\b(True|False)\\b");
-        static const std::regex NULLVALUE  = std::regex("\\bNull\\b");
-        static const std::regex IDENTIFIER = std::regex("[a-zA-Z][a-zA-Z0-9_]*");
+        static const regex STRING     = regex(Values::STRING_REGEX);
+        static const regex NUMBER     = regex(Values::NUMBER_REGEX);
+        static const regex BOOLEAN    = regex("\\b(True|False)\\b");
+        static const regex NULLVALUE  = regex("\\bNull\\b");
+        static const regex IDENTIFIER = regex("[a-zA-Z][a-zA-Z0-9_]*");
 
         // StreamTypes
-        static const std::regex ARRAYSTREAM = std::regex("ArrayStream");
+        static const regex ARRAYSTREAM = regex("ArrayStream");
 
         // Operations
-        static const std::regex ASSIGN  = std::regex("=");
-        static const std::regex PIPE    = std::regex("->");
-        static const std::regex GREATER = std::regex(">");
-        static const std::regex GREATEQ = std::regex(">=");
-        static const std::regex EQUAL   = std::regex("==");
-        static const std::regex NEQUAL  = std::regex("!=");
-        static const std::regex LESSEQ  = std::regex("<=");
-        static const std::regex LESS    = std::regex("<");
-        static const std::regex ADD     = std::regex("\\+");
-        static const std::regex SUB     = std::regex("-");
-        static const std::regex MUL     = std::regex("\\*");
-        static const std::regex DIV     = std::regex("\\/");
-        static const std::regex MOD     = std::regex("%");
-        static const std::regex LPAREN  = std::regex("\\(");
-        static const std::regex RPAREN  = std::regex("\\)");
+        static const regex ASSIGN  = regex("=");
+        static const regex PIPE    = regex("->");
+        static const regex GREATER = regex(">");
+        static const regex GREATEQ = regex(">=");
+        static const regex EQUAL   = regex("==");
+        static const regex NEQUAL  = regex("!=");
+        static const regex LESSEQ  = regex("<=");
+        static const regex LESS    = regex("<");
+        static const regex ADD     = regex("\\+");
+        static const regex SUB     = regex("-");
+        static const regex MUL     = regex("\\*");
+        static const regex DIV     = regex("\\/");
+        static const regex MOD     = regex("%");
+        static const regex LPAREN  = regex("\\(");
+        static const regex RPAREN  = regex("\\)");
 
         // Space
-        static const std::regex ENDLINE = std::regex("(#.*?)?\r?\n");
-        static const std::regex WSPACE  = std::regex("[ \t]+");
+        static const regex ENDLINE = regex("(#.*?)?\r?\n");
+        static const regex WSPACE  = regex("[ \t]+");
 
         // ----------------------------- VARIABLES -----------------------------
 
         /**
          * The last input passed to the interpreter
          */
-        static std::string s_input;
+        static string s_input;
 
         /**
          * The last token recieved
          */
-        static std::string s_recieved;
+        static string s_recieved;
 
         /**
          * The statemachine being built
@@ -150,7 +151,7 @@ namespace Jump {
          * @param flags   flag buffer
          * @param message the message to print
          */
-        static void debug(int flags, std::string message);
+        static void debug(int flags, string message);
 
         /**
          * Returns a SyntaxError which descries unexpected token
@@ -159,14 +160,14 @@ namespace Jump {
          *
          * @return SyntaxError which describes unexpected
          */
-        static Errors::SyntaxError unexpected(std::string exp);
+        static Errors::SyntaxError unexpected(string exp);
 
         /**
          * Returns the last recieved token
          *
          * @return the last recieved token
          */
-        static std::string recieved();
+        static string recieved();
 
         /**
          * Returns true if the string is at end
@@ -182,7 +183,7 @@ namespace Jump {
          *
          * @return true if the front can supply the given token
          */
-        static bool percieve(std::regex reg);
+        static bool percieve(regex reg);
 
         /**
          * Returns true if the front supplies the given token
@@ -191,7 +192,7 @@ namespace Jump {
          *
          * @return true if the front supplies the given token
          */
-        static bool recieve(std::regex reg);
+        static bool recieve(regex reg);
 
         /**
          * Asserts that the given token appears next in the input
@@ -201,14 +202,14 @@ namespace Jump {
          *
          * @throw SyntaxError if token is not found
          */
-        static void require(std::regex reg, std::string exp) throw(Errors::SyntaxError);
+        static void require(regex reg, string exp) throw(Errors::SyntaxError);
 
         /**
          * Returns a peek at the first 5 characters of the input
          *
          * @return a peek at the first 5 characters of the input
          */
-        static std::string peek();
+        static string peek();
 
         // ------------------------------- NODES -------------------------------
         static void statemachine(int flags) throw(Errors::SyntaxError);
@@ -287,7 +288,7 @@ namespace Jump {
          * @param flags   flag buffer
          * @param message the message to print
          */
-        static void debug(int flags, std::string message) {
+        static void debug(int flags, string message) {
             if (flag(flags,DEBUG)) cout << message << endl;
         }
 
@@ -298,7 +299,7 @@ namespace Jump {
          *
          * @return SyntaxError which describes unexpected
          */
-        static SyntaxError unexpected(std::string ex) {
+        static SyntaxError unexpected(string ex) {
             return SyntaxError("unexpected token " + peek() + ". Expected " + ex);
         }
 
@@ -327,7 +328,7 @@ namespace Jump {
          *
          * @return true if the front can supply the given token
          */
-        static bool percieve(std::regex reg) {
+        static bool percieve(regex reg) {
             // Match object
             smatch matched;
 
@@ -372,7 +373,7 @@ namespace Jump {
          *
          * @throw SyntaxError if token is not found
          */
-        static void require(std::regex reg, std::string ex) throw(SyntaxError) {
+        static void require(regex reg, string ex) throw(SyntaxError) {
             if (!recieve(reg)) throw unexpected(ex);
         }
 
@@ -481,7 +482,7 @@ namespace Jump {
                 s_state->add(new Print(new Null(), id));
             } else {
                 Value* val = feed(flags);
-                if (recieve(PIPE)) {
+                if (recieve(TO)) {
                     require(IDENTIFIER, "IDENTIFIER after ->");
                     id = recieved();
                 }
@@ -500,10 +501,10 @@ namespace Jump {
             require(IDENTIFIER, "IDENTIFIER after read");
             string id1 = recieved(), id2;
 
-            if (recieve(PIPE)) {
+            if (recieve(FROM)) {
                 require(IDENTIFIER, "IDENTIFIER after read");
                 id2 = recieved();
-                s_state->add(new Read(new Identifier(id2), id1));
+                s_state->add(new Read(new Identifier(id1), id2));
             } else s_state->add(new Read(new Identifier(id1)));
         }
 

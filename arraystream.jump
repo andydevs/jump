@@ -14,10 +14,10 @@ var out
 # Fills buffer
 state start
 	print "Adding things..."
-	print 2 -> buffer
-	print 4 -> buffer
-	print "bacon" -> buffer
-	print True -> buffer
+	print 2 to buffer
+	print 4 to buffer
+	print "bacon" to buffer
+	print True to buffer
 	to start_read
 
 # Start printing
@@ -27,7 +27,7 @@ state start_read
 
 # Printing
 state read_buffer
-	read buffer -> out
+	read out from buffer
 	to print_value if Null != out
 
 state print_value
