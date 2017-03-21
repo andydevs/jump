@@ -76,11 +76,12 @@ namespace Jump
 		/**
 		 * Writes the given Value to the Stream
 		 *
+		 * @param stateRef reference to State in which this is being printed
 		 * @param value the value to print to the Stream
 		 *
 		 * @throw StreamError upon an error when writing to Stream
 		 */
-		void PrintStream::print(Value* value) throw(StreamError)
+		void PrintStream::print(State* stateRef, Value* value) throw(StreamError)
 		{
 			m_printstream << *value << m_delimeter;
 		}

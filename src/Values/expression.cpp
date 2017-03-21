@@ -44,7 +44,7 @@ namespace Jump
 		 *
 		 * @param oper the operation order layer of the expression
 		 */
-		Expression::Expression(OperLayer oper): 
+		Expression::Expression(OperLayer oper):
 		Value("Expression"),
 		m_layer(oper),
 		m_values(),
@@ -85,7 +85,7 @@ namespace Jump
 				case COMPARE:   str = "<=>"; break;
 				case ADDSUB:    str = "+-"; break;
 				case MULDIVMOD: str = "*/%"; break;
-				default:        str = "noop"; break; 
+				default:        str = "noop"; break;
 			}
 			str += "(" + m_values[0]->toString();
 			for (unsigned i = 1; i < m_values.size(); ++i)
@@ -136,7 +136,7 @@ namespace Jump
 		 * @param flags    the flags that the Expression is being evaluated under
 		 *
 		 * @return the value to be assigned
-		 */ 
+		 */
 		Value* Expression::assign(State* stateRef, int flags) throw(ValueError)
 		{
 			// If only one value in assign
@@ -295,8 +295,8 @@ namespace Jump
 				// Perform the operation represented by the given type
 				switch(m_types[i])
 				{
-					case 1: toret  = toret->divides(m_values[i]->evaluate(stateRef, flags)); break;
 					case 2: toret  = toret->modulus(m_values[i]->evaluate(stateRef, flags)); break;
+					case 1: toret  = toret->divides(m_values[i]->evaluate(stateRef, flags)); break;
 					default: toret = toret->times( m_values[i]->evaluate(stateRef, flags) ); break;
 				}
 			}

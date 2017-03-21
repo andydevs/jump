@@ -6,28 +6,32 @@
 # Created: 12 - 2 - 2016
 
 # Pushing things to buffer
-stream buffer = ArrayStream
-var out # Holds the output from the buffer
-var counter # Counter variable
+stream buffer = ArrayStream()
+
+# Holds the output from the buffer
+var out
 
 # Fills buffer
 state start
-	print "Adding things"
-	print 2 -> buffer
-	print 4 -> buffer
-	print "bacon" -> buffer
-	print True -> buffer
+	print "Adding things..."
+	print 2 to buffer
+	print 4 to buffer
+	print "bacon" to buffer
+	print True to buffer
 	to start_read
 
 # Start printing
 state start_read
 	print "Printing things"
-	counter = 0
 	to read_buffer
 
-# Printing
+# Read from the buffer
 state read_buffer
-	read buffer -> out
+	read out from buffer
+	to print_value if Null != out
+	end otherwise
+
+# Print value in the buffer
+state print_value
 	print out
-	counter = counter + 1
-	loop if counter < 4
+	to read_buffer

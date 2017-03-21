@@ -83,7 +83,7 @@ namespace Jump
 		 *
 		 * @return the number parsed from the text
 		 */
-		static Value* number(string text) throw(SyntaxError)
+		Value* number(string text) throw(SyntaxError)
 		{
 			// Determine numerical info based on suffix
 			string suffix  = getSuffix(text);

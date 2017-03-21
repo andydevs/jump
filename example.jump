@@ -28,7 +28,7 @@ state first
 	# Test Number print
 	print 32 # Integer
 	print 64.332 # Float
-	print #test null print
+	print # Test null print
 	to second
 
 state second
@@ -65,6 +65,7 @@ state fifth
 	print "Sum of Int8:      " + (127i8  + 5i8)  # 124
 	print "Sum of Int16:     " + (127i16 + 5u8)  # 132
 	print "Sum of Int16 (2): " + (127i8  + 5u16) # 132
+	print "Negative number:  " + -2
 
 	# Transition
 	to sixth
@@ -92,7 +93,7 @@ state seventh_a
 
 state seventh_b
 	# Prompt name
-	print "Enter your name:" -> prompt
+	print "Enter your name:" to STDPromptStream
 	read name
 
 	# Print output

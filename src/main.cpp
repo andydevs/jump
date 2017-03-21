@@ -10,11 +10,11 @@ Created: 7 - 15 - 2016
 */
 
 // Headers being used
-#include "Jump/Compiler/compiler.h"
 #include "Jump/Values/expression.h"
 #include "Jump/Streams/printstream.h"
 #include "Jump/Streams/readstream.h"
 #include "Jump/jumperror.h"
+#include "Jump/interpreter.h"
 
 // Libraries being used
 #include <iostream>
@@ -45,37 +45,28 @@ string readfile(string filename);
  */
 int main(int argc, char const *argv[])
 {
-	// Get filename
-	// Return error if filename not given
+	// Get filename (Return error if filename not given)
 	string filename;
-	if (argc > 1)
-	{
-		filename = argv[1];
-	}
+	if (argc > 1) filename = argv[1];
 	else
 	{
-		cout << "ERROR! Script name not specified!" << endl;
+		cout << "ERROR: No Filename specified!" << endl;
 		return 1;
 	}
 
-	try
-	{
-		// Compile inout into StateMachine
-		StateMachine machine = Compiler::compile(readfile(filename));
-		machine.streamSet("stdout", new Streams::PrintStream(cout));
-		machine.streamSet("stdin",  new Streams::ReadStream(cin));
-		machine.streamSet("stderr", new Streams::PrintStream(cerr));
-		machine.streamSet("prompt", new Streams::PrintStream(cout, " "));
-
-		// Execute the machine and return status code
-		return machine.execute();
-	}
-	catch (Errors::JumpError& e)
-	{
-		// Print Error and exit
+	// Interpret and run state machine
+	int status; StateMachine* machine;
+	try {
+		machine = Interpreter::interpret(readfile(filename), 0);
+		status = machine->execute();
+	} catch (Errors::JumpError e) {
 		cout << "JumpError: " << e.what() << endl;
-		return 1;
+		status = 1;
 	}
+
+	// Do afterwards
+	delete machine;
+	return status;
 }
 
 /**

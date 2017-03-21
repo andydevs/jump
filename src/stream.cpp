@@ -15,6 +15,7 @@ Created: 7 - 15 - 2016
 // Namespaces being used
 using namespace std;
 using namespace Jump::Errors;
+using namespace Jump::Values;
 
 /**
  * Jump is a new programming language that uses the state machine paradigm
@@ -50,13 +51,27 @@ namespace Jump
 		Stream::~Stream() {}
 
 		/**
+		 * Adds an attribute to the stream
+		 *
+		 * @param id   the id of the attribute
+		 * @param attr the attribute to add
+		 *
+		 * @throw StreamError upon an error with setting attributes
+		 */
+		void Stream::attributeSet(int id, Value* attr) throw(StreamError)
+		{
+			throw StreamError("Stream cannot have attributes set");
+		}
+
+		/**
 		 * Writes the given Value to the Stream
 		 *
+		 * @param stateRef reference to State in which this is being printed
 		 * @param value the value to print to the Stream
 		 *
-		 * @throw StreamError upon an error when printing to Stream
+		 * @throw StreamError upon an error when writing to Stream
 		 */
-		void Stream::print(Values::Value* value) throw(StreamError)
+		void Stream::print(State* stateRef, Value* value) throw(StreamError)
 		{
 			throw StreamError("Stream cannot be written to.");
 		}
@@ -64,11 +79,13 @@ namespace Jump
 		/**
 		 * Reads a value from the Stream
 		 *
+		 * @param stateRef reference to State in which this is being printed
+		 *
 		 * @return value read from the Stream
 		 *
 		 * @throw StreamError upon an error when reading from Stream
 		 */
-		Values::Value* Stream::read() throw(StreamError)
+		Value* Stream::read(State* stateRef) throw(StreamError)
 		{
 			throw StreamError("Stream cannot be read from.");
 		}

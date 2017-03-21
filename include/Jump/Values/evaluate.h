@@ -39,7 +39,7 @@ namespace Jump
 		/**
 		 * The number regex
 		 */
-		const std::regex NUMBER_REGEX("[0-9]+((?:\\.[0-9]+)?(?:(?:e|E)(?:\\+|\\-)?[0-9]+)?)([uif][0-9]*)?");
+		const std::regex NUMBER_REGEX("(?:\\+|\\-)?[0-9]+((?:\\.[0-9]+)?(?:(?:e|E)(?:\\+|\\-)?[0-9]+)?)([uif][0-9]*)?");
 
 		/**
 		 * The boolean regex
@@ -80,6 +80,15 @@ namespace Jump
 		 * Default suffix for Floats
 		 */
 		const std::string DEFAULT_FLOAT_SUFFIX    = "f64";
+
+		/**
+		 * Parses the given text into a number
+		 *
+		 * @param text the text to parse
+		 *
+		 * @return the number parsed from the text
+		 */
+		Value* number(std::string text) throw(Errors::SyntaxError);
 
 		/**
 		 * Evaluates the given input string as a value

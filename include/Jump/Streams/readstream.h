@@ -68,11 +68,13 @@ namespace Jump
 			/**
 			 * Reads a value from the Stream
 			 *
+			 * @param stateRef reference to State in which this is being printed
+			 *
 			 * @return value read from the Stream
 			 *
 			 * @throw StreamError upon an error when reading from Stream
 			 */
-			virtual Values::Value* read() throw(Errors::StreamError);
+			virtual Values::Value* read(State* stateRef) throw(Errors::StreamError);
 		};
 	}
 }
