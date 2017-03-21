@@ -253,10 +253,10 @@ namespace Jump {
 
             // Create state machine
             s_machine = new StateMachine();
-            s_machine->streamSet("stdin",  new ReadStream(cin));
-            s_machine->streamSet("stdout", new PrintStream(cout));
-            s_machine->streamSet("stderr", new PrintStream(cerr));
-            s_machine->streamSet("prompt", new PrintStream(cout, " "));
+            s_machine->streamSet("STDReadStream",   new ReadStream(cin));
+            s_machine->streamSet("STDPrintStream",  new PrintStream(cout));
+            s_machine->streamSet("STDErrorStream",  new PrintStream(cerr));
+            s_machine->streamSet("STDPromptStream", new PrintStream(cout, " "));
 
             // Start parser
             statemachine(flags);
