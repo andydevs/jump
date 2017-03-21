@@ -450,16 +450,15 @@ namespace Jump {
             if (recieve(ARRAYSTREAM)) stream = new ArrayStream();
             else throw unexpected("STREAMTYPE after =");
 
-            // Handle parentheses
+            // Require parentheses
             int i = 0;
-            if (recieve(LPAREN)) {
-                while(!percieve(RPAREN)) {
-                    stream->attributeSet(i, feed(flags));
-                    if (percieve(ENDLINE)) throw unexpected("RPAREN after stream definition");
-                    i++;
-                }
-                recieve(RPAREN);
+            require(LPAREN, "LPAREN after stream ID");
+            while(!percieve(RPAREN)) {
+                stream->attributeSet(i, feed(flags));
+                if (percieve(ENDLINE)) throw unexpected("RPAREN after stream definition");
+                i++;
             }
+            recieve(RPAREN);
 
             // Add stream
             s_machine->streamSet(id, stream);

@@ -6,7 +6,7 @@
 # Created: 12 - 2 - 2016
 
 # Pushing things to buffer
-stream buffer = ArrayStream(True)
+stream buffer = ArrayStream()
 
 # Holds the output from the buffer
 var out
