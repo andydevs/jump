@@ -438,11 +438,31 @@ namespace Jump {
         static void stream(int flags) throw(SyntaxError) {
             debug(flags, "  stream");
 
+            // Identifier
             require(IDENTIFIER, "IDENTIFIER after stream");
             string id = recieved(); debug(flags, "      id = " + id);
+
+            // Assignment
             require(ASSIGN, "= after IDENTIFIER");
-            if (recieve(ARRAYSTREAM)) s_machine->streamSet(id, new ArrayStream());
+
+            // Stream
+            Streams::Stream* stream;
+            if (recieve(ARRAYSTREAM)) stream = new ArrayStream();
             else throw unexpected("STREAMTYPE after =");
+
+            // Handle parentheses
+            int i = 0;
+            if (recieve(LPAREN)) {
+                while(!percieve(RPAREN)) {
+                    stream->attributeSet(i, feed(flags));
+                    if (percieve(ENDLINE)) throw unexpected("RPAREN after stream definition");
+                    i++;
+                }
+                recieve(RPAREN);
+            }
+
+            // Add stream
+            s_machine->streamSet(id, stream);
         }
 
         /**
