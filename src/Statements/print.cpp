@@ -41,7 +41,7 @@ namespace Jump
 		/**
 		 * Creates an empty print statement
 		 */
-		Print::Print() : Statement(), 
+		Print::Print() : Statement(),
 						 m_toPrint(new Null()),
 						 m_streamRef("stdout") {}
 
@@ -50,7 +50,7 @@ namespace Jump
 		 *
 		 * @param toPrint the value to print
 		 */
-		Print::Print(Value* toPrint) : Statement(),  
+		Print::Print(Value* toPrint) : Statement(),
 									   m_toPrint(toPrint),
 									   m_streamRef("stdout") {}
 
@@ -76,7 +76,7 @@ namespace Jump
 		/**
 		 * Destructor for print statement
 		 */
-		Print::~Print() 
+		Print::~Print()
 		{
 			delete m_toPrint;
 		}
@@ -85,7 +85,7 @@ namespace Jump
 		 * Returns an inspection of the Print
 		 *
 		 * @return an inspection of the Print
-		 */ 
+		 */
 		string Print::inspect()
 		{
 			return "[PRINT " + (m_toPrint->isNull() ? "" : " " + m_toPrint->toString()) + " -> " + m_streamRef + "]";
@@ -104,7 +104,7 @@ namespace Jump
 		{
 			Value* evaluated = m_toPrint->evaluate(stateRef, 0);
 			Stream* stream = stateRef->statemachine()->streamGet(m_streamRef);
-			stream->print(evaluated);
+			stream->print(stateRef, evaluated);
 			return "";
 		}
 	}

@@ -84,7 +84,7 @@ namespace Jump
 		 * Returns an inspection of the Read
 		 *
 		 * @return an inspection of the Read
-		 */ 
+		 */
 		string Read::inspect()
 		{
 			return "[READ " + m_toStore->name() + "]";
@@ -102,7 +102,7 @@ namespace Jump
 		string Read::execute(State* stateRef) throw(JumpError)
 		{
 			Stream* stream = stateRef->statemachine()->streamGet(m_streamRef);
-			Value* red = stream->read();
+			Value* red = stream->read(stateRef);
 			if (red == NULL) red = new Null();
 			m_toStore->assign(stateRef, red);
 			return "";

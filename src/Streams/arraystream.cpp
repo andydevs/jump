@@ -79,11 +79,12 @@ namespace Jump
 		/**
 		 * Writes the given Value to the Stream
 		 *
+		 * @param stateRef reference to State in which this is being printed
 		 * @param value the value to print to the Stream
 		 *
 		 * @throw StreamError upon an error when writing to Stream
 		 */
-		void ArrayStream::print(Value* value) throw(StreamError)
+		void ArrayStream::print(State* stateRef, Value* value) throw(StreamError)
 		{
 			m_container.push_back(value);
 		}
@@ -91,18 +92,20 @@ namespace Jump
 		/**
 		 * Reads a value from the Stream
 		 *
+		 * @param stateRef reference to State in which this is being printed
+		 *
 		 * @return value read from the Stream
 		 *
 		 * @throw StreamError upon an error when reading from Stream
 		 */
-		Value* ArrayStream::read() throw(StreamError)
+		Value* ArrayStream::read(State* stateRef) throw(StreamError)
 		{
 			Value* ret;
 			if (m_container.empty())
 			{
 				return new Null();
 			}
-			else if (m_behavior->evaluate(NULL, 0)->toBool())
+			else if (m_behavior->evaluate(stateRef, 0)->toBool())
 			{
 				ret = m_container.back();
 				m_container.pop_back();

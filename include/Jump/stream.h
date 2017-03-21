@@ -75,20 +75,23 @@ namespace Jump
 			/**
 			 * Writes the given Value to the Stream
 			 *
+			 * @param stateRef reference to State in which this is being printed
 			 * @param value the value to print to the Stream
 			 *
 			 * @throw StreamError upon an error when writing to Stream
 			 */
-			virtual void print(Values::Value* value) throw(Errors::StreamError);
+			virtual void print(State* stateRef, Values::Value* value) throw(Errors::StreamError);
 
 			/**
 			 * Reads a value from the Stream
+			 *
+			 * @param stateRef reference to State in which this is being printed
 			 *
 			 * @return value read from the Stream
 			 *
 			 * @throw StreamError upon an error when reading from Stream
 			 */
-			virtual Values::Value* read() throw(Errors::StreamError);
+			virtual Values::Value* read(State* stateRef) throw(Errors::StreamError);
 		};
 	}
 }

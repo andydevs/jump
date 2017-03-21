@@ -85,11 +85,12 @@ namespace Jump
 			/**
 			 * Writes the given Value to the Stream
 			 *
+			 * @param stateRef reference to State in which this is being printed
 			 * @param value the value to print to the Stream
 			 *
 			 * @throw StreamError upon an error when writing to Stream
 			 */
-			void print(Values::Value* value) throw(Errors::StreamError);
+			virtual void print(State* stateRef, Values::Value* value) throw(Errors::StreamError);
 		};
 	}
 }

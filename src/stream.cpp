@@ -66,11 +66,12 @@ namespace Jump
 		/**
 		 * Writes the given Value to the Stream
 		 *
+		 * @param stateRef reference to State in which this is being printed
 		 * @param value the value to print to the Stream
 		 *
-		 * @throw StreamError upon an error when printing to Stream
+		 * @throw StreamError upon an error when writing to Stream
 		 */
-		void Stream::print(Value* value) throw(StreamError)
+		void Stream::print(State* stateRef, Value* value) throw(StreamError)
 		{
 			throw StreamError("Stream cannot be written to.");
 		}
@@ -78,11 +79,13 @@ namespace Jump
 		/**
 		 * Reads a value from the Stream
 		 *
+		 * @param stateRef reference to State in which this is being printed
+		 *
 		 * @return value read from the Stream
 		 *
 		 * @throw StreamError upon an error when reading from Stream
 		 */
-		Value* Stream::read() throw(StreamError)
+		Value* Stream::read(State* stateRef) throw(StreamError)
 		{
 			throw StreamError("Stream cannot be read from.");
 		}
