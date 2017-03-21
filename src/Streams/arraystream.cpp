@@ -70,8 +70,10 @@ namespace Jump
 		 */
 		void ArrayStream::attributeSet(int id, Values::Value* attr) throw(StreamError)
 		{
-			if (id == 0) m_behavior = attr;
-			else throw StreamError("Invalid attribute id " + id);
+			if (id == 0) {
+				delete m_behavior;
+				m_behavior = attr;
+			} else throw StreamError("Invalid attribute id " + id);
 		}
 
 		/**
@@ -100,7 +102,7 @@ namespace Jump
 			{
 				return new Null();
 			}
-			else if (m_behavior->toBool())
+			else if (m_behavior->evaluate(NULL, 0)->toBool())
 			{
 				ret = m_container.back();
 				m_container.pop_back();
