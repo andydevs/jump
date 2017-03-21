@@ -16,7 +16,7 @@ Created: 7 - 15 - 2016
 #include "Jump/stream.h"
 
 // Libraries being used
-#include <queue>
+#include <deque>
 
 /**
  * Jump is a new programming language that uses the state machine paradigm
@@ -44,9 +44,17 @@ namespace Jump
 		{
 		private:
 			/**
-			 * Contains values
+			 * The behavior of the ArrayStream
+			 *
+			 * True if the ArrayStream behaves like a stack
+			 * False if the ArrayStream behaves like a queue
 			 */
-			std::queue<Values::Value*> m_container;
+			Values::Value* m_behavior;
+
+			/**
+			 * Contains values in the arraystream
+			 */
+			std::deque<Values::Value*> m_container;
 		public:
 			/**
 			 * Creates an ArrayStream
@@ -64,6 +72,16 @@ namespace Jump
 			 * Destroys the ArrayStream
 			 */
 			~ArrayStream();
+
+			/**
+			 * Sets an attribute to the stream
+			 *
+			 * @param id   the id of the attribute
+			 * @param attr the attribute value to set
+			 *
+			 * @throw StreamError upon an error with setting attributes
+			 */
+			virtual void attributeSet(int id, Values::Value* attr) throw(Errors::StreamError);
 
 			/**
 			 * Writes the given Value to the Stream

@@ -18,6 +18,7 @@ Created: 7 - 15 - 2016
 
 // Libraries
 #include <iostream>
+#include <vector>
 
 /**
  * Jump is a new programming language that uses the state machine paradigm
@@ -60,6 +61,16 @@ namespace Jump
 			 * Destroys the Stream
 			 */
 			virtual ~Stream();
+
+			/**
+			 * Sets an attribute to the stream
+			 *
+			 * @param id   the id of the attribute
+			 * @param attr the attribute value to set
+			 *
+			 * @throw StreamError upon an error with setting attributes
+			 */
+			virtual void attributeSet(int id, Values::Value* attr) throw(Errors::StreamError);
 
 			/**
 			 * Writes the given Value to the Stream

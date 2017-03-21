@@ -11,6 +11,7 @@ Created: 7 - 15 - 2016
 
 // Headers being used
 #include "Jump/Streams/arraystream.h"
+#include "Jump/Values/boolean.h"
 #include "Jump/Values/null.h"
 
 // Namespaces being used
@@ -39,7 +40,9 @@ namespace Jump
 		 * Creates an ArrayStream
 		 */
 		ArrayStream::ArrayStream():
-		Stream(), m_container(queue<Value*>()) {}
+		Stream(), m_container() {
+			m_behavior = new Boolean(false);
+		}
 
 		/**
 		 * Copy constructor for ArrayStream
@@ -52,7 +55,24 @@ namespace Jump
 		/**
 		 * Destroys the ArrayStream
 		 */
-		ArrayStream::~ArrayStream() {}
+		ArrayStream::~ArrayStream()
+		{
+			delete m_behavior;
+		}
+
+		/**
+		 * Sets an attribute to the stream
+		 *
+		 * @param id   the id of the attribute
+		 * @param attr the attribute value to set
+		 *
+		 * @throw StreamError upon an error with setting attributes
+		 */
+		void ArrayStream::attributeSet(int id, Values::Value* attr) throw(StreamError)
+		{
+			if (id == 0) m_behavior = attr;
+			else throw StreamError("Invalid attribute id " + id);
+		}
 
 		/**
 		 * Writes the given Value to the Stream
@@ -63,7 +83,7 @@ namespace Jump
 		 */
 		void ArrayStream::print(Value* value) throw(StreamError)
 		{
-			m_container.push(value);
+			m_container.push_back(value);
 		}
 
 		/**
@@ -75,14 +95,21 @@ namespace Jump
 		 */
 		Value* ArrayStream::read() throw(StreamError)
 		{
+			Value* ret;
 			if (m_container.empty())
 			{
 				return new Null();
 			}
+			else if (m_behavior->toBool())
+			{
+				ret = m_container.back();
+				m_container.pop_back();
+				return ret;
+			}
 			else
 			{
-				Value* ret = m_container.front();
-				m_container.pop();
+				ret = m_container.front();
+				m_container.pop_front();
 				return ret;
 			}
 		}
