@@ -39,7 +39,7 @@ namespace Jump
 		/**
 		 * The number regex
 		 */
-		const std::regex NUMBER_REGEX("[0-9]+((?:\\.[0-9]+)?(?:(?:e|E)(?:\\+|\\-)?[0-9]+)?)([uif][0-9]*)?");
+		const std::regex NUMBER_REGEX("(?:\\+|\\-)?[0-9]+((?:\\.[0-9]+)?(?:(?:e|E)(?:\\+|\\-)?[0-9]+)?)([uif][0-9]*)?");
 
 		/**
 		 * The boolean regex

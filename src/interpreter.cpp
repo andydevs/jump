@@ -253,10 +253,10 @@ namespace Jump {
 
             // Create state machine
             s_machine = new StateMachine();
-            s_machine->streamSet("STDReadStream",   new ReadStream(cin));
-            s_machine->streamSet("STDPrintStream",  new PrintStream(cout));
-            s_machine->streamSet("STDErrorStream",  new PrintStream(cerr));
-            s_machine->streamSet("STDPromptStream", new PrintStream(cout, " "));
+            s_machine->streamSet(Streams::STDNames::READ,   new ReadStream(cin));
+            s_machine->streamSet(Streams::STDNames::PRINT,  new PrintStream(cout));
+            s_machine->streamSet(Streams::STDNames::ERROR,  new PrintStream(cerr));
+            s_machine->streamSet(Streams::STDNames::PROMPT, new PrintStream(cout, " "));
 
             // Start parser
             statemachine(flags);
@@ -495,7 +495,7 @@ namespace Jump {
          */
         static void print(int flags) throw(SyntaxError) {
             debug(flags, "      print");
-            string id = "stdout";
+            string id = Streams::STDNames::PRINT;
             if (recieve(ENDLINE)) {
                 debug(flags, "          nullprint");
                 s_state->add(new Print(new Null(), id));
@@ -518,13 +518,14 @@ namespace Jump {
             debug(flags, "      read");
 
             require(IDENTIFIER, "IDENTIFIER after read");
-            string id1 = recieved(), id2;
+            string id1 = recieved(), id2 = Streams::STDNames::READ;
 
             if (recieve(FROM)) {
                 require(IDENTIFIER, "IDENTIFIER after read");
                 id2 = recieved();
-                s_state->add(new Read(new Identifier(id1), id2));
-            } else s_state->add(new Read(new Identifier(id1)));
+            }
+
+            s_state->add(new Read(new Identifier(id1), id2));
         }
 
         /**

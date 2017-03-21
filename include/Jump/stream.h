@@ -37,6 +37,34 @@ namespace Jump
 	namespace Streams
 	{
 		/**
+		 * Contains standard stream names
+		 *
+		 * @author  Anshul Kharbanda
+		 * @created 3 - 21 - 2017
+		 */
+		namespace STDNames {
+			/**
+			 * Name for standard read
+			 */
+			const std::string READ = "STDReadStream";
+
+			/**
+			 * Name for standard print
+			 */
+			const std::string PRINT = "STDPrintStream";
+
+			/**
+			 * Name for standard error
+			 */
+			const std::string ERROR = "STDErrorStream";
+
+			/**
+			 * Name for standard prompt
+			 */
+			const std::string PROMPT = "STDPromptStream";
+		}
+
+		/**
 		 * Basic stream object
 		 *
 		 * @author  Anshul Kharbanda

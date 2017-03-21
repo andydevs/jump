@@ -49,7 +49,7 @@ namespace Jump
 		Read::Read(Identifier* toStore):
 		Statement(),
 		m_toStore(toStore),
-		m_streamRef("stdin")
+		m_streamRef(STDNames::READ)
 		{}
 
 		/**

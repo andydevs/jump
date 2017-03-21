@@ -43,7 +43,7 @@ namespace Jump
 		 */
 		Print::Print() : Statement(),
 						 m_toPrint(new Null()),
-						 m_streamRef("stdout") {}
+						 m_streamRef(STDNames::PRINT) {}
 
 		/**
 		 * Creates a print statement with the given value to print
@@ -52,7 +52,7 @@ namespace Jump
 		 */
 		Print::Print(Value* toPrint) : Statement(),
 									   m_toPrint(toPrint),
-									   m_streamRef("stdout") {}
+									   m_streamRef(STDNames::PRINT) {}
 
 		/**
 		 * Creates a print statement with the given value to print and the stream to print to
