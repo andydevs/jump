@@ -25,11 +25,13 @@ state start_read
 	print "Printing things"
 	to read_buffer
 
-# Printing
+# Read from the buffer
 state read_buffer
 	read out from buffer
 	to print_value if Null != out
+	end otherwise
 
+# Print value in the buffer
 state print_value
 	print out
 	to read_buffer
