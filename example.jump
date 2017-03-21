@@ -92,7 +92,7 @@ state seventh_a
 
 state seventh_b
 	# Prompt name
-	print "Enter your name:" to prompt
+	print "Enter your name:" to STDPromptStream
 	read name
 
 	# Print output
