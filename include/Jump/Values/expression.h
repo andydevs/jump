@@ -49,7 +49,8 @@ namespace Jump
 		 	NOT,
 		 	COMPARE,
 		 	ADDSUB,
-		 	MULDIVMOD
+		 	MULDIVMOD,
+			INCREMENT
 		 };
 
 		/**
@@ -80,15 +81,17 @@ namespace Jump
 			 * Assigns the left hand side to the right hand side
 			 *
 			 * @param stateRef reference to the state that contains the Expression
+			 * @param flags    flags being used
 			 *
 			 * @return the value to be assigned
-			 */ 
+			 */
 			Value* assign(State* stateRef, int flags) throw(Errors::ValueError);
 
 			/**
 			 * Returns the orr operation of the values
 			 *
 			 * @param stateRef reference to the state that contains the Expression
+			 * @param flags    flags being used
 			 *
 			 * @return the orr operation of the values
 			 */
@@ -98,6 +101,7 @@ namespace Jump
 			 * Returns the andd operation of the values
 			 *
 			 * @param stateRef reference to the state that contains the Expression
+			 * @param flags    flags being used
 			 *
 			 * @return the andd operation of the values
 			 */
@@ -107,6 +111,7 @@ namespace Jump
 			 * Returns the nott operation of the values
 			 *
 			 * @param stateRef reference to the state that contains the Expression
+			 * @param flags    flags being used
 			 *
 			 * @return the nott operation of the values
 			 */
@@ -116,6 +121,7 @@ namespace Jump
 			 * Returns the compare operation of the values
 			 *
 			 * @param stateRef reference to the state that contains the Expression
+			 * @param flags    flags being used
 			 *
 			 * @return the compare operation of the values
 			 */
@@ -125,6 +131,7 @@ namespace Jump
 			 * Returns the addsub operation of the values
 			 *
 			 * @param stateRef reference to the state that contains the Expression
+			 * @param flags    flags being used
 			 *
 			 * @return the addsub operation of the values
 			 */
@@ -133,11 +140,22 @@ namespace Jump
 			/**
 			 * Returns the muldivmod operation of the values
 			 *
-			 * @param stateRef reference to the state that contains the Expression 
+			 * @param stateRef reference to the state that contains the Expression
+			 * @param flags    flags being used
 			 *
 			 * @return the muldivmod operation of the values
 			 */
 			Value* muldivmod(State* stateRef, int flags) throw(Errors::ValueError);
+
+			/**
+			 * Returns the value incremented by one
+			 *
+			 * @param stateRef reference to the state that contains the Expression
+			 * @param flags    flags being used
+			 *
+			 * @return the increment operation of the value
+			 */
+			Value* increment(State* stateRef, int flags) throw(Errors::ValueError);
 		public:
 			/**
 			 * Creates an Expression with the given operation

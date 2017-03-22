@@ -13,6 +13,7 @@ Created: 7 - 15 - 2016
 #include "Jump/Values/expression.h"
 #include "Jump/Values/identifier.h"
 #include "Jump/Values/null.h"
+#include "Jump/Values/Numbers/integer.h"
 #include "Jump/state.h"
 #include "Jump/statemachine.h"
 
@@ -85,6 +86,7 @@ namespace Jump
 				case COMPARE:   str = "<=>"; break;
 				case ADDSUB:    str = "+-"; break;
 				case MULDIVMOD: str = "*/%"; break;
+				case INCREMENT: str = "++"; break;
 				default:        str = "noop"; break;
 			}
 			str += "(" + m_values[0]->toString();
@@ -125,6 +127,7 @@ namespace Jump
 				case COMPARE:   return compare(stateRef, flags);
 				case ADDSUB:    return addsub(stateRef, flags);
 				case MULDIVMOD: return muldivmod(stateRef, flags);
+				case INCREMENT: return increment(stateRef, flags);
 				default:        return new Null();
 			}
 		}
@@ -303,6 +306,25 @@ namespace Jump
 
 			// Return buffer
 			return toret;
+		}
+
+		/**
+		 * Returns the value incremented by one
+		 *
+		 * @param stateRef reference to the state that contains the Expression
+		 * @param flags    flags being used
+		 *
+		 * @return the increment operation of the value
+		 */
+		Value* Expression::increment(State* stateRef, int flags) throw(ValueError)
+		{
+			// Evaluate return value
+			Value* toret = m_values[0]->evaluate(stateRef, flags|NO_EVALUATE_IDENTIFIER);
+			Value* incrm = new Numbers::Int32(1);
+
+			// Set buffer to first value
+			if (m_types[0] == 0) return toret->assign(stateRef, toret->evaluate(stateRef,flags)->plus(incrm));
+			else return toret->assign(stateRef, toret->evaluate(stateRef,flags)->minus(incrm));
 		}
 	}
 }

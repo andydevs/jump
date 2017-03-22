@@ -91,21 +91,22 @@ namespace Jump {
         static const regex ARRAYSTREAM = regex("ArrayStream");
 
         // Operations
-        static const regex ASSIGN  = regex("=");
-        static const regex PIPE    = regex("->");
-        static const regex GREATER = regex(">");
-        static const regex GREATEQ = regex(">=");
-        static const regex EQUAL   = regex("==");
-        static const regex NEQUAL  = regex("!=");
-        static const regex LESSEQ  = regex("<=");
-        static const regex LESS    = regex("<");
-        static const regex ADD     = regex("\\+");
-        static const regex SUB     = regex("-");
-        static const regex MUL     = regex("\\*");
-        static const regex DIV     = regex("\\/");
-        static const regex MOD     = regex("%");
-        static const regex LPAREN  = regex("\\(");
-        static const regex RPAREN  = regex("\\)");
+        static const regex ASSIGN    = regex("=");
+        static const regex GREATER   = regex(">");
+        static const regex GREATEQ   = regex(">=");
+        static const regex EQUAL     = regex("==");
+        static const regex NEQUAL    = regex("!=");
+        static const regex LESSEQ    = regex("<=");
+        static const regex LESS      = regex("<");
+        static const regex ADD       = regex("\\+");
+        static const regex SUB       = regex("-");
+        static const regex MUL       = regex("\\*");
+        static const regex DIV       = regex("\\/");
+        static const regex MOD       = regex("%");
+        static const regex INCREMENT = regex("\\+\\+");
+        static const regex DECREMENT = regex("\\-\\-");
+        static const regex LPAREN    = regex("\\(");
+        static const regex RPAREN    = regex("\\)");
 
         // Space
         static const regex ENDLINE = regex("(#.*?)?\r?\n");
@@ -636,11 +637,11 @@ namespace Jump {
         static Value* compare(int flags) throw(SyntaxError) {
             Expression* val = new Expression(COMPARE);
             val->add(addsub(flags), 0);
-            if (recieve(GREATER)) val->add(addsub(flags), 0);
-            else if (recieve(GREATEQ)) val->add(addsub(flags), 1);
+            if (recieve(GREATEQ)) val->add(addsub(flags), 1);
+            else if (recieve(LESSEQ)) val->add(addsub(flags), 4);
             else if (recieve(EQUAL)) val->add(addsub(flags), 2);
             else if (recieve(NEQUAL)) val->add(addsub(flags), 3);
-            else if (recieve(LESSEQ)) val->add(addsub(flags), 4);
+            else if (recieve(GREATER)) val->add(addsub(flags), 0);
             else if (recieve(LESS)) val->add(addsub(flags), 5);
             return val;
         }
@@ -653,7 +654,7 @@ namespace Jump {
         static Value* addsub(int flags) throw(SyntaxError) {
             Expression* val = new Expression(ADDSUB);
             val->add(muldivmod(flags), 0);
-            while(!percieve(PIPE) && (percieve(ADD) || percieve(SUB)))
+            while(percieve(ADD) || percieve(SUB))
                 if (recieve(ADD)) val->add(muldivmod(flags),      0);
                 else if (recieve(SUB)) val->add(muldivmod(flags), 1);
             return val;
@@ -680,12 +681,24 @@ namespace Jump {
          * @return Value expression
          */
         static Value* value(int flags) throw(SyntaxError) {
+            string id; Value* increment;
             if (recieve(STRING)) return new String(recieved().substr(1,recieved().length()-2));
             else if (recieve(NUMBER)) return number(recieved());
             else if (recieve(BOOLEAN)) return new Boolean(recieved() == "True");
             else if (recieve(NULLVALUE)) return new Null();
-            else if (recieve(IDENTIFIER)) return new Identifier(recieved());
-            else if (recieve(LPAREN)) {
+            else if (recieve(IDENTIFIER)) {
+                id = recieved();
+                if (recieve(INCREMENT)) {
+                    increment = new Expression(OperLayer::INCREMENT);
+                    ((Expression*)increment)->add(new Identifier(id), 0);
+                } else if (recieve(DECREMENT)) {
+                    increment = new Expression(OperLayer::INCREMENT);
+                    ((Expression*)increment)->add(new Identifier(id), 1);
+                } else {
+                    increment = new Identifier(id);
+                }
+                return increment;
+            } else if (recieve(LPAREN)) {
                 Value* val = feed(flags);
                 require(RPAREN, "RPAREN after expression");
                 return val;

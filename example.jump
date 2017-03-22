@@ -8,11 +8,10 @@
 # Defining a constant
 const PI = 3.1415926535897932
 
-# Defining a variable
+# Defining variables
 var variable
-
-# Defining a variable and setting it to a value
-var name = "Jamie Oliver"
+var increment
+var name = "Jamie Oliver" # Initializing with a value
 
 state start
 	# Testing printing
@@ -71,6 +70,9 @@ state fifth
 	to sixth
 
 state sixth
+	# Print message
+	print "All of these should be true"
+
 	# Test comparision
 	print 7 > 3
 	print 5 == 5
@@ -138,4 +140,86 @@ state tenth
 
 	# Loop if less than 5 times else to end
 	loop if variable < 5
-	end otherwise
+	to increment otherwise
+
+state increment
+	# Print initial message
+	print "The variable should successfuly increment to 3 using increment operator"
+
+	# Set both variable to 0
+	variable = 0
+	increment = 0
+
+	# Go to loop state
+	to increment_loop
+
+state increment_loop
+	# Print running message
+	print "Variable: " + increment
+
+	# increment variable
+	variable = variable + 1
+	increment++
+
+	# Loop if variable is less than 5
+	loop if increment < 3 and variable < 5
+	to increment_verify otherwise
+
+state increment_verify
+	# Verify if increment works
+	to increment_success if increment == 3
+	to increment_failed otherwise
+
+state increment_success
+	# Increment works
+	print "Increment works!"
+	print "Final: " + increment
+
+	# Transition to decrement
+	to decrement
+
+state increment_failed
+	# Increment does not work
+	print "Increment does not work!"
+	print "Final: " + increment
+
+	# Transition to decrement
+	to decrement
+
+state decrement
+	# Print initial message
+	print "The variable should successfuly decrement to 0 using decrement operator"
+
+	# Initialize variables
+	variable  = 0
+	increment = 3
+
+	# To loop state
+	to decrement_loop
+
+state decrement_loop
+	# Loop decrement
+	print "Variable: " + increment
+
+	# Increment variables
+	variable = variable + 1
+	increment--
+
+	# Loop
+	loop if increment > 0 and variable < 5
+	to decrement_verify otherwise
+
+state decrement_verify
+	# Verify if increment works
+	to decrement_success if increment == 0
+	to decrement_failed otherwise
+
+state decrement_success
+	# Decrement success
+	print "Decrement works!"
+	print "Final: " + increment
+
+state decrement_failed
+	# Decrement failure
+	print "Decrement does not work!"
+	print "Final: " + increment
