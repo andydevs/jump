@@ -1,6 +1,7 @@
 # TODO
 
-- FileStream
+- Update Roject files
+- Implement FileStream
     - Filename Attribute
     - Read/Write Attribute
 - Write README.md
